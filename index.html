@@ -1,0 +1,605 @@
+﻿<title>CSAT 대시보드 | MP 병원비환급</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  :root {
+    --accent:     #3D6FE8;
+    --accent-dim: #2A55C4;
+    --star:       #F59E0B;
+    --star-empty: #D9DCE6;
+    --good:       #16A34A;
+    --bg:         #EEF0F7;
+    --surface:    #FFFFFF;
+    --surface-2:  #F4F5FB;
+    --border:     #E0E3EF;
+    --text-1:     #0F1828;
+    --text-2:     #5C6480;
+    --text-3:     #9AA0B8;
+    --shadow:     0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --accent:     #5B8BF5;
+      --accent-dim: #3D6FE8;
+      --star:       #FBBF24;
+      --star-empty: #2D3148;
+      --good:       #22C55E;
+      --bg:         #0A0D17;
+      --surface:    #131726;
+      --surface-2:  #1A1F33;
+      --border:     #252C46;
+      --text-1:     #E8ECF8;
+      --text-2:     #8892B4;
+      --text-3:     #515A7A;
+      --shadow:     0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+    }
+  }
+  :root[data-theme="light"] {
+    --accent:#3D6FE8; --accent-dim:#2A55C4; --star:#F59E0B; --star-empty:#D9DCE6;
+    --good:#16A34A; --bg:#EEF0F7; --surface:#FFFFFF; --surface-2:#F4F5FB;
+    --border:#E0E3EF; --text-1:#0F1828; --text-2:#5C6480; --text-3:#9AA0B8;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
+  }
+  :root[data-theme="dark"] {
+    --accent:#5B8BF5; --accent-dim:#3D6FE8; --star:#FBBF24; --star-empty:#2D3148;
+    --good:#22C55E; --bg:#0A0D17; --surface:#131726; --surface-2:#1A1F33;
+    --border:#252C46; --text-1:#E8ECF8; --text-2:#8892B4; --text-3:#515A7A;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-1);
+    min-height: 100vh;
+    padding: 0 0 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .logo-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .header h1 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+  .header-meta { font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .04em;
+    padding: 2px 7px; border-radius: 99px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+  }
+
+  /* Main */
+  .main { max-width: 900px; margin: 0 auto; padding: 28px 24px 0; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .stat-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums;
+    color: var(--text-1); letter-spacing: -.02em; line-height: 1;
+  }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.star   { color: var(--star); }
+  .stat-sub { font-size: 12px; color: var(--text-2); margin-top: 5px; font-variant-numeric: tabular-nums; }
+
+  /* Section title */
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-3);
+    margin-bottom: 10px; padding-left: 2px;
+  }
+
+  /* Card shell */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 22px;
+    box-shadow: var(--shadow); margin-bottom: 22px;
+  }
+
+  /* Distribution */
+  .dist-row {
+    display: grid; grid-template-columns: 34px 1fr 56px;
+    align-items: center; gap: 12px; margin-bottom: 9px;
+  }
+  .dist-row:last-child { margin-bottom: 0; }
+  .dist-label {
+    font-size: 13px; font-weight: 500; color: var(--text-2);
+    display: flex; align-items: center; gap: 3px; font-variant-numeric: tabular-nums;
+  }
+  .dist-star-icon { color: var(--star); font-size: 10px; }
+  .dist-bar-track { height: 7px; background: var(--star-empty); border-radius: 99px; overflow: hidden; }
+  .dist-bar-fill {
+    height: 100%; background: var(--star); border-radius: 99px;
+    transition: width .65s cubic-bezier(.25,.46,.45,.94);
+  }
+  .dist-count { font-size: 12px; color: var(--text-2); text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Trend chart */
+  .trend-card { position: relative; }
+  .trend-legend {
+    display: flex; gap: 16px; margin-bottom: 14px;
+    font-size: 11px; font-weight: 600; letter-spacing: .03em; color: var(--text-2);
+  }
+  .legend-dot {
+    display: inline-block; width: 8px; height: 8px;
+    border-radius: 2px; margin-right: 5px; vertical-align: middle;
+  }
+  .legend-dot.bar  { background: var(--star); }
+  .legend-dot.line { background: var(--accent); border-radius: 50%; }
+  canvas#trend-canvas { display: block; width: 100%; cursor: crosshair; }
+
+  /* Tooltip */
+  #trend-tooltip {
+    position: fixed; pointer-events: none;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px;
+    font-size: 12px; color: var(--text-1);
+    box-shadow: var(--shadow);
+    display: none; z-index: 100; white-space: nowrap;
+  }
+
+  /* Date group */
+  .date-group-header {
+    display: flex; align-items: center; gap: 10px;
+    margin: 20px 0 10px; padding: 0 2px;
+  }
+  .date-group-header:first-child { margin-top: 0; }
+  .date-label {
+    font-size: 12px; font-weight: 700; color: var(--text-2);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .date-line { flex: 1; height: 1px; background: var(--border); }
+  .date-count {
+    font-size: 11px; color: var(--text-3);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+
+  /* Response cards */
+  .response-list { display: flex; flex-direction: column; gap: 8px; }
+  .response-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px;
+    box-shadow: var(--shadow); transition: border-color .15s;
+  }
+  .response-card:hover { border-color: var(--accent); }
+  .response-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 7px;
+  }
+  .stars-display { display: flex; gap: 2px; font-size: 15px; line-height: 1; }
+  .star-filled  { color: var(--star); }
+  .star-empty-c { color: var(--star-empty); }
+  .response-time { font-size: 11px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .response-comment {
+    font-size: 13.5px; color: var(--text-2); line-height: 1.55;
+    background: var(--surface-2); border-radius: 7px; padding: 9px 13px; margin-top: 2px;
+  }
+  .no-comment { font-size: 12px; color: var(--text-3); font-style: italic; }
+  .chat-id-chip {
+    display: inline-block; font-size: 10px;
+    font-family: "SF Mono", "Consolas", monospace;
+    color: var(--text-3); background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 1px 6px; margin-top: 7px;
+  }
+
+  /* Empty & notice */
+  .empty-state {
+    background: var(--surface); border: 1px dashed var(--border);
+    border-radius: 12px; padding: 44px 24px; text-align: center;
+  }
+  .empty-icon { font-size: 28px; margin-bottom: 10px; }
+  .empty-title { font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 5px; }
+  .empty-desc  { font-size: 13px; color: var(--text-3); line-height: 1.5; }
+  .notice {
+    margin-top: 18px; padding: 11px 15px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 9px; font-size: 13px; color: var(--text-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .notice strong { color: var(--text-1); }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .stat-card:last-child { grid-column: 1 / -1; }
+    .header { padding: 14px 16px; }
+    .main { padding: 18px 14px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dist-bar-fill { transition: none; }
+  }
+</style>
+
+<div id="trend-tooltip"></div>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-dot"></div>
+    <h1>CSAT 대시보드</h1>
+    <span class="badge">Beta</span>
+  </div>
+  <span class="header-meta" id="collected-at">—</span>
+</div>
+
+<div class="main">
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">설문 발송</div>
+      <div class="stat-value" id="stat-sent">—</div>
+      <div class="stat-sub" id="stat-scanned">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">응답률</div>
+      <div class="stat-value accent" id="stat-rate">—</div>
+      <div class="stat-sub" id="stat-responded">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">평균 별점</div>
+      <div class="stat-value star" id="stat-avg">—</div>
+      <div class="stat-sub" id="stat-avg-sub">—</div>
+    </div>
+  </div>
+
+  <p class="section-title">일별 트렌드 (최근 14일)</p>
+  <div class="card trend-card">
+    <div class="trend-legend">
+      <span><span class="legend-dot bar"></span>응답 건수</span>
+      <span><span class="legend-dot line"></span>평균 별점</span>
+    </div>
+    <canvas id="trend-canvas" height="110"></canvas>
+  </div>
+
+  <p class="section-title">별점 분포</p>
+  <div class="card" id="dist-card"></div>
+
+  <p class="section-title">응답 목록</p>
+  <div id="response-list" class="response-list"></div>
+  <div id="notice-area"></div>
+
+</div>
+
+<script>
+window.CSAT_DATA = {
+    "collectedAt":  "2026-07-09 18:26",
+    "totalScanned":  100,
+    "totalSent":  74,
+    "totalResponded":  2,
+    "responseRate":  2.7,
+    "avgScore":  3,
+    "scoreMap":  {
+                     "5":  1,
+                     "4":  0,
+                     "3":  0,
+                     "2":  0,
+                     "1":  1
+                 },
+    "responses":  [
+                      {
+                          "chatId":  "6a30d89bbf7e86583943",
+                          "stars":  5,
+                          "comment":  "잘하고있어요 화이팅",
+                          "time":  "2026-07-09 16:57"
+                      },
+                      {
+                          "chatId":  "6a4db29414f910d8b037",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-09 16:51"
+                      }
+                  ],
+    "noResponseCount":  72
+};
+
+(function () {
+  var D = window.CSAT_DATA;
+
+  /* ── utils ── */
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function getVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  /* ── Header ── */
+  document.getElementById('collected-at').textContent = '집계: ' + D.collectedAt;
+
+  /* ── Stats ── */
+  document.getElementById('stat-sent').textContent     = D.totalSent.toLocaleString() + '건';
+  document.getElementById('stat-scanned').textContent  = '검색 ' + D.totalScanned.toLocaleString() + '건 중';
+  document.getElementById('stat-rate').textContent     = D.responseRate + '%';
+  document.getElementById('stat-responded').textContent= D.totalResponded + '건 응답';
+  document.getElementById('stat-avg').textContent      = D.avgScore > 0 ? '★ ' + D.avgScore : '—';
+  document.getElementById('stat-avg-sub').textContent  = D.totalResponded > 0 ? D.totalResponded + '건 기준' : '응답 없음';
+
+  /* ── Daily trend data ── */
+  var byDate = {};
+  (D.responses || []).forEach(function(r) {
+    if (!r.time) return;
+    var d = r.time.substring(0, 10);
+    if (!byDate[d]) byDate[d] = { count: 0, sum: 0 };
+    byDate[d].count++;
+    byDate[d].sum += r.stars;
+  });
+
+  var days = [];
+  for (var i = 13; i >= 0; i--) {
+    var dt = new Date();
+    dt.setDate(dt.getDate() - i);
+    var ds = dt.toISOString().substring(0, 10);
+    var mm = dt.getMonth() + 1, dd = dt.getDate();
+    days.push({
+      date: ds,
+      label: mm + '/' + dd,
+      count: byDate[ds] ? byDate[ds].count : 0,
+      avg:   byDate[ds] ? Math.round(byDate[ds].sum / byDate[ds].count * 10) / 10 : 0
+    });
+  }
+
+  /* ── Trend canvas ── */
+  var canvas = document.getElementById('trend-canvas');
+  var tooltip = document.getElementById('trend-tooltip');
+  var PAD = { top: 12, right: 44, bottom: 28, left: 36 };
+
+  function drawTrend() {
+    var container = canvas.parentElement;
+    var W = Math.max(300, container.getBoundingClientRect().width - 44);
+    canvas.width  = Math.round(W * window.devicePixelRatio);
+    canvas.height = Math.round(110 * window.devicePixelRatio);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = '110px';
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    var cW = W, cH = 110;
+    var plotW = cW - PAD.left - PAD.right;
+    var plotH = cH - PAD.top - PAD.bottom;
+
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+      || (!document.documentElement.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    var starColor   = '#F59E0B';
+    var accentColor = isDark ? '#5B8BF5' : '#3D6FE8';
+    var borderColor = isDark ? '#252C46' : '#E0E3EF';
+    var text3Color  = isDark ? '#515A7A' : '#9AA0B8';
+    var text2Color  = isDark ? '#8892B4' : '#5C6480';
+
+    ctx.clearRect(0, 0, cW, cH);
+
+    var maxCount = Math.max(1, Math.max.apply(null, days.map(function(d){ return d.count; })));
+    var barW = (plotW / days.length) * 0.55;
+
+    /* grid lines */
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 0.5;
+    [0, 0.5, 1].forEach(function(f) {
+      var y = PAD.top + plotH * (1 - f);
+      ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + plotW, y); ctx.stroke();
+    });
+
+    /* bars */
+    days.forEach(function(d, i) {
+      var x = PAD.left + (i + 0.5) * (plotW / days.length);
+      var barH = d.count > 0 ? (d.count / maxCount) * plotH : 0;
+      var y = PAD.top + plotH - barH;
+      ctx.fillStyle = d.count > 0
+        ? starColor
+        : (borderColor + '66');
+      var r = 3;
+      if (barH < 1) { barH = 0; }
+      if (barH > 0) {
+        ctx.beginPath();
+        ctx.moveTo(x - barW/2 + r, y);
+        ctx.lineTo(x + barW/2 - r, y);
+        ctx.arcTo(x + barW/2, y, x + barW/2, y + r, r);
+        ctx.lineTo(x + barW/2, y + barH);
+        ctx.lineTo(x - barW/2, y + barH);
+        ctx.arcTo(x - barW/2, y, x - barW/2 + r, y, r);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.fillStyle = borderColor;
+        ctx.fillRect(x - barW/2, PAD.top + plotH - 1, barW, 1);
+      }
+    });
+
+    /* score line */
+    var linePoints = [];
+    days.forEach(function(d, i) {
+      if (d.count === 0) return;
+      var x = PAD.left + (i + 0.5) * (plotW / days.length);
+      var y = PAD.top + plotH * (1 - d.avg / 5);
+      linePoints.push({ x: x, y: y, d: d });
+    });
+
+    if (linePoints.length > 0) {
+      ctx.strokeStyle = accentColor;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      linePoints.forEach(function(p, i) {
+        if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      });
+      ctx.stroke();
+
+      linePoints.forEach(function(p) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = accentColor;
+        ctx.fill();
+        ctx.strokeStyle = getVar('--surface') || '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    }
+
+    /* x labels (show every 2nd) */
+    ctx.fillStyle = text3Color;
+    ctx.font = '9px -apple-system, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    days.forEach(function(d, i) {
+      if (i % 2 !== 0) return;
+      var x = PAD.left + (i + 0.5) * (plotW / days.length);
+      ctx.fillText(d.label, x, cH - 4);
+    });
+
+    /* y-axis left: count */
+    ctx.fillStyle = text3Color;
+    ctx.font = '9px -apple-system, system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(maxCount, PAD.left - 4, PAD.top + 4);
+    ctx.fillText('0', PAD.left - 4, PAD.top + plotH + 4);
+
+    /* y-axis right: score */
+    ctx.fillStyle = accentColor;
+    ctx.textAlign = 'left';
+    ctx.fillText('5.0', PAD.left + plotW + 4, PAD.top + 4);
+    ctx.fillText('0', PAD.left + plotW + 4, PAD.top + plotH + 4);
+  }
+
+  /* hover tooltip */
+  canvas.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var plotW = canvas.offsetWidth - PAD.left - PAD.right;
+    var slotW = plotW / days.length;
+    var idx = Math.floor((mx - PAD.left) / slotW);
+    if (idx < 0 || idx >= days.length) { tooltip.style.display = 'none'; return; }
+    var d = days[idx];
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 12) + 'px';
+    tooltip.style.top  = (e.clientY - 10) + 'px';
+    tooltip.innerHTML =
+      '<strong>' + d.date + '</strong><br>' +
+      '응답 <strong>' + d.count + '건</strong>' +
+      (d.count > 0 ? ' &nbsp;·&nbsp; 평균 <strong style="color:var(--accent)">★ ' + d.avg + '</strong>' : '');
+  });
+  canvas.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
+
+  // 레이아웃 완료 후 그리기
+  setTimeout(drawTrend, 50);
+  window.addEventListener('resize', drawTrend);
+
+  /* ── Distribution ── */
+  var distCard = document.getElementById('dist-card');
+  var maxC = Math.max(1, D.scoreMap['5']||0, D.scoreMap['4']||0, D.scoreMap['3']||0, D.scoreMap['2']||0, D.scoreMap['1']||0);
+  [5,4,3,2,1].forEach(function(k) {
+    var cnt = D.scoreMap[String(k)] || 0;
+    var pct = D.totalResponded > 0 ? Math.round(cnt / D.totalResponded * 100) : 0;
+    var barW = Math.round(cnt / maxC * 100);
+    var row = document.createElement('div');
+    row.className = 'dist-row';
+    row.innerHTML =
+      '<div class="dist-label"><span class="dist-star-icon">★</span>' + k + '</div>' +
+      '<div class="dist-bar-track"><div class="dist-bar-fill" style="width:0%" data-w="' + barW + '"></div></div>' +
+      '<div class="dist-count">' + cnt + '건' +
+        (D.totalResponded > 0 ? ' <span style="color:var(--text-3)">(' + pct + '%)</span>' : '') +
+      '</div>';
+    distCard.appendChild(row);
+  });
+  requestAnimationFrame(function() {
+    setTimeout(function() {
+      document.querySelectorAll('.dist-bar-fill').forEach(function(el) {
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 100);
+  });
+
+  /* ── Response list grouped by date ── */
+  var listEl = document.getElementById('response-list');
+  var responses = (D.responses || []).slice().sort(function(a, b) {
+    return (b.time || '').localeCompare(a.time || '');
+  });
+
+  if (responses.length === 0) {
+    listEl.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-icon">📭</div>' +
+        '<div class="empty-title">아직 응답이 없어요</div>' +
+        '<div class="empty-desc">데이터가 쌓이면 날짜별로 여기에 표시돼요.</div>' +
+      '</div>';
+  } else {
+    var grouped = {};
+    var groupOrder = [];
+    responses.forEach(function(r) {
+      var key = r.time ? r.time.substring(0, 10) : '날짜 미상';
+      if (!grouped[key]) { grouped[key] = []; groupOrder.push(key); }
+      grouped[key].push(r);
+    });
+
+    groupOrder.forEach(function(dateKey) {
+      var group = grouped[dateKey];
+      var hdr = document.createElement('div');
+      hdr.className = 'date-group-header';
+      var displayDate = dateKey;
+      if (dateKey !== '날짜 미상') {
+        var parts = dateKey.split('-');
+        displayDate = parts[0] + '년 ' + parseInt(parts[1]) + '월 ' + parseInt(parts[2]) + '일';
+      }
+      hdr.innerHTML =
+        '<span class="date-label">' + displayDate + '</span>' +
+        '<span class="date-line"></span>' +
+        '<span class="date-count">' + group.length + '건</span>';
+      listEl.appendChild(hdr);
+
+      group.forEach(function(r) {
+        var card = document.createElement('div');
+        card.className = 'response-card';
+        var starsHtml = '';
+        for (var i = 1; i <= 5; i++) {
+          starsHtml += '<span class="' + (i <= r.stars ? 'star-filled' : 'star-empty-c') + '">★</span>';
+        }
+        var timeStr = r.time ? r.time.substring(11) : '';
+        var commentHtml = (r.comment && r.comment.trim())
+          ? '<div class="response-comment">' + esc(r.comment) + '</div>'
+          : '<div class="response-comment no-comment">코멘트 없음</div>';
+
+        card.innerHTML =
+          '<div class="response-top">' +
+            '<div class="stars-display">' + starsHtml + '</div>' +
+            '<span class="response-time">' + esc(timeStr) + '</span>' +
+          '</div>' +
+          commentHtml +
+          '<span class="chat-id-chip">' + esc(r.chatId) + '</span>';
+        listEl.appendChild(card);
+      });
+    });
+  }
+
+  /* ── No-response notice ── */
+  if (D.noResponseCount > 0) {
+    document.getElementById('notice-area').innerHTML =
+      '<div class="notice">📨 설문은 발송됐지만 <strong>' + D.noResponseCount + '명</strong>이 아직 응답하지 않았어요.</div>';
+  }
+
+})();
+</script>
