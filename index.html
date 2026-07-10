@@ -292,12 +292,12 @@
 
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-label">설문 발송</div>
+      <div class="stat-label">누적 발송</div>
       <div class="stat-value" id="stat-sent">—</div>
       <div class="stat-sub" id="stat-scanned">—</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">응답률</div>
+      <div class="stat-label">회신율</div>
       <div class="stat-value accent" id="stat-rate">—</div>
       <div class="stat-sub" id="stat-responded">—</div>
     </div>
@@ -526,11 +526,11 @@ window.CSAT_DATA = {
     }
 
     document.getElementById('stat-sent').textContent      = stats.sent.toLocaleString() + '건';
+    document.getElementById('stat-scanned').textContent   = stats.responded.toLocaleString() + '건 회신';
     document.getElementById('stat-rate').textContent      = stats.responseRate + '%';
-    document.getElementById('stat-responded').textContent = stats.responded + '건 응답';
+    document.getElementById('stat-responded').textContent = stats.responded + ' / ' + stats.sent + '건';
     document.getElementById('stat-avg').textContent       = stats.avgScore > 0 ? '★ ' + stats.avgScore : '—';
     document.getElementById('stat-avg-sub').textContent   = stats.responded > 0 ? stats.responded + '건 기준' : '응답 없음';
-    document.getElementById('stat-scanned').textContent   = subLabel;
 
     /* 트렌드 제목 */
     var trendTitle = key === 'all' ? 'CSAT 운영 일별 트렌드'
