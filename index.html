@@ -523,9 +523,6 @@ window.CSAT_DATA = {
     drawTrendForKey(key);
   }
 
-  /* ── Initial render ── */
-  renderAll('all');
-
   /* ── Trend: dailyStats 기반 데이터 조회 ── */
   var allDS = D.dailyStats || {};
 
@@ -580,6 +577,9 @@ window.CSAT_DATA = {
     currentTrendDays = computeTrendDays(key);
     drawTrend();
   }
+
+  /* ── Initial render ── */
+  renderAll('all');
 
   function drawTrend() {
     var days = currentTrendDays;
