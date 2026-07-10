@@ -250,6 +250,18 @@
   .d-btn:hover  { border-color: var(--accent); color: var(--accent); background: var(--surface); }
   .d-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+  /* Star filter */
+  .star-filter-bar { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
+  .s-btn {
+    font-size: 12px; font-weight: 700; padding: 5px 12px;
+    border-radius: 99px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text-3);
+    cursor: pointer; transition: all .15s; line-height: 1; letter-spacing: .02em;
+  }
+  .s-btn:hover { border-color: var(--star); color: var(--star); }
+  .s-btn.active { background: var(--star); border-color: var(--star); color: #fff; }
+  .s-btn.all-stars.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
   @media (max-width: 600px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
     .stat-card:last-child { grid-column: 1 / -1; }
@@ -309,6 +321,7 @@
   <div class="card" id="dist-card"></div>
 
   <p class="section-title">응답 목록</p>
+  <div class="star-filter-bar" id="star-filter-bar"></div>
   <div id="response-list" class="response-list"></div>
   <div id="notice-area"></div>
 
@@ -461,6 +474,10 @@ window.CSAT_DATA = {
     });
   }
 
+  /* ── 별점 필터 상태 ── */
+  var selectedStar  = 0;   // 0 = 전체
+  var currentFiltered = [];
+
   /* ── renderAll: stats + dist + list ── */
   function renderAll(key) {
     var stats, sm, filtered, subLabel;
@@ -469,7 +486,10 @@ window.CSAT_DATA = {
       stats    = { sent: D.totalSent, responded: D.totalResponded, responseRate: D.responseRate, avgScore: D.avgScore };
       sm       = D.scoreMap;
       filtered = D.responses || [];
-      subLabel = '전체 기간 집계';
+      /* 누적 시작일 동적 계산 */
+      var dk0 = Object.keys(D.dailyStats || {}).filter(function(k){ return /^\d{4}-\d{2}-\d{2}$/.test(k); }).sort()[0];
+      var sinceLabel = dk0 ? (parseInt(dk0.split('-')[1]) + '/' + parseInt(dk0.split('-')[2]) + ' 이후 누적') : '전체 누적';
+      subLabel = sinceLabel;
 
     } else if (key.substring(0, 6) === 'month:') {
       var ym = key.substring(6);
@@ -519,9 +539,44 @@ window.CSAT_DATA = {
     document.getElementById('trend-title').textContent = trendTitle;
 
     renderDist(sm, stats.responded);
+    currentFiltered = filtered;
+    /* 별점 필터 리셋 */
+    selectedStar = 0;
+    document.querySelectorAll('.s-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.star === '0');
+    });
     renderList(filtered);
     drawTrendForKey(key);
   }
+
+  /* ── 별점 필터 버튼 ── */
+  var starBar = document.getElementById('star-filter-bar');
+  (function() {
+    var items = [
+      { label: '전체 별점', star: 0, cls: 'all-stars' },
+      { label: '★★★★★', star: 5, cls: '' },
+      { label: '★★★★', star: 4, cls: '' },
+      { label: '★★★', star: 3, cls: '' },
+      { label: '★★', star: 2, cls: '' },
+      { label: '★', star: 1, cls: '' }
+    ];
+    items.forEach(function(item) {
+      var btn = document.createElement('button');
+      btn.className = 's-btn' + (item.cls ? ' ' + item.cls : '') + (item.star === 0 ? ' active' : '');
+      btn.dataset.star = String(item.star);
+      btn.textContent = item.label;
+      btn.onclick = function() {
+        selectedStar = item.star;
+        starBar.querySelectorAll('.s-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var toShow = item.star === 0
+          ? currentFiltered
+          : currentFiltered.filter(function(r) { return r.stars === item.star; });
+        renderList(toShow);
+      };
+      starBar.appendChild(btn);
+    });
+  })();
 
   /* ── Trend: dailyStats 기반 데이터 조회 ── */
   var allDS = D.dailyStats || {};
