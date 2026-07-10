@@ -181,7 +181,11 @@
   }
 
   /* Response cards */
-  .response-list { display: flex; flex-direction: column; gap: 8px; }
+  .response-list { display: flex; flex-direction: column; gap: 8px; max-height: 520px; overflow-y: auto; padding-right: 6px; scroll-behavior: smooth; }
+  .response-list::-webkit-scrollbar { width: 6px; }
+  .response-list::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 3px; }
+  .response-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .response-list::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
   .response-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 10px; padding: 14px 18px;
@@ -345,7 +349,7 @@ window.CSAT_DATA = {
 
   /* ── Stats ── */
   document.getElementById('stat-sent').textContent     = D.totalSent.toLocaleString() + '건';
-  document.getElementById('stat-scanned').textContent  = '검색 ' + D.totalScanned.toLocaleString() + '건 중';
+  document.getElementById('stat-scanned').textContent  = '최근 종료 상담 ' + D.totalScanned.toLocaleString() + '건 중 CSAT 발송';
   document.getElementById('stat-rate').textContent     = D.responseRate + '%';
   document.getElementById('stat-responded').textContent= D.totalResponded + '건 응답';
   document.getElementById('stat-avg').textContent      = D.avgScore > 0 ? '★ ' + D.avgScore : '—';
