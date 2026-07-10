@@ -275,8 +275,7 @@
 <div class="main">
 
   <div class="filter-wrap">
-    <div class="month-bar" id="month-bar"></div>
-    <div class="day-bar"   id="day-bar"></div>
+    <div class="month-bar" id="date-bar"></div>
   </div>
 
   <div class="stats-row">
@@ -419,67 +418,47 @@ window.CSAT_DATA = {
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '집계: ' + D.collectedAt;
 
-  /* ── 월별 그룹 빌드 ── */
-  var monthMap = {};   // { "2026-07": ["2026-07-10", ...], ... }
-  if (D.dailyStats) {
-    Object.keys(D.dailyStats).sort().reverse().forEach(function(dk) {
-      if (dk === '미상') return;
-      var ym = dk.substring(0, 7);
-      if (!monthMap[ym]) monthMap[ym] = [];
-      monthMap[ym].push(dk);
-    });
-  }
-  var ymKeys = Object.keys(monthMap).sort().reverse();
+  /* ── 날짜 필터 버튼 ── */
+  var dateBar = document.getElementById('date-bar');
 
   function ymLabel(ym) {
     var p = ym.split('-');
     return (parseInt(p[0]) % 100) + '년 ' + parseInt(p[1]) + '월';
   }
 
-  var monthBar = document.getElementById('month-bar');
-  var dayBar   = document.getElementById('day-bar');
-
-  /* 월 버튼 생성 */
-  function addMonthBtn(label, key) {
+  function addDateBtn(label, key) {
     var btn = document.createElement('button');
     btn.className = 'm-btn' + (key === 'all' ? ' active' : '');
     btn.dataset.key = key;
     btn.textContent = label;
-    btn.onclick = function() { selectMonth(key); };
-    monthBar.appendChild(btn);
-  }
-  addMonthBtn('전체', 'all');
-  ymKeys.forEach(function(ym) { addMonthBtn(ymLabel(ym), ym); });
-
-  /* 일 버튼 생성 */
-  function renderDayButtons(ym) {
-    dayBar.innerHTML = '';
-    if (!ym || !monthMap[ym]) return;
-    monthMap[ym].forEach(function(dk) {
-      var btn = document.createElement('button');
-      btn.className = 'd-btn';
-      btn.dataset.key = dk;
-      btn.textContent = parseInt(dk.split('-')[2]) + '일';
-      btn.onclick = function() {
-        dayBar.querySelectorAll('.d-btn').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        renderAll(dk);
-      };
-      dayBar.appendChild(btn);
-    });
+    btn.onclick = function() {
+      dateBar.querySelectorAll('.m-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderAll(key);
+    };
+    dateBar.appendChild(btn);
   }
 
-  function selectMonth(key) {
-    monthBar.querySelectorAll('.m-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.key === key);
+  addDateBtn('전체', 'all');
+  if (D.dailyStats) {
+    Object.keys(D.dailyStats)
+      .filter(function(dk) { return dk !== '미상'; })
+      .sort().reverse()
+      .forEach(function(dk) {
+        var p = dk.split('-');
+        addDateBtn(parseInt(p[1]) + '월 ' + parseInt(p[2]) + '일', dk);
+      });
+  }
+
+  /* monthMap은 renderAll 내부 month: 처리에서만 사용 */
+  var monthMap = {};
+  if (D.dailyStats) {
+    Object.keys(D.dailyStats).forEach(function(dk) {
+      if (dk === '미상') return;
+      var ym = dk.substring(0, 7);
+      if (!monthMap[ym]) monthMap[ym] = [];
+      monthMap[ym].push(dk);
     });
-    if (key === 'all') {
-      dayBar.innerHTML = '';
-      renderAll('all');
-    } else {
-      renderDayButtons(key);
-      renderAll('month:' + key);
-    }
   }
 
   /* ── renderAll: stats + dist + list ── */
