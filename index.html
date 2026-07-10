@@ -229,16 +229,26 @@
   }
   .notice strong { color: var(--text-1); }
 
-  /* Date filter */
-  .date-filter-bar { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
-  .date-btn {
+  /* Period filter */
+  .filter-wrap { margin-bottom: 18px; }
+  .month-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .day-bar   { display: flex; gap: 4px; flex-wrap: wrap; min-height: 0; padding-left: 2px; }
+  .m-btn {
     font-size: 12px; font-weight: 600; padding: 6px 14px;
     border-radius: 99px; border: 1.5px solid var(--border);
     background: var(--surface); color: var(--text-2);
     cursor: pointer; transition: all .15s; line-height: 1;
   }
-  .date-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .date-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .m-btn:hover  { border-color: var(--accent); color: var(--accent); }
+  .m-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .d-btn {
+    font-size: 11px; font-weight: 600; padding: 4px 11px;
+    border-radius: 99px; border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--text-3);
+    cursor: pointer; transition: all .15s; line-height: 1.3;
+  }
+  .d-btn:hover  { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+  .d-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   @media (max-width: 600px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
@@ -264,7 +274,10 @@
 
 <div class="main">
 
-  <div class="date-filter-bar" id="date-filter-bar"></div>
+  <div class="filter-wrap">
+    <div class="month-bar" id="month-bar"></div>
+    <div class="day-bar"   id="day-bar"></div>
+  </div>
 
   <div class="stats-row">
     <div class="stat-card">
@@ -284,7 +297,7 @@
     </div>
   </div>
 
-  <p class="section-title">일별 트렌드 (최근 14일)</p>
+  <p class="section-title" id="trend-title">일별 트렌드 (최근 60일)</p>
   <div class="card trend-card">
     <div class="trend-legend">
       <span><span class="legend-dot bar"></span>응답 건수</span>
@@ -304,20 +317,38 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-10 14:26",
-    "totalScanned":  100,
-    "totalSent":  80,
-    "totalResponded":  4,
-    "responseRate":  5,
-    "avgScore":  2,
+    "collectedAt":  "2026-07-10 15:26",
+    "totalScanned":  82,
+    "totalSent":  82,
+    "totalResponded":  7,
+    "responseRate":  8.5,
+    "avgScore":  3,
     "scoreMap":  {
-                     "5":  1,
+                     "5":  3,
                      "4":  0,
-                     "3":  0,
+                     "3":  1,
                      "2":  0,
                      "1":  3
                  },
     "responses":  [
+                      {
+                          "chatId":  "6a28c9632e62b95f4ea1",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:50"
+                      },
+                      {
+                          "chatId":  "6a505c953a97506f3276",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:10"
+                      },
+                      {
+                          "chatId":  "6a505866cad68755b2cf",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:10"
+                      },
                       {
                           "chatId":  "6a30d89bbf7e86583943",
                           "stars":  5,
@@ -343,7 +374,35 @@ window.CSAT_DATA = {
                           "time":  "2026-07-09 15:24"
                       }
                   ],
-    "noResponseCount":  76
+    "noResponseCount":  75,
+    "dailyStats":  {
+                       "2026-07-10":  {
+                                          "sent":  29,
+                                          "responded":  3,
+                                          "responseRate":  10.3,
+                                          "avgScore":  4.33,
+                                          "scoreMap":  {
+                                                           "5":  2,
+                                                           "4":  0,
+                                                           "3":  1,
+                                                           "2":  0,
+                                                           "1":  0
+                                                       }
+                                      },
+                       "2026-07-09":  {
+                                          "sent":  53,
+                                          "responded":  4,
+                                          "responseRate":  7.5,
+                                          "avgScore":  2,
+                                          "scoreMap":  {
+                                                           "5":  1,
+                                                           "4":  0,
+                                                           "3":  0,
+                                                           "2":  0,
+                                                           "1":  3
+                                                       }
+                                      }
+                   }
 };
 
 (function () {
@@ -360,85 +419,191 @@ window.CSAT_DATA = {
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '집계: ' + D.collectedAt;
 
-  /* ── Date filter buttons ── */
-  var filterBar = document.getElementById('date-filter-bar');
-  function makeBtn(label, dateKey) {
-    var btn = document.createElement('button');
-    btn.className = 'date-btn' + (dateKey === 'all' ? ' active' : '');
-    btn.dataset.date = dateKey;
-    btn.textContent = label;
-    btn.onclick = function() { renderAll(dateKey); };
-    filterBar.appendChild(btn);
-  }
-  makeBtn('전체', 'all');
+  /* ── 월별 그룹 빌드 ── */
+  var monthMap = {};   // { "2026-07": ["2026-07-10", ...], ... }
   if (D.dailyStats) {
     Object.keys(D.dailyStats).sort().reverse().forEach(function(dk) {
-      var p = dk.split('-');
-      makeBtn(parseInt(p[1]) + '/' + parseInt(p[2]), dk);
+      if (dk === '미상') return;
+      var ym = dk.substring(0, 7);
+      if (!monthMap[ym]) monthMap[ym] = [];
+      monthMap[ym].push(dk);
+    });
+  }
+  var ymKeys = Object.keys(monthMap).sort().reverse();
+
+  function ymLabel(ym) {
+    var p = ym.split('-');
+    return (parseInt(p[0]) % 100) + '년 ' + parseInt(p[1]) + '월';
+  }
+
+  var monthBar = document.getElementById('month-bar');
+  var dayBar   = document.getElementById('day-bar');
+
+  /* 월 버튼 생성 */
+  function addMonthBtn(label, key) {
+    var btn = document.createElement('button');
+    btn.className = 'm-btn' + (key === 'all' ? ' active' : '');
+    btn.dataset.key = key;
+    btn.textContent = label;
+    btn.onclick = function() { selectMonth(key); };
+    monthBar.appendChild(btn);
+  }
+  addMonthBtn('전체', 'all');
+  ymKeys.forEach(function(ym) { addMonthBtn(ymLabel(ym), ym); });
+
+  /* 일 버튼 생성 */
+  function renderDayButtons(ym) {
+    dayBar.innerHTML = '';
+    if (!ym || !monthMap[ym]) return;
+    monthMap[ym].forEach(function(dk) {
+      var btn = document.createElement('button');
+      btn.className = 'd-btn';
+      btn.dataset.key = dk;
+      btn.textContent = parseInt(dk.split('-')[2]) + '일';
+      btn.onclick = function() {
+        dayBar.querySelectorAll('.d-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderAll(dk);
+      };
+      dayBar.appendChild(btn);
     });
   }
 
-  /* ── renderAll: stats + dist + list ── */
-  function renderAll(dateKey) {
-    document.querySelectorAll('.date-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.date === dateKey);
+  function selectMonth(key) {
+    monthBar.querySelectorAll('.m-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.key === key);
     });
-    var stats, sm, filtered;
-    if (dateKey === 'all') {
-      stats = { sent: D.totalSent, responded: D.totalResponded, responseRate: D.responseRate, avgScore: D.avgScore };
-      sm = D.scoreMap;
-      filtered = D.responses || [];
-      document.getElementById('stat-scanned').textContent = '전체 기간 집계';
+    if (key === 'all') {
+      dayBar.innerHTML = '';
+      renderAll('all');
     } else {
-      var ds = D.dailyStats && D.dailyStats[dateKey];
+      renderDayButtons(key);
+      renderAll('month:' + key);
+    }
+  }
+
+  /* ── renderAll: stats + dist + list ── */
+  function renderAll(key) {
+    var stats, sm, filtered, subLabel;
+
+    if (key === 'all') {
+      stats    = { sent: D.totalSent, responded: D.totalResponded, responseRate: D.responseRate, avgScore: D.avgScore };
+      sm       = D.scoreMap;
+      filtered = D.responses || [];
+      subLabel = '전체 기간 집계';
+
+    } else if (key.substring(0, 6) === 'month:') {
+      var ym = key.substring(6);
+      var daysInMonth = monthMap[ym] || [];
+      var mSent = 0, mResp = 0;
+      var mSm = {"5":0,"4":0,"3":0,"2":0,"1":0};
+      daysInMonth.forEach(function(dk) {
+        var ds = D.dailyStats && D.dailyStats[dk];
+        if (!ds) return;
+        mSent += ds.sent; mResp += ds.responded;
+        [5,4,3,2,1].forEach(function(s) {
+          mSm[String(s)] += (ds.scoreMap && ds.scoreMap[String(s)]) ? ds.scoreMap[String(s)] : 0;
+        });
+      });
+      var mAvg = mResp > 0
+        ? Math.round((5*mSm["5"]+4*mSm["4"]+3*mSm["3"]+2*mSm["2"]+1*mSm["1"])/mResp*100)/100
+        : 0;
+      stats    = { sent: mSent, responded: mResp,
+                   responseRate: mSent > 0 ? Math.round(mResp/mSent*1000)/10 : 0,
+                   avgScore: mAvg };
+      sm       = mSm;
+      filtered = (D.responses||[]).filter(function(r){ return r.time && r.time.substring(0,7) === ym; });
+      subLabel = ymLabel(ym) + ' 집계';
+
+    } else {
+      /* 특정 날짜 */
+      var ds = D.dailyStats && D.dailyStats[key];
       stats = ds ? { sent: ds.sent, responded: ds.responded, responseRate: ds.responseRate, avgScore: ds.avgScore }
                  : { sent: 0, responded: 0, responseRate: 0, avgScore: 0 };
-      sm = ds ? ds.scoreMap : {"5":0,"4":0,"3":0,"2":0,"1":0};
-      filtered = (D.responses||[]).filter(function(r){ return r.time && r.time.substring(0,10) === dateKey; });
-      document.getElementById('stat-scanned').textContent = dateKey + ' 기준';
+      sm       = ds ? ds.scoreMap : {"5":0,"4":0,"3":0,"2":0,"1":0};
+      filtered = (D.responses||[]).filter(function(r){ return r.time && r.time.substring(0,10) === key; });
+      var kp = key.split('-');
+      subLabel = parseInt(kp[1]) + '월 ' + parseInt(kp[2]) + '일 기준';
     }
+
     document.getElementById('stat-sent').textContent      = stats.sent.toLocaleString() + '건';
     document.getElementById('stat-rate').textContent      = stats.responseRate + '%';
     document.getElementById('stat-responded').textContent = stats.responded + '건 응답';
     document.getElementById('stat-avg').textContent       = stats.avgScore > 0 ? '★ ' + stats.avgScore : '—';
     document.getElementById('stat-avg-sub').textContent   = stats.responded > 0 ? stats.responded + '건 기준' : '응답 없음';
+    document.getElementById('stat-scanned').textContent   = subLabel;
+
+    /* 트렌드 제목 */
+    var trendTitle = key === 'all' ? '일별 트렌드 (최근 60일)'
+      : key.substring(0, 6) === 'month:' ? ymLabel(key.substring(6)) + ' 일별 트렌드'
+      : key + ' 전후 2주 트렌드';
+    document.getElementById('trend-title').textContent = trendTitle;
+
     renderDist(sm, stats.responded);
     renderList(filtered);
+    drawTrendForKey(key);
   }
 
   /* ── Initial render ── */
   renderAll('all');
 
-  /* ── Daily trend data ── */
-  var byDate = {};
-  (D.responses || []).forEach(function(r) {
-    if (!r.time) return;
-    var d = r.time.substring(0, 10);
-    if (!byDate[d]) byDate[d] = { count: 0, sum: 0 };
-    byDate[d].count++;
-    byDate[d].sum += r.stars;
-  });
+  /* ── Trend: dailyStats 기반 데이터 조회 ── */
+  var allDS = D.dailyStats || {};
 
-  var days = [];
-  for (var i = 13; i >= 0; i--) {
-    var dt = new Date();
-    dt.setDate(dt.getDate() - i);
-    var ds = dt.toISOString().substring(0, 10);
-    var mm = dt.getMonth() + 1, dd = dt.getDate();
-    days.push({
-      date: ds,
-      label: mm + '/' + dd,
-      count: byDate[ds] ? byDate[ds].count : 0,
-      avg:   byDate[ds] ? Math.round(byDate[ds].sum / byDate[ds].count * 10) / 10 : 0
-    });
+  function dstatEntry(dk) {
+    var ds = allDS[dk];
+    if (!ds) return { count: 0, avg: 0 };
+    return { count: ds.responded || 0, avg: ds.avgScore || 0 };
+  }
+
+  function computeTrendDays(key) {
+    var result = [];
+    if (key === 'all') {
+      /* 최근 60일 */
+      for (var i = 59; i >= 0; i--) {
+        var dt = new Date(); dt.setDate(dt.getDate() - i);
+        var dk = dt.toISOString().substring(0, 10);
+        var mm = dt.getMonth()+1, dd = dt.getDate();
+        var e = dstatEntry(dk);
+        result.push({ date: dk, label: mm+'/'+dd, count: e.count, avg: e.avg });
+      }
+    } else if (key.substring(0, 6) === 'month:') {
+      var ym = key.substring(6);
+      var parts = ym.split('-');
+      var yr = parseInt(parts[0]), mo = parseInt(parts[1]);
+      var dim = new Date(yr, mo, 0).getDate();
+      for (var d = 1; d <= dim; d++) {
+        var dk = ym + '-' + (d < 10 ? '0' : '') + d;
+        var e = dstatEntry(dk);
+        result.push({ date: dk, label: d+'일', count: e.count, avg: e.avg });
+      }
+    } else {
+      /* 특정 날짜: 전후 2주 */
+      var base = new Date(key + 'T12:00:00');
+      for (var i = -6; i <= 7; i++) {
+        var dt = new Date(base); dt.setDate(base.getDate() + i);
+        var dk = dt.toISOString().substring(0, 10);
+        var mm = dt.getMonth()+1, dd = dt.getDate();
+        var e = dstatEntry(dk);
+        result.push({ date: dk, label: mm+'/'+dd, count: e.count, avg: e.avg, highlight: dk === key });
+      }
+    }
+    return result;
   }
 
   /* ── Trend canvas ── */
-  var canvas = document.getElementById('trend-canvas');
+  var canvas  = document.getElementById('trend-canvas');
   var tooltip = document.getElementById('trend-tooltip');
   var PAD = { top: 12, right: 44, bottom: 28, left: 36 };
+  var currentTrendDays = computeTrendDays('all');
+
+  function drawTrendForKey(key) {
+    currentTrendDays = computeTrendDays(key);
+    drawTrend();
+  }
 
   function drawTrend() {
+    var days = currentTrendDays;
     var container = canvas.parentElement;
     var W = Math.max(300, container.getBoundingClientRect().width - 44);
     canvas.width  = Math.round(W * window.devicePixelRatio);
@@ -558,6 +723,7 @@ window.CSAT_DATA = {
 
   /* hover tooltip */
   canvas.addEventListener('mousemove', function(e) {
+    var days = currentTrendDays;
     var rect = canvas.getBoundingClientRect();
     var mx = e.clientX - rect.left;
     var plotW = canvas.offsetWidth - PAD.left - PAD.right;
