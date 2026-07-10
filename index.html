@@ -580,8 +580,8 @@ window.CSAT_DATA = {
   window.addEventListener('resize', drawTrend);
 
   /* ── Distribution ── */
-  var distCard = document.getElementById('dist-card');
   function renderDist(sm, totalResponded) {
+    var distCard = document.getElementById('dist-card');
     distCard.innerHTML = '';
     var maxC = Math.max(1, sm['5']||0, sm['4']||0, sm['3']||0, sm['2']||0, sm['1']||0);
     [5,4,3,2,1].forEach(function(k) {
@@ -608,8 +608,8 @@ window.CSAT_DATA = {
   }
 
   /* ── Response list ── */
-  var listEl = document.getElementById('response-list');
   function renderList(responses) {
+    var listEl = document.getElementById('response-list');
     listEl.innerHTML = '';
     responses = responses.slice().sort(function(a, b) {
       return (b.time || '').localeCompare(a.time || '');
