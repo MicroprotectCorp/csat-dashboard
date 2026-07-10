@@ -338,6 +338,7 @@
   <div class="card" id="dist-card"></div>
 
   <p class="section-title">응답 목록</p>
+  <div class="agent-filter-bar" id="agent-filter-bar" style="display:none"></div>
   <div class="star-filter-bar" id="star-filter-bar"></div>
   <div id="response-list" class="response-list"></div>
   <div id="notice-area"></div>
@@ -346,7 +347,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-10 17:00",
+    "collectedAt":  "2026-07-10 17:07",
     "totalScanned":  264,
     "totalSent":  264,
     "totalResponded":  13,
@@ -604,9 +605,62 @@ window.CSAT_DATA = {
     });
   }
 
-  /* ── 별점 필터 상태 ── */
-  var selectedStar  = 0;   // 0 = 전체
+  /* ── 필터 상태 ── */
+  var selectedStar   = 0;   // 0 = 전체
+  var selectedAgent  = '';  // '' = 전체
   var currentFiltered = [];
+
+  function getFilteredList() {
+    var result = currentFiltered;
+    if (selectedAgent) result = result.filter(function(r) { return (r.assigneeId || '') === selectedAgent; });
+    if (selectedStar > 0) result = result.filter(function(r) { return r.stars === selectedStar; });
+    return result;
+  }
+
+  /* ── 에이전트 필터 바 빌드 ── */
+  function buildAgentBar(responses) {
+    var agentBar = document.getElementById('agent-filter-bar');
+    agentBar.innerHTML = '';
+
+    var agents = {};
+    responses.forEach(function(r) {
+      var aid = r.assigneeId || '';
+      if (!aid) return;
+      var nm = r.assigneeName || aid;
+      if (!agents[aid]) agents[aid] = { id: aid, name: nm, count: 0 };
+      agents[aid].count++;
+    });
+
+    var agentList = Object.keys(agents).map(function(k) { return agents[k]; })
+      .sort(function(a, b) { return b.count - a.count; });
+
+    if (agentList.length === 0) { agentBar.style.display = 'none'; return; }
+    agentBar.style.display = 'flex';
+
+    var allBtn = document.createElement('button');
+    allBtn.className = 'a-btn active';
+    allBtn.dataset.agent = '';
+    allBtn.textContent = '전체 상담원';
+    allBtn.onclick = function() { selectAgent(''); };
+    agentBar.appendChild(allBtn);
+
+    agentList.forEach(function(ag) {
+      var btn = document.createElement('button');
+      btn.className = 'a-btn';
+      btn.dataset.agent = ag.id;
+      btn.textContent = ag.name + ' (' + ag.count + ')';
+      btn.onclick = function() { selectAgent(ag.id); };
+      agentBar.appendChild(btn);
+    });
+  }
+
+  function selectAgent(agentId) {
+    selectedAgent = agentId;
+    document.querySelectorAll('.a-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.agent === agentId);
+    });
+    renderList(getFilteredList());
+  }
 
   /* ── renderAll: stats + dist + list ── */
   function renderAll(key) {
@@ -670,11 +724,13 @@ window.CSAT_DATA = {
 
     renderDist(sm, stats.responded);
     currentFiltered = filtered;
-    /* 별점 필터 리셋 */
-    selectedStar = 0;
+    /* 필터 리셋 */
+    selectedStar  = 0;
+    selectedAgent = '';
     document.querySelectorAll('.s-btn').forEach(function(b) {
       b.classList.toggle('active', b.dataset.star === '0');
     });
+    buildAgentBar(filtered);
     renderList(filtered);
     drawTrendForKey(key);
   }
@@ -699,10 +755,7 @@ window.CSAT_DATA = {
         selectedStar = item.star;
         starBar.querySelectorAll('.s-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
-        var toShow = item.star === 0
-          ? currentFiltered
-          : currentFiltered.filter(function(r) { return r.stars === item.star; });
-        renderList(toShow);
+        renderList(getFilteredList());
       };
       starBar.appendChild(btn);
     });
@@ -994,13 +1047,19 @@ window.CSAT_DATA = {
           ? '<div class="response-comment">' + esc(r.comment) + '</div>'
           : '<div class="response-comment no-comment">코멘트 없음</div>';
 
+        var agentHtml = r.assigneeName
+          ? '<span class="agent-chip">' + esc(r.assigneeName) + '</span>'
+          : '';
         card.innerHTML =
           '<div class="response-top">' +
             '<div class="stars-display">' + starsHtml + '</div>' +
             '<span class="response-time">' + esc(timeStr) + '</span>' +
           '</div>' +
           commentHtml +
-          '<span class="chat-id-chip">' + esc(r.chatId) + '</span>';
+          '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
+            agentHtml +
+            '<span class="chat-id-chip">' + esc(r.chatId) + '</span>' +
+          '</div>';
         listEl.appendChild(card);
       });
     });
