@@ -229,6 +229,17 @@
   }
   .notice strong { color: var(--text-1); }
 
+  /* Date filter */
+  .date-filter-bar { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .date-btn {
+    font-size: 12px; font-weight: 600; padding: 6px 14px;
+    border-radius: 99px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text-2);
+    cursor: pointer; transition: all .15s; line-height: 1;
+  }
+  .date-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .date-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
   @media (max-width: 600px) {
     .stats-row { grid-template-columns: 1fr 1fr; }
     .stat-card:last-child { grid-column: 1 / -1; }
@@ -252,6 +263,8 @@
 </div>
 
 <div class="main">
+
+  <div class="date-filter-bar" id="date-filter-bar"></div>
 
   <div class="stats-row">
     <div class="stat-card">
@@ -347,13 +360,54 @@ window.CSAT_DATA = {
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '집계: ' + D.collectedAt;
 
-  /* ── Stats ── */
-  document.getElementById('stat-sent').textContent     = D.totalSent.toLocaleString() + '건';
-  document.getElementById('stat-scanned').textContent  = '최근 종료 상담 ' + D.totalScanned.toLocaleString() + '건 중 CSAT 발송';
-  document.getElementById('stat-rate').textContent     = D.responseRate + '%';
-  document.getElementById('stat-responded').textContent= D.totalResponded + '건 응답';
-  document.getElementById('stat-avg').textContent      = D.avgScore > 0 ? '★ ' + D.avgScore : '—';
-  document.getElementById('stat-avg-sub').textContent  = D.totalResponded > 0 ? D.totalResponded + '건 기준' : '응답 없음';
+  /* ── Date filter buttons ── */
+  var filterBar = document.getElementById('date-filter-bar');
+  function makeBtn(label, dateKey) {
+    var btn = document.createElement('button');
+    btn.className = 'date-btn' + (dateKey === 'all' ? ' active' : '');
+    btn.dataset.date = dateKey;
+    btn.textContent = label;
+    btn.onclick = function() { renderAll(dateKey); };
+    filterBar.appendChild(btn);
+  }
+  makeBtn('전체', 'all');
+  if (D.dailyStats) {
+    Object.keys(D.dailyStats).sort().reverse().forEach(function(dk) {
+      var p = dk.split('-');
+      makeBtn(parseInt(p[1]) + '/' + parseInt(p[2]), dk);
+    });
+  }
+
+  /* ── renderAll: stats + dist + list ── */
+  function renderAll(dateKey) {
+    document.querySelectorAll('.date-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.date === dateKey);
+    });
+    var stats, sm, filtered;
+    if (dateKey === 'all') {
+      stats = { sent: D.totalSent, responded: D.totalResponded, responseRate: D.responseRate, avgScore: D.avgScore };
+      sm = D.scoreMap;
+      filtered = D.responses || [];
+      document.getElementById('stat-scanned').textContent = '전체 기간 집계';
+    } else {
+      var ds = D.dailyStats && D.dailyStats[dateKey];
+      stats = ds ? { sent: ds.sent, responded: ds.responded, responseRate: ds.responseRate, avgScore: ds.avgScore }
+                 : { sent: 0, responded: 0, responseRate: 0, avgScore: 0 };
+      sm = ds ? ds.scoreMap : {"5":0,"4":0,"3":0,"2":0,"1":0};
+      filtered = (D.responses||[]).filter(function(r){ return r.time && r.time.substring(0,10) === dateKey; });
+      document.getElementById('stat-scanned').textContent = dateKey + ' 기준';
+    }
+    document.getElementById('stat-sent').textContent      = stats.sent.toLocaleString() + '건';
+    document.getElementById('stat-rate').textContent      = stats.responseRate + '%';
+    document.getElementById('stat-responded').textContent = stats.responded + '건 응답';
+    document.getElementById('stat-avg').textContent       = stats.avgScore > 0 ? '★ ' + stats.avgScore : '—';
+    document.getElementById('stat-avg-sub').textContent   = stats.responded > 0 ? stats.responded + '건 기준' : '응답 없음';
+    renderDist(sm, stats.responded);
+    renderList(filtered);
+  }
+
+  /* ── Initial render ── */
+  renderAll('all');
 
   /* ── Daily trend data ── */
   var byDate = {};
@@ -527,51 +581,54 @@ window.CSAT_DATA = {
 
   /* ── Distribution ── */
   var distCard = document.getElementById('dist-card');
-  var maxC = Math.max(1, D.scoreMap['5']||0, D.scoreMap['4']||0, D.scoreMap['3']||0, D.scoreMap['2']||0, D.scoreMap['1']||0);
-  [5,4,3,2,1].forEach(function(k) {
-    var cnt = D.scoreMap[String(k)] || 0;
-    var pct = D.totalResponded > 0 ? Math.round(cnt / D.totalResponded * 100) : 0;
-    var barW = Math.round(cnt / maxC * 100);
-    var row = document.createElement('div');
-    row.className = 'dist-row';
-    row.innerHTML =
-      '<div class="dist-label"><span class="dist-star-icon">★</span>' + k + '</div>' +
-      '<div class="dist-bar-track"><div class="dist-bar-fill" style="width:0%" data-w="' + barW + '"></div></div>' +
-      '<div class="dist-count">' + cnt + '건' +
-        (D.totalResponded > 0 ? ' <span style="color:var(--text-3)">(' + pct + '%)</span>' : '') +
-      '</div>';
-    distCard.appendChild(row);
-  });
-  requestAnimationFrame(function() {
-    setTimeout(function() {
-      document.querySelectorAll('.dist-bar-fill').forEach(function(el) {
-        el.style.width = el.dataset.w + '%';
-      });
-    }, 100);
-  });
+  function renderDist(sm, totalResponded) {
+    distCard.innerHTML = '';
+    var maxC = Math.max(1, sm['5']||0, sm['4']||0, sm['3']||0, sm['2']||0, sm['1']||0);
+    [5,4,3,2,1].forEach(function(k) {
+      var cnt = sm[String(k)] || 0;
+      var pct = totalResponded > 0 ? Math.round(cnt / totalResponded * 100) : 0;
+      var barW = Math.round(cnt / maxC * 100);
+      var row = document.createElement('div');
+      row.className = 'dist-row';
+      row.innerHTML =
+        '<div class="dist-label"><span class="dist-star-icon">★</span>' + k + '</div>' +
+        '<div class="dist-bar-track"><div class="dist-bar-fill" style="width:0%" data-w="' + barW + '"></div></div>' +
+        '<div class="dist-count">' + cnt + '건' +
+          (totalResponded > 0 ? ' <span style="color:var(--text-3)">(' + pct + '%)</span>' : '') +
+        '</div>';
+      distCard.appendChild(row);
+    });
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        distCard.querySelectorAll('.dist-bar-fill').forEach(function(el) {
+          el.style.width = el.dataset.w + '%';
+        });
+      }, 80);
+    });
+  }
 
-  /* ── Response list grouped by date ── */
+  /* ── Response list ── */
   var listEl = document.getElementById('response-list');
-  var responses = (D.responses || []).slice().sort(function(a, b) {
-    return (b.time || '').localeCompare(a.time || '');
-  });
-
-  if (responses.length === 0) {
-    listEl.innerHTML =
-      '<div class="empty-state">' +
-        '<div class="empty-icon">📭</div>' +
-        '<div class="empty-title">아직 응답이 없어요</div>' +
-        '<div class="empty-desc">데이터가 쌓이면 날짜별로 여기에 표시돼요.</div>' +
-      '</div>';
-  } else {
-    var grouped = {};
-    var groupOrder = [];
+  function renderList(responses) {
+    listEl.innerHTML = '';
+    responses = responses.slice().sort(function(a, b) {
+      return (b.time || '').localeCompare(a.time || '');
+    });
+    if (responses.length === 0) {
+      listEl.innerHTML =
+        '<div class="empty-state">' +
+          '<div class="empty-icon">📭</div>' +
+          '<div class="empty-title">응답이 없어요</div>' +
+          '<div class="empty-desc">해당 날짜에 수집된 응답이 없습니다.</div>' +
+        '</div>';
+      return;
+    }
+    var grouped = {}, groupOrder = [];
     responses.forEach(function(r) {
       var key = r.time ? r.time.substring(0, 10) : '날짜 미상';
       if (!grouped[key]) { grouped[key] = []; groupOrder.push(key); }
       grouped[key].push(r);
     });
-
     groupOrder.forEach(function(dateKey) {
       var group = grouped[dateKey];
       var hdr = document.createElement('div');
