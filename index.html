@@ -205,6 +205,9 @@
     background: var(--surface-2); border-radius: 7px; padding: 9px 13px; margin-top: 2px;
   }
   .no-comment { font-size: 12px; color: var(--text-3); font-style: italic; }
+  .translate-btn { font-size: 11px; color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 4px; padding: 1px 7px; cursor: pointer; margin-top: 5px; display: inline-block; }
+  .translate-btn:hover { background: var(--accent); color: #fff; }
+  .translated-text { font-size: 12.5px; color: var(--text-3); margin-top: 5px; font-style: italic; }
   .chat-id-chip {
     display: inline-block; font-size: 10px;
     font-family: "SF Mono", "Consolas", monospace;
@@ -347,7 +350,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 10:16",
+    "collectedAt":  "2026-07-16 10:28",
     "totalScanned":  1600,
     "totalSent":  1600,
     "totalResponded":  43,
@@ -1349,8 +1352,12 @@ window.CSAT_DATA = {
           starsHtml += '<span class="' + (i <= r.stars ? 'star-filled' : 'star-empty-c') + '">★</span>';
         }
         var timeStr = r.time ? r.time.substring(11) : '';
-        var commentHtml = (r.comment && r.comment.trim())
-          ? '<div class="response-comment">' + esc(r.comment) + '</div>'
+        var hasComment = r.comment && r.comment.trim();
+        var isForeign = hasComment && !/[가-힣]/.test(r.comment);
+        var commentHtml = hasComment
+          ? '<div class="response-comment">' + esc(r.comment) +
+            (isForeign ? '<br><button class="translate-btn" onclick="translateComment(this,' + JSON.stringify(r.comment) + ')">번역보기</button><span class="translated-text"></span>' : '') +
+            '</div>'
           : '<div class="response-comment no-comment">코멘트 없음</div>';
 
         var agentHtml = r.assigneeName
@@ -1378,4 +1385,22 @@ window.CSAT_DATA = {
   }
 
 })();
+
+function translateComment(btn, text) {
+  var resultEl = btn.nextElementSibling;
+  btn.disabled = true;
+  btn.textContent = '번역 중…';
+  fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ko&dt=t&q=' + encodeURIComponent(text))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var translated = data[0].map(function(s) { return s[0]; }).join('');
+      resultEl.textContent = '🇰🇷 ' + translated;
+      btn.style.display = 'none';
+    })
+    .catch(function() {
+      resultEl.textContent = '번역 실패';
+      btn.textContent = '번역보기';
+      btn.disabled = false;
+    });
+}
 </script>
