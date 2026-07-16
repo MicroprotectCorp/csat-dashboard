@@ -350,7 +350,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 10:49",
+    "collectedAt":  "2026-07-16 10:54",
     "totalScanned":  1601,
     "totalSent":  1601,
     "totalResponded":  43,
@@ -1356,7 +1356,7 @@ window.CSAT_DATA = {
         var isForeign = hasComment && !/[가-힣]/.test(r.comment);
         var commentHtml = hasComment
           ? '<div class="response-comment">' + esc(r.comment) +
-            (isForeign ? '<br><button class="translate-btn" onclick="translateComment(this,' + JSON.stringify(r.comment) + ')">번역보기</button><span class="translated-text"></span>' : '') +
+            (isForeign ? '<br><button class="translate-btn">번역보기</button><span class="translated-text"></span>' : '') +
             '</div>'
           : '<div class="response-comment no-comment">코멘트 없음</div>';
 
@@ -1373,6 +1373,11 @@ window.CSAT_DATA = {
             agentHtml +
             '<span class="chat-id-chip">' + esc(r.chatId) + '</span>' +
           '</div>';
+        if (isForeign) {
+          var btn = card.querySelector('.translate-btn');
+          var comment = r.comment;
+          btn.addEventListener('click', function() { translateComment(btn, comment); });
+        }
         listEl.appendChild(card);
       });
     });
@@ -1390,17 +1395,26 @@ function translateComment(btn, text) {
   var resultEl = btn.nextElementSibling;
   btn.disabled = true;
   btn.textContent = '번역 중…';
-  fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=auto|ko')
+  fetch('https://lingva.ml/api/v1/auto/ko/' + encodeURIComponent(text))
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      var translated = data.responseData.translatedText;
-      resultEl.textContent = '🇰🇷 ' + translated;
+      if (!data.translation) throw new Error();
+      resultEl.textContent = '🇰🇷 ' + data.translation;
       btn.style.display = 'none';
     })
     .catch(function() {
-      resultEl.textContent = '번역 실패';
-      btn.textContent = '번역보기';
-      btn.disabled = false;
+      // fallback: MyMemory
+      fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=ru|ko')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          resultEl.textContent = '🇰🇷 ' + data.responseData.translatedText;
+          btn.style.display = 'none';
+        })
+        .catch(function() {
+          resultEl.textContent = '번역 실패';
+          btn.textContent = '번역보기';
+          btn.disabled = false;
+        });
     });
 }
 </script>
