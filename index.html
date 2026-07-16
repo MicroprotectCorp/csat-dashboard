@@ -350,7 +350,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 10:54",
+    "collectedAt":  "2026-07-16 10:58",
     "totalScanned":  1601,
     "totalSent":  1601,
     "totalResponded":  43,
@@ -1354,9 +1354,14 @@ window.CSAT_DATA = {
         var timeStr = r.time ? r.time.substring(11) : '';
         var hasComment = r.comment && r.comment.trim();
         var isForeign = hasComment && !/[가-힣]/.test(r.comment);
+        var savedTranslation = isForeign ? localStorage.getItem('tr_' + r.chatId) : null;
         var commentHtml = hasComment
           ? '<div class="response-comment">' + esc(r.comment) +
-            (isForeign ? '<br><button class="translate-btn">번역보기</button><span class="translated-text"></span>' : '') +
+            (isForeign
+              ? (savedTranslation
+                  ? '<br><span class="translated-text">🇰🇷 ' + esc(savedTranslation) + '</span>'
+                  : '<br><button class="translate-btn">번역보기</button><span class="translated-text"></span>')
+              : '') +
             '</div>'
           : '<div class="response-comment no-comment">코멘트 없음</div>';
 
@@ -1373,10 +1378,11 @@ window.CSAT_DATA = {
             agentHtml +
             '<span class="chat-id-chip">' + esc(r.chatId) + '</span>' +
           '</div>';
-        if (isForeign) {
+        if (isForeign && !savedTranslation) {
           var btn = card.querySelector('.translate-btn');
           var comment = r.comment;
-          btn.addEventListener('click', function() { translateComment(btn, comment); });
+          var chatId = r.chatId;
+          btn.addEventListener('click', function() { translateComment(btn, comment, chatId); });
         }
         listEl.appendChild(card);
       });
@@ -1391,25 +1397,25 @@ window.CSAT_DATA = {
 
 })();
 
-function translateComment(btn, text) {
+function translateComment(btn, text, chatId) {
   var resultEl = btn.nextElementSibling;
   btn.disabled = true;
   btn.textContent = '번역 중…';
+  function onSuccess(translated) {
+    resultEl.textContent = '🇰🇷 ' + translated;
+    btn.style.display = 'none';
+    if (chatId) localStorage.setItem('tr_' + chatId, translated);
+  }
   fetch('https://lingva.ml/api/v1/auto/ko/' + encodeURIComponent(text))
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (!data.translation) throw new Error();
-      resultEl.textContent = '🇰🇷 ' + data.translation;
-      btn.style.display = 'none';
+      onSuccess(data.translation);
     })
     .catch(function() {
-      // fallback: MyMemory
       fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=ru|ko')
         .then(function(r) { return r.json(); })
-        .then(function(data) {
-          resultEl.textContent = '🇰🇷 ' + data.responseData.translatedText;
-          btn.style.display = 'none';
-        })
+        .then(function(data) { onSuccess(data.responseData.translatedText); })
         .catch(function() {
           resultEl.textContent = '번역 실패';
           btn.textContent = '번역보기';
