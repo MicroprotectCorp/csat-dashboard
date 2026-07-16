@@ -208,6 +208,8 @@
   .translate-btn { font-size: 11px; color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 4px; padding: 1px 7px; cursor: pointer; margin-top: 5px; display: inline-block; }
   .translate-btn:hover { background: var(--accent); color: #fff; }
   .translated-text { font-size: 12.5px; color: var(--text-3); margin-top: 5px; font-style: italic; }
+  .open-chat-hint { font-size: 11px; color: var(--accent); font-weight: 500; opacity: .55; transition: opacity .15s; white-space: nowrap; }
+  .response-card:hover .open-chat-hint { opacity: 1; }
   .chat-id-chip {
     display: inline-block; font-size: 10px;
     font-family: "SF Mono", "Consolas", monospace;
@@ -350,9 +352,9 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 11:50",
-    "totalScanned":  1607,
-    "totalSent":  1607,
+    "collectedAt":  "2026-07-16 12:06",
+    "totalScanned":  1608,
+    "totalSent":  1608,
     "totalResponded":  43,
     "responseRate":  2.7,
     "avgScore":  3.44,
@@ -752,10 +754,10 @@ window.CSAT_DATA = {
                           "customerName":  "천영안"
                       }
                   ],
-    "noResponseCount":  1564,
+    "noResponseCount":  1565,
     "dailyStats":  {
                        "2026-07-16":  {
-                                          "sent":  9,
+                                          "sent":  10,
                                           "responded":  0,
                                           "responseRate":  0,
                                           "avgScore":  0,
@@ -857,7 +859,7 @@ window.CSAT_DATA = {
                                   },
                        "647650":  {
                                       "name":  "Olive",
-                                      "sent":  15,
+                                      "sent":  16,
                                       "responded":  0,
                                       "responseRate":  0,
                                       "avgScore":  0
@@ -1430,8 +1432,9 @@ window.CSAT_DATA = {
             '<span class="response-time">' + esc(timeStr) + '</span>' +
           '</div>' +
           commentHtml +
-          '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
-            agentHtml +
+          '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:space-between">' +
+            '<div>' + agentHtml + '</div>' +
+            (chatUrl ? '<span class="open-chat-hint">상담 보기 ↗</span>' : '') +
           '</div>';
         if (isForeign && !savedTranslation) {
           var btn = card.querySelector('.translate-btn');
