@@ -350,7 +350,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 11:13",
+    "collectedAt":  "2026-07-16 11:29",
     "totalScanned":  1607,
     "totalSent":  1607,
     "totalResponded":  43,
@@ -1371,9 +1371,10 @@ window.CSAT_DATA = {
         var chatUrl = r.customerName
           ? 'https://channel.works/j6kzv/user-chats/' + encodeURIComponent(r.customerName) + '-' + esc(r.chatId)
           : null;
-        var chatChipHtml = chatUrl
-          ? '<a class="chat-id-chip" href="' + chatUrl + '" target="_blank" style="text-decoration:none">' + esc(r.chatId) + ' ↗</a>'
-          : '<span class="chat-id-chip">' + esc(r.chatId) + '</span>';
+        if (chatUrl) {
+          card.style.cursor = 'pointer';
+          card.title = r.customerName + ' 상담 열기';
+        }
         card.innerHTML =
           '<div class="response-top">' +
             '<div class="stars-display">' + starsHtml + '</div>' +
@@ -1382,8 +1383,13 @@ window.CSAT_DATA = {
           commentHtml +
           '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
             agentHtml +
-            chatChipHtml +
           '</div>';
+        if (chatUrl) {
+          card.addEventListener('click', function(e) {
+            if (e.target.classList.contains('translate-btn')) return;
+            window.open(chatUrl, '_blank');
+          });
+        }
         if (isForeign && !savedTranslation) {
           var btn = card.querySelector('.translate-btn');
           var comment = r.comment;
