@@ -350,7 +350,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 11:43",
+    "collectedAt":  "2026-07-16 11:50",
     "totalScanned":  1607,
     "totalSent":  1607,
     "totalResponded":  43,
@@ -1388,8 +1388,21 @@ window.CSAT_DATA = {
       listEl.appendChild(hdr);
 
       group.forEach(function(r) {
-        var card = document.createElement('div');
+        var chatUrl = r.customerName
+          ? 'https://channel.works/j6kzv/user-chats/' + encodeURIComponent(r.customerName) + '-' + r.chatId
+          : null;
+        var card = document.createElement(chatUrl ? 'a' : 'div');
         card.className = 'response-card';
+        if (chatUrl) {
+          card.href = chatUrl;
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+          card.style.textDecoration = 'none';
+          card.style.color = 'inherit';
+          card.style.display = 'block';
+          card.style.cursor = 'pointer';
+          card.title = r.customerName + ' 상담 열기';
+        }
         var starsHtml = '';
         for (var i = 1; i <= 5; i++) {
           starsHtml += '<span class="' + (i <= r.stars ? 'star-filled' : 'star-empty-c') + '">★</span>';
@@ -1411,13 +1424,6 @@ window.CSAT_DATA = {
         var agentHtml = r.assigneeName
           ? '<span class="agent-chip">' + esc(r.assigneeName) + '</span>'
           : '';
-        var chatUrl = r.customerName
-          ? 'https://channel.works/j6kzv/user-chats/' + encodeURIComponent(r.customerName) + '-' + esc(r.chatId)
-          : null;
-        if (chatUrl) {
-          card.style.cursor = 'pointer';
-          card.title = r.customerName + ' 상담 열기';
-        }
         card.innerHTML =
           '<div class="response-top">' +
             '<div class="stars-display">' + starsHtml + '</div>' +
@@ -1427,17 +1433,14 @@ window.CSAT_DATA = {
           '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
             agentHtml +
           '</div>';
-        if (chatUrl) {
-          card.addEventListener('click', function(e) {
-            if (e.target.classList.contains('translate-btn')) return;
-            window.open(chatUrl, '_blank');
-          });
-        }
         if (isForeign && !savedTranslation) {
           var btn = card.querySelector('.translate-btn');
           var comment = r.comment;
           var chatId = r.chatId;
-          btn.addEventListener('click', function() { translateComment(btn, comment, chatId); });
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            translateComment(btn, comment, chatId);
+          });
         }
         listEl.appendChild(card);
       });
