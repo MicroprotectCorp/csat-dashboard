@@ -350,9 +350,9 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 10:58",
-    "totalScanned":  1601,
-    "totalSent":  1601,
+    "collectedAt":  "2026-07-16 11:13",
+    "totalScanned":  1607,
+    "totalSent":  1607,
     "totalResponded":  43,
     "responseRate":  2.7,
     "avgScore":  3.44,
@@ -709,10 +709,10 @@ window.CSAT_DATA = {
                           "assigneeName":  "jacob"
                       }
                   ],
-    "noResponseCount":  1558,
+    "noResponseCount":  1564,
     "dailyStats":  {
                        "2026-07-16":  {
-                                          "sent":  3,
+                                          "sent":  9,
                                           "responded":  0,
                                           "responseRate":  0,
                                           "avgScore":  0,
@@ -828,9 +828,9 @@ window.CSAT_DATA = {
                                   },
                        "636057":  {
                                       "name":  "jacob",
-                                      "sent":  152,
+                                      "sent":  158,
                                       "responded":  13,
-                                      "responseRate":  8.6,
+                                      "responseRate":  8.2,
                                       "avgScore":  3.23
                                   },
                        "unknown":  {
@@ -1368,6 +1368,12 @@ window.CSAT_DATA = {
         var agentHtml = r.assigneeName
           ? '<span class="agent-chip">' + esc(r.assigneeName) + '</span>'
           : '';
+        var chatUrl = r.customerName
+          ? 'https://channel.works/j6kzv/user-chats/' + encodeURIComponent(r.customerName) + '-' + esc(r.chatId)
+          : null;
+        var chatChipHtml = chatUrl
+          ? '<a class="chat-id-chip" href="' + chatUrl + '" target="_blank" style="text-decoration:none">' + esc(r.chatId) + ' ↗</a>'
+          : '<span class="chat-id-chip">' + esc(r.chatId) + '</span>';
         card.innerHTML =
           '<div class="response-top">' +
             '<div class="stars-display">' + starsHtml + '</div>' +
@@ -1376,7 +1382,7 @@ window.CSAT_DATA = {
           commentHtml +
           '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' +
             agentHtml +
-            '<span class="chat-id-chip">' + esc(r.chatId) + '</span>' +
+            chatChipHtml +
           '</div>';
         if (isForeign && !savedTranslation) {
           var btn = card.querySelector('.translate-btn');
