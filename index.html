@@ -73,6 +73,17 @@
     backdrop-filter: blur(8px);
   }
   .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .collect-btn {
+    font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+    padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--accent); color: #fff; cursor: pointer;
+    font-variant-numeric: tabular-nums; transition: opacity .15s, background .15s;
+  }
+  .collect-btn:hover:not(:disabled) { opacity: .88; }
+  .collect-btn:disabled {
+    background: var(--surface); color: var(--text-3); cursor: not-allowed;
+  }
   .logo-dot {
     width: 9px; height: 9px; border-radius: 50%;
     background: var(--accent);
@@ -303,7 +314,10 @@
     <h1>CSAT 대시보드</h1>
     <span class="badge">Beta</span>
   </div>
-  <span class="header-meta" id="collected-at">—</span>
+  <div class="header-right">
+    <span class="header-meta" id="collected-at">—</span>
+    <button class="collect-btn" id="manual-collect-btn" type="button">수동 집계</button>
+  </div>
 </div>
 
 <div class="main">
@@ -352,7 +366,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-16 22:00",
+    "collectedAt":  "2026-07-16 22:55",
     "totalScanned":  1981,
     "totalSent":  1981,
     "totalResponded":  48,
@@ -960,6 +974,46 @@ window.CSAT_DATA = {
 
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '집계: ' + D.collectedAt;
+
+  /* ── 수동 집계 버튼 (1시간 쿨다운) ── */
+  (function () {
+    var KEY = 'csatManualCollectAt';
+    var COOLDOWN_MS = 60 * 60 * 1000;
+    var btn = document.getElementById('manual-collect-btn');
+    if (!btn) return;
+
+    function remainingMs() {
+      var last = parseInt(localStorage.getItem(KEY) || '0', 10);
+      return COOLDOWN_MS - (Date.now() - last);
+    }
+    function render() {
+      var rem = remainingMs();
+      if (rem > 0) {
+        btn.textContent = '수동 집계 (' + Math.ceil(rem / 60000) + '분 후 가능)';
+        btn.disabled = true;
+      } else {
+        btn.textContent = '수동 집계';
+        btn.disabled = false;
+      }
+    }
+    btn.addEventListener('click', function () {
+      if (remainingMs() > 0) return;
+      var ok = window.confirm(
+        'GitHub Actions에서 CSAT 수집을 수동 실행합니다.\n' +
+        '1시간에 1번만 실행할 수 있어요 — 계속할까요?'
+      );
+      if (!ok) return;
+      localStorage.setItem(KEY, String(Date.now()));
+      window.open(
+        'https://github.com/MicroprotectCorp/mp-info/actions/workflows/csat-collect.yml',
+        '_blank',
+        'noopener'
+      );
+      render();
+    });
+    render();
+    setInterval(render, 30000);
+  })();
 
   /* ── 날짜 필터 버튼 ── */
   var dateBar = document.getElementById('date-bar');
