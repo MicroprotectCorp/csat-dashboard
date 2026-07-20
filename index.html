@@ -1034,16 +1034,28 @@ window.CSAT_DATA = {
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '[자동 집계] ' + D.collectedAt;
 
-  /* ── 수동 집계 버튼 (1시간 쿨다운) ── */
+  /* ── 수동 집계 버튼 (수동/자동 통틀어 1시간 제약) ── */
   (function () {
     var KEY = 'csatManualCollectAt';
     var COOLDOWN_MS = 60 * 60 * 1000;
     var btn = document.getElementById('manual-collect-btn');
     if (!btn) return;
 
-    function remainingMs() {
+    /* D.collectedAt은 "YYYY-MM-DD HH:mm" 형식의 KST 시각 문자열 */
+    function lastCollectedMs() {
+      if (!D.collectedAt) return 0;
+      var t = new Date(D.collectedAt.replace(' ', 'T') + ':00+09:00').getTime();
+      return isNaN(t) ? 0 : t;
+    }
+    function dataRemainMs() {
+      return COOLDOWN_MS - (Date.now() - lastCollectedMs());
+    }
+    function clickRemainMs() {
       var last = parseInt(localStorage.getItem(KEY) || '0', 10);
       return COOLDOWN_MS - (Date.now() - last);
+    }
+    function remainingMs() {
+      return Math.max(dataRemainMs(), clickRemainMs());
     }
     function render() {
       var rem = remainingMs();
@@ -1056,7 +1068,12 @@ window.CSAT_DATA = {
       }
     }
     btn.addEventListener('click', function () {
-      if (remainingMs() > 0) return;
+      var dRem = dataRemainMs();
+      if (dRem > 0) {
+        alert('아직 집계된 지 1시간이 지나지 않았어요.\n' + Math.ceil(dRem / 60000) + '분 후 다시 시도해주세요.');
+        return;
+      }
+      if (clickRemainMs() > 0) return;
       var ok = window.confirm(
         'CSAT 수집을 수동 실행합니다.\n' +
         '1시간에 1번만 실행할 수 있어요 — 계속할까요?'
