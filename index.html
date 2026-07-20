@@ -1058,17 +1058,26 @@ window.CSAT_DATA = {
     btn.addEventListener('click', function () {
       if (remainingMs() > 0) return;
       var ok = window.confirm(
-        'GitHub Actions에서 CSAT 수집을 수동 실행합니다.\n' +
+        'CSAT 수집을 수동 실행합니다.\n' +
         '1시간에 1번만 실행할 수 있어요 — 계속할까요?'
       );
       if (!ok) return;
-      localStorage.setItem(KEY, String(Date.now()));
-      window.open(
-        'https://github.com/MicroprotectCorp/mp-info/actions/workflows/csat-collect.yml',
-        '_blank',
-        'noopener'
-      );
-      render();
+      btn.disabled = true;
+      btn.textContent = '실행 중…';
+      fetch('https://csat-trigger.summer-563.workers.dev/', { method: 'POST' })
+        .then(function (res) { return res.json().then(function (data) { return { status: res.status, data: data }; }); })
+        .then(function (r) {
+          if (r.status === 200 && r.data.ok) {
+            localStorage.setItem(KEY, String(Date.now()));
+            alert(r.data.message || '수집을 시작했어요.');
+          } else {
+            alert(r.data.message || '실행에 실패했어요.');
+          }
+        })
+        .catch(function () {
+          alert('연결에 실패했어요. 잠시 후 다시 시도해주세요.');
+        })
+        .finally(render);
     });
     render();
     setInterval(render, 30000);
