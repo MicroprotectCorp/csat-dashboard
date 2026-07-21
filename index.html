@@ -1630,8 +1630,8 @@ window.CSAT_DATA = {
       listEl.appendChild(hdr);
 
       group.forEach(function(r) {
-        var chatUrl = r.customerName
-          ? 'https://channel.works/j6kzv/user-chats/' + encodeURIComponent(r.customerName) + '-' + r.chatId
+        var chatUrl = r.chatId
+          ? 'https://channel.works/j6kzv/user-chats/' + r.chatId
           : null;
         var card = document.createElement(chatUrl ? 'a' : 'div');
         card.className = 'response-card';
@@ -1643,7 +1643,7 @@ window.CSAT_DATA = {
           card.style.color = 'inherit';
           card.style.display = 'block';
           card.style.cursor = 'pointer';
-          card.title = r.customerName + ' 상담 열기';
+          card.title = '상담 열기';
         }
         var starsHtml = '';
         for (var i = 1; i <= 5; i++) {
