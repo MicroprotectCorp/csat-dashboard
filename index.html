@@ -305,6 +305,14 @@
   @media (prefers-reduced-motion: reduce) {
     .dist-bar-fill { transition: none; }
   }
+  .compare-note { font-size: 12px; color: var(--text-3); margin: 0 0 10px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .compare-table th, .compare-table td { padding: 10px 14px; text-align: left; }
+  .compare-table th { font-size: 11px; color: var(--text-3); font-weight: 600; border-bottom: 1px solid var(--border); }
+  .compare-table th:not(:first-child), .compare-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+  .compare-table tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+  .compare-up { color: var(--good); }
+  .compare-down { color: #DC2626; }
 </style>
 
 <div id="pw-gate" style="position:fixed;inset:0;z-index:9999;background:#EEF0F7;display:flex;align-items:center;justify-content:center;padding:20px;">
@@ -356,6 +364,11 @@
       <div class="stat-value star" id="stat-avg">—</div>
       <div class="stat-sub" id="stat-avg-sub">—</div>
     </div>
+  </div>
+
+  <div id="compare-section" style="display:none;">
+    <p class="section-title">정책 전/후 비교</p>
+    <div id="compare-cards"></div>
   </div>
 
   <p class="section-title" id="trend-title">CSAT 운영 일별 트렌드</p>
@@ -412,737 +425,771 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-07-21 18:55",
-  "totalScanned": 2807,
-  "totalSent": 2807,
-  "totalResponded": 68,
-  "responseRate": 2.4,
-  "avgScore": 3.72,
-  "scoreMap": {
-    "5": 38,
-    "4": 4,
-    "3": 10,
-    "2": 1,
-    "1": 15
-  },
-  "responses": [
-    {
-      "chatId": "6a509f1b05be4fac779f",
-      "stars": 5,
-      "comment": "빠르고 확실한 처리 굿!",
-      "time": "2026-07-10 16:54",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a508a6a20a42a923fc5",
-      "stars": 5,
-      "comment": "문자로 하는것 보다는 전화 연결로 했으면 좋을것 같습니다",
-      "time": "2026-07-10 16:00",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a28c9632e62b95f4ea1",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-10 14:50",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a506b4277af1f3bd8f5",
-      "stars": 5,
-      "comment": "빠른  처리  바랍니다",
-      "time": "2026-07-10 14:42",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a505c953a97506f3276",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-10 14:10",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a505866cad68755b2cf",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-10 14:10",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a4db29414f910d8b037",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-09 16:51",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a4ee52f2375fc7a779d",
-      "stars": 1,
-      "comment": "빠른처리 부탁드립니다",
-      "time": "2026-07-09 17:37",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a4f358d0048e184f658",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-09 15:24",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a4f0e50881b75d8695b",
-      "stars": 1,
-      "comment": "약속한것 지킵시다",
-      "time": "2026-07-09 17:43",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a4f34a4d7aa759f6329",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-09 17:37",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a4f35ee0c746f86f1c7",
-      "stars": 4,
-      "comment": "",
-      "time": "2026-07-09 15:44",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5083b547f611a10353",
-      "stars": 4,
-      "comment": "",
-      "time": "2026-07-10 17:12",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a509b5255c97f802790",
-      "stars": 5,
-      "comment": "친절해요",
-      "time": "2026-07-10 17:29",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a507a51f4185a35edda",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-10 18:31",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a50809aed58683cdeb5",
-      "stars": 2,
-      "comment": "경제적 사정으로 빠른 접수와 처리",
-      "time": "2026-07-10 17:29",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a4ddd6084d3cf0866c1",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-10 17:39",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a4dbf0256ced35955a2",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-09 14:03",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a54773376c82339278e",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-13 17:27",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a548e0257b6641d9f18",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-13 17:19",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a54966768dbf6886e7c",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-13 17:13",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a543ee6eff135e22a0c",
-      "stars": 1,
-      "comment": "채팅보다는 직접 전화 상담을 했으면 좋겠어요.자세한 설명이 필요한 부분에 있어서 답답해요",
-      "time": "2026-07-13 16:37",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a45c3f2e33f1eac9879",
-      "stars": 4,
-      "comment": "",
-      "time": "2026-07-13 17:09",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a544d22ebf412f968c9",
-      "stars": 5,
-      "comment": "Очень доходчиво и досконально обьяснили,спасибо за возврат денег",
-      "time": "2026-07-13 17:21",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a5436a6a4697fd3d5ff",
-      "stars": 5,
-      "comment": "상담은 괜찮으나 일 처리속도가 너무 늦음",
-      "time": "2026-07-13 17:09",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a545738722a9a76b9e7",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-13 18:53",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a544650c05e96d82223",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-13 12:16",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a55ca1eb9b94e59a025",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-14 15:12",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a55ea0f4c8efafab60b",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-14 17:32",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a55dbfd0c8e756491cc",
-      "stars": 1,
-      "comment": "상담원대답이 성의가없음",
-      "time": "2026-07-14 17:28",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a55c5b4b398512f9ff5",
-      "stars": 4,
-      "comment": "환급 대상이 아닌 병원진료항목들은 삼쩜삼 결제 전에 미리 쌍방 확인이 되었으면 합니다",
-      "time": "2026-07-14 17:24",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a4db527d78ff3b4af70",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-10 17:29",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a4c6885b002fc3df7e0",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-09 17:37",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a55a56359bde4d8a8f7",
-      "stars": 3,
-      "comment": "AI라서조금답답합니다.",
-      "time": "2026-07-14 17:55",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a559ee1455eb542b431",
-      "stars": 5,
-      "comment": "질문에  바로바로  답해주셔서  좋은거같아요",
-      "time": "2026-07-16 11:06",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a56e55f6e42702e59f6",
-      "stars": 5,
-      "comment": "예상환급액이랑차이가넘많이나는점 참고해주세요 상당사님수고하십니다",
-      "time": "2026-07-15 11:46",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5734a2b0d541da215d",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-15 17:15",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a56e06719ace226ae67",
-      "stars": 1,
-      "comment": "문의자가 정확히 알수없이 너무 메뉴얼데로만 답변을 줘서 문의한 결과 제대로된 답변을 듣지 못하었습니다 결국 저는 알고싶은걸 알지 못했네요",
-      "time": "2026-07-15 17:09",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a573949810775fb2449",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-15 17:24",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a5734747f10d4de9f2a",
-      "stars": 3,
-      "comment": "신청한거는 2건에 제가 12만원 이상을 걸제했고 보험사에세둑건 다 환불할께 없다고 문자가 왔는데요",
-      "time": "2026-07-15 17:08",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a2659d7c386b827a29a",
-      "stars": 3,
-      "comment": "시간이 너무오래걸리고 첨에 신청하고 결제까지한후 환급받을수없다있다 이런거까지완벽하게안되서 계속기다려야하는번거로움",
-      "time": "2026-07-15 17:08",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a543adb040dc89b6f14",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-15 18:39",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a57247e87b95432e297",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-15 17:12",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5832a74a32f4ea37f8",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-16 11:07",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a588eeb9725bab1d880",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-16 17:40",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a587fd3746281ce1206",
-      "stars": 3,
-      "comment": "보험회사4만윈나왔는데수수료 78000윈뗀다고요",
-      "time": "2026-07-16 18:50",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a584b314f5d6b4d0e3d",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-16 14:44",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a4daf1f7eeb5c561e08",
-      "stars": 5,
-      "comment": "고생하셨습니다",
-      "time": "2026-07-16 17:19",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a5868226cf36e51e714",
-      "stars": 5,
-      "comment": "예상햇던것보다 신속한처리 만족하고. 주변에 권하도록하겠습니다",
-      "time": "2026-07-16 14:19",
-      "assigneeId": "565238",
-      "assigneeName": "Randy"
-    },
-    {
-      "chatId": "6a584526b1b3f0de9018",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-16 12:16",
-      "assigneeId": "647650",
-      "assigneeName": "Olive"
-    },
-    {
-      "chatId": "6a584503e3a1a0e4a098",
-      "stars": 1,
-      "comment": "일처리 좀빨리하소",
-      "time": "2026-07-16 16:35",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5d7c3cea0087071ade",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-20 11:40",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a588580b739373a38f6",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-20 12:10",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a58714ddf76c2cdc8af",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-16 18:20",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5dce7ae6c5a47c1993",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-20 17:05",
-      "assigneeId": "609327",
-      "assigneeName": "Summer"
-    },
-    {
-      "chatId": "6a5dbc9b59450c610cff",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-20 17:51",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5889c0233f4612f8b7",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-16 18:23",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5ec97c979995c0a3ef",
-      "stars": 5,
-      "comment": ".",
-      "time": "2026-07-21 10:56",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a5edd7c7b207d3bce94",
-      "stars": 5,
-      "comment": "응대속도와 궁금한 사항을 신속히 답을주시어 사이트에 대한 신뢰도를 느낄수있었습니다~",
-      "time": "2026-07-21 12:09",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a5ed29a9e9d60f84bd8",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-07-21 12:09",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5edaeb73fcab6f90c4",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 12:09",
-      "assigneeId": "631507",
-      "assigneeName": "allie"
-    },
-    {
-      "chatId": "6a5ecb28ae2900579cd5",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-07-21 12:08",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5f0ebcd795c57bc286",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 15:53",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a5f0057104378f80aa6",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 16:19",
-      "assigneeId": "629325",
-      "assigneeName": "Jiu"
-    },
-    {
-      "chatId": "6a5f15c54eae96b5cdb8",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 16:07",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a5f23b3d0d80632bd9a",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 17:12",
-      "assigneeId": "656326",
-      "assigneeName": "heizle"
-    },
-    {
-      "chatId": "6a5f09bfb8627e8f2118",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-07-21 17:04",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a5f249524d9a3c50ca1",
-      "stars": 5,
-      "comment": "없습니다. 감사합니다",
-      "time": "2026-07-21 18:16",
-      "assigneeId": "647650",
-      "assigneeName": "Olive"
-    }
-  ],
-  "noResponseCount": 2739,
-  "dailyStats": {
-    "2026-07-21": {
-      "sent": 437,
-      "responded": 11,
-      "responseRate": 2.5,
-      "avgScore": 4.45,
-      "scoreMap": {
-        "5": 9,
-        "4": 0,
-        "3": 1,
-        "2": 0,
-        "1": 1
-      }
-    },
-    "2026-07-20": {
-      "sent": 436,
-      "responded": 4,
-      "responseRate": 0.9,
-      "avgScore": 4.5,
-      "scoreMap": {
-        "5": 3,
-        "4": 0,
-        "3": 1,
-        "2": 0,
-        "1": 0
-      }
-    },
-    "2026-07-16": {
-      "sent": 337,
-      "responded": 11,
-      "responseRate": 3.3,
-      "avgScore": 3.91,
-      "scoreMap": {
-        "5": 7,
-        "4": 0,
-        "3": 2,
-        "2": 0,
-        "1": 2
-      }
-    },
-    "2026-07-15": {
-      "sent": 336,
-      "responded": 8,
-      "responseRate": 2.4,
-      "avgScore": 2.25,
-      "scoreMap": {
-        "5": 1,
-        "4": 0,
-        "3": 3,
-        "2": 0,
-        "1": 4
-      }
-    },
-    "2026-07-14": {
-      "sent": 364,
-      "responded": 5,
-      "responseRate": 1.4,
-      "avgScore": 3.6,
-      "scoreMap": {
-        "5": 2,
-        "4": 1,
-        "3": 1,
-        "2": 0,
-        "1": 1
-      }
-    },
-    "2026-07-13": {
-      "sent": 358,
-      "responded": 9,
-      "responseRate": 2.5,
-      "avgScore": 4.0,
-      "scoreMap": {
-        "5": 6,
-        "4": 1,
-        "3": 0,
-        "2": 0,
-        "1": 2
-      }
-    },
-    "2026-07-10": {
-      "sent": 336,
-      "responded": 12,
-      "responseRate": 3.6,
-      "avgScore": 4.17,
-      "scoreMap": {
-        "5": 8,
-        "4": 1,
-        "3": 1,
-        "2": 1,
-        "1": 1
-      }
-    },
-    "2026-07-09": {
-      "sent": 203,
-      "responded": 8,
-      "responseRate": 3.9,
-      "avgScore": 2.62,
-      "scoreMap": {
-        "5": 2,
-        "4": 1,
-        "3": 1,
-        "2": 0,
-        "1": 4
-      }
-    }
-  },
-  "agentStats": {
-    "656326": {
-      "name": "heizle",
-      "sent": 497,
-      "responded": 9,
-      "responseRate": 1.8,
-      "avgScore": 4.11
-    },
-    "629325": {
-      "name": "Jiu",
-      "sent": 642,
-      "responded": 9,
-      "responseRate": 1.4,
-      "avgScore": 3.67
-    },
-    "636057": {
-      "name": "jacob",
-      "sent": 384,
-      "responded": 24,
-      "responseRate": 6.2,
-      "avgScore": 3.29
-    },
-    "609327": {
-      "name": "Summer",
-      "sent": 109,
-      "responded": 6,
-      "responseRate": 5.5,
-      "avgScore": 4.5
-    },
-    "651322": {
-      "name": "aileen",
-      "sent": 1,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
-    },
-    "unknown": {
-      "name": "unknown",
-      "sent": 9,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
-    },
-    "647650": {
-      "name": "Olive",
-      "sent": 23,
-      "responded": 2,
-      "responseRate": 8.7,
-      "avgScore": 5.0
-    },
-    "565238": {
-      "name": "Randy",
-      "sent": 158,
-      "responded": 9,
-      "responseRate": 5.7,
-      "avgScore": 3.89
-    },
-    "631507": {
-      "name": "allie",
-      "sent": 984,
-      "responded": 9,
-      "responseRate": 0.9,
-      "avgScore": 3.56
-    }
-  }
+    "collectedAt":  "2026-07-21 19:17",
+    "totalScanned":  2832,
+    "totalSent":  2832,
+    "totalResponded":  68,
+    "responseRate":  2.4,
+    "avgScore":  3.72,
+    "scoreMap":  {
+                     "5":  38,
+                     "4":  4,
+                     "3":  10,
+                     "2":  1,
+                     "1":  15
+                 },
+    "responses":  [
+                      {
+                          "chatId":  "6a509f1b05be4fac779f",
+                          "stars":  5,
+                          "comment":  "빠르고 확실한 처리 굿!",
+                          "time":  "2026-07-10 16:54",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a508a6a20a42a923fc5",
+                          "stars":  5,
+                          "comment":  "문자로 하는것 보다는 전화 연결로 했으면 좋을것 같습니다",
+                          "time":  "2026-07-10 16:00",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a28c9632e62b95f4ea1",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:50",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a506b4277af1f3bd8f5",
+                          "stars":  5,
+                          "comment":  "빠른  처리  바랍니다",
+                          "time":  "2026-07-10 14:42",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a505c953a97506f3276",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:10",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a505866cad68755b2cf",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 14:10",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a4db29414f910d8b037",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-09 16:51",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a4ee52f2375fc7a779d",
+                          "stars":  1,
+                          "comment":  "빠른처리 부탁드립니다",
+                          "time":  "2026-07-09 17:37",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a4f358d0048e184f658",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-09 15:24",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a4f0e50881b75d8695b",
+                          "stars":  1,
+                          "comment":  "약속한것 지킵시다",
+                          "time":  "2026-07-09 17:43",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a4f34a4d7aa759f6329",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-09 17:37",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a4f35ee0c746f86f1c7",
+                          "stars":  4,
+                          "comment":  "",
+                          "time":  "2026-07-09 15:44",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5083b547f611a10353",
+                          "stars":  4,
+                          "comment":  "",
+                          "time":  "2026-07-10 17:12",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a509b5255c97f802790",
+                          "stars":  5,
+                          "comment":  "친절해요",
+                          "time":  "2026-07-10 17:29",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a507a51f4185a35edda",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 18:31",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a50809aed58683cdeb5",
+                          "stars":  2,
+                          "comment":  "경제적 사정으로 빠른 접수와 처리",
+                          "time":  "2026-07-10 17:29",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a4ddd6084d3cf0866c1",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-10 17:39",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a4dbf0256ced35955a2",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-09 14:03",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a54773376c82339278e",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-13 17:27",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a548e0257b6641d9f18",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-13 17:19",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a54966768dbf6886e7c",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-13 17:13",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a543ee6eff135e22a0c",
+                          "stars":  1,
+                          "comment":  "채팅보다는 직접 전화 상담을 했으면 좋겠어요.자세한 설명이 필요한 부분에 있어서 답답해요",
+                          "time":  "2026-07-13 16:37",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a45c3f2e33f1eac9879",
+                          "stars":  4,
+                          "comment":  "",
+                          "time":  "2026-07-13 17:09",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a544d22ebf412f968c9",
+                          "stars":  5,
+                          "comment":  "Очень доходчиво и досконально обьяснили,спасибо за возврат денег",
+                          "time":  "2026-07-13 17:21",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a5436a6a4697fd3d5ff",
+                          "stars":  5,
+                          "comment":  "상담은 괜찮으나 일 처리속도가 너무 늦음",
+                          "time":  "2026-07-13 17:09",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a545738722a9a76b9e7",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-13 18:53",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a544650c05e96d82223",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-13 12:16",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a55ca1eb9b94e59a025",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-14 15:12",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a55ea0f4c8efafab60b",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-14 17:32",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a55dbfd0c8e756491cc",
+                          "stars":  1,
+                          "comment":  "상담원대답이 성의가없음",
+                          "time":  "2026-07-14 17:28",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a55c5b4b398512f9ff5",
+                          "stars":  4,
+                          "comment":  "환급 대상이 아닌 병원진료항목들은 삼쩜삼 결제 전에 미리 쌍방 확인이 되었으면 합니다",
+                          "time":  "2026-07-14 17:24",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a4db527d78ff3b4af70",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-10 17:29",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a4c6885b002fc3df7e0",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-09 17:37",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a55a56359bde4d8a8f7",
+                          "stars":  3,
+                          "comment":  "AI라서조금답답합니다.",
+                          "time":  "2026-07-14 17:55",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a559ee1455eb542b431",
+                          "stars":  5,
+                          "comment":  "질문에  바로바로  답해주셔서  좋은거같아요",
+                          "time":  "2026-07-16 11:06",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a56e55f6e42702e59f6",
+                          "stars":  5,
+                          "comment":  "예상환급액이랑차이가넘많이나는점 참고해주세요 상당사님수고하십니다",
+                          "time":  "2026-07-15 11:46",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5734a2b0d541da215d",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-15 17:15",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a56e06719ace226ae67",
+                          "stars":  1,
+                          "comment":  "문의자가 정확히 알수없이 너무 메뉴얼데로만 답변을 줘서 문의한 결과 제대로된 답변을 듣지 못하었습니다 결국 저는 알고싶은걸 알지 못했네요",
+                          "time":  "2026-07-15 17:09",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a573949810775fb2449",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-15 17:24",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a5734747f10d4de9f2a",
+                          "stars":  3,
+                          "comment":  "신청한거는 2건에 제가 12만원 이상을 걸제했고 보험사에세둑건 다 환불할께 없다고 문자가 왔는데요",
+                          "time":  "2026-07-15 17:08",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a2659d7c386b827a29a",
+                          "stars":  3,
+                          "comment":  "시간이 너무오래걸리고 첨에 신청하고 결제까지한후 환급받을수없다있다 이런거까지완벽하게안되서 계속기다려야하는번거로움",
+                          "time":  "2026-07-15 17:08",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a543adb040dc89b6f14",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-15 18:39",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a57247e87b95432e297",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-15 17:12",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5832a74a32f4ea37f8",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-16 11:07",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a588eeb9725bab1d880",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-16 17:40",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a587fd3746281ce1206",
+                          "stars":  3,
+                          "comment":  "보험회사4만윈나왔는데수수료 78000윈뗀다고요",
+                          "time":  "2026-07-16 18:50",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a584b314f5d6b4d0e3d",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-16 14:44",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a4daf1f7eeb5c561e08",
+                          "stars":  5,
+                          "comment":  "고생하셨습니다",
+                          "time":  "2026-07-16 17:19",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a5868226cf36e51e714",
+                          "stars":  5,
+                          "comment":  "예상햇던것보다 신속한처리 만족하고. 주변에 권하도록하겠습니다",
+                          "time":  "2026-07-16 14:19",
+                          "assigneeId":  "565238",
+                          "assigneeName":  "Randy"
+                      },
+                      {
+                          "chatId":  "6a584526b1b3f0de9018",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-16 12:16",
+                          "assigneeId":  "647650",
+                          "assigneeName":  "Olive"
+                      },
+                      {
+                          "chatId":  "6a584503e3a1a0e4a098",
+                          "stars":  1,
+                          "comment":  "일처리 좀빨리하소",
+                          "time":  "2026-07-16 16:35",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5d7c3cea0087071ade",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-20 11:40",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a588580b739373a38f6",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-20 12:10",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a58714ddf76c2cdc8af",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-16 18:20",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5dce7ae6c5a47c1993",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-20 17:05",
+                          "assigneeId":  "609327",
+                          "assigneeName":  "Summer"
+                      },
+                      {
+                          "chatId":  "6a5dbc9b59450c610cff",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-20 17:51",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5889c0233f4612f8b7",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-16 18:23",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5ec97c979995c0a3ef",
+                          "stars":  5,
+                          "comment":  ".",
+                          "time":  "2026-07-21 10:56",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a5edd7c7b207d3bce94",
+                          "stars":  5,
+                          "comment":  "응대속도와 궁금한 사항을 신속히 답을주시어 사이트에 대한 신뢰도를 느낄수있었습니다~",
+                          "time":  "2026-07-21 12:09",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a5ed29a9e9d60f84bd8",
+                          "stars":  1,
+                          "comment":  "",
+                          "time":  "2026-07-21 12:09",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5edaeb73fcab6f90c4",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 12:09",
+                          "assigneeId":  "631507",
+                          "assigneeName":  "allie"
+                      },
+                      {
+                          "chatId":  "6a5ecb28ae2900579cd5",
+                          "stars":  3,
+                          "comment":  "",
+                          "time":  "2026-07-21 12:08",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5f0ebcd795c57bc286",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 15:53",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a5f0057104378f80aa6",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 16:19",
+                          "assigneeId":  "629325",
+                          "assigneeName":  "Jiu"
+                      },
+                      {
+                          "chatId":  "6a5f15c54eae96b5cdb8",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 16:07",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a5f23b3d0d80632bd9a",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 17:12",
+                          "assigneeId":  "656326",
+                          "assigneeName":  "heizle"
+                      },
+                      {
+                          "chatId":  "6a5f09bfb8627e8f2118",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-07-21 17:04",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "jacob"
+                      },
+                      {
+                          "chatId":  "6a5f249524d9a3c50ca1",
+                          "stars":  5,
+                          "comment":  "없습니다. 감사합니다",
+                          "time":  "2026-07-21 18:16",
+                          "assigneeId":  "647650",
+                          "assigneeName":  "Olive"
+                      }
+                  ],
+    "noResponseCount":  2764,
+    "dailyStats":  {
+                       "2026-07-21":  {
+                                          "sent":  462,
+                                          "responded":  11,
+                                          "responseRate":  2.4,
+                                          "avgScore":  4.45,
+                                          "scoreMap":  {
+                                                           "5":  9,
+                                                           "4":  0,
+                                                           "3":  1,
+                                                           "2":  0,
+                                                           "1":  1
+                                                       }
+                                      },
+                       "2026-07-20":  {
+                                          "sent":  436,
+                                          "responded":  4,
+                                          "responseRate":  0.9,
+                                          "avgScore":  4.5,
+                                          "scoreMap":  {
+                                                           "5":  3,
+                                                           "4":  0,
+                                                           "3":  1,
+                                                           "2":  0,
+                                                           "1":  0
+                                                       }
+                                      },
+                       "2026-07-16":  {
+                                          "sent":  337,
+                                          "responded":  11,
+                                          "responseRate":  3.3,
+                                          "avgScore":  3.91,
+                                          "scoreMap":  {
+                                                           "5":  7,
+                                                           "4":  0,
+                                                           "3":  2,
+                                                           "2":  0,
+                                                           "1":  2
+                                                       }
+                                      },
+                       "2026-07-15":  {
+                                          "sent":  336,
+                                          "responded":  8,
+                                          "responseRate":  2.4,
+                                          "avgScore":  2.25,
+                                          "scoreMap":  {
+                                                           "5":  1,
+                                                           "4":  0,
+                                                           "3":  3,
+                                                           "2":  0,
+                                                           "1":  4
+                                                       }
+                                      },
+                       "2026-07-14":  {
+                                          "sent":  364,
+                                          "responded":  5,
+                                          "responseRate":  1.4,
+                                          "avgScore":  3.6,
+                                          "scoreMap":  {
+                                                           "5":  2,
+                                                           "4":  1,
+                                                           "3":  1,
+                                                           "2":  0,
+                                                           "1":  1
+                                                       }
+                                      },
+                       "2026-07-13":  {
+                                          "sent":  358,
+                                          "responded":  9,
+                                          "responseRate":  2.5,
+                                          "avgScore":  4,
+                                          "scoreMap":  {
+                                                           "5":  6,
+                                                           "4":  1,
+                                                           "3":  0,
+                                                           "2":  0,
+                                                           "1":  2
+                                                       }
+                                      },
+                       "2026-07-10":  {
+                                          "sent":  336,
+                                          "responded":  12,
+                                          "responseRate":  3.6,
+                                          "avgScore":  4.17,
+                                          "scoreMap":  {
+                                                           "5":  8,
+                                                           "4":  1,
+                                                           "3":  1,
+                                                           "2":  1,
+                                                           "1":  1
+                                                       }
+                                      },
+                       "2026-07-09":  {
+                                          "sent":  203,
+                                          "responded":  8,
+                                          "responseRate":  3.9,
+                                          "avgScore":  2.62,
+                                          "scoreMap":  {
+                                                           "5":  2,
+                                                           "4":  1,
+                                                           "3":  1,
+                                                           "2":  0,
+                                                           "1":  4
+                                                       }
+                                      }
+                   },
+    "agentStats":  {
+                       "565238":  {
+                                      "name":  "Randy",
+                                      "sent":  171,
+                                      "responded":  9,
+                                      "responseRate":  5.3,
+                                      "avgScore":  3.89
+                                  },
+                       "609327":  {
+                                      "name":  "Summer",
+                                      "sent":  110,
+                                      "responded":  6,
+                                      "responseRate":  5.5,
+                                      "avgScore":  4.5
+                                  },
+                       "629325":  {
+                                      "name":  "Jiu",
+                                      "sent":  642,
+                                      "responded":  9,
+                                      "responseRate":  1.4,
+                                      "avgScore":  3.67
+                                  },
+                       "647650":  {
+                                      "name":  "Olive",
+                                      "sent":  23,
+                                      "responded":  2,
+                                      "responseRate":  8.7,
+                                      "avgScore":  5
+                                  },
+                       "631507":  {
+                                      "name":  "allie",
+                                      "sent":  984,
+                                      "responded":  9,
+                                      "responseRate":  0.9,
+                                      "avgScore":  3.56
+                                  },
+                       "636057":  {
+                                      "name":  "jacob",
+                                      "sent":  395,
+                                      "responded":  24,
+                                      "responseRate":  6.1,
+                                      "avgScore":  3.29
+                                  },
+                       "unknown":  {
+                                       "name":  "unknown",
+                                       "sent":  9,
+                                       "responded":  0,
+                                       "responseRate":  0,
+                                       "avgScore":  0
+                                   },
+                       "651322":  {
+                                      "name":  "aileen",
+                                      "sent":  1,
+                                      "responded":  0,
+                                      "responseRate":  0,
+                                      "avgScore":  0
+                                  },
+                       "656326":  {
+                                      "name":  "heizle",
+                                      "sent":  497,
+                                      "responded":  9,
+                                      "responseRate":  1.8,
+                                      "avgScore":  4.11
+                                  }
+                   },
+    "policyComparisons":  [
+                              {
+                                  "cutoffDate":  "2026-07-20",
+                                  "eventTitle":  "즉시 종결 가능 건 바로 종료하라고 매니저 공지",
+                                  "before":  {
+                                                 "sent":  1934,
+                                                 "responded":  53,
+                                                 "responseRate":  2.74,
+                                                 "avgScore":  3.51
+                                             },
+                                  "after":  {
+                                                "sent":  898,
+                                                "responded":  15,
+                                                "responseRate":  1.67,
+                                                "avgScore":  4.47
+                                            }
+                              },
+                              {
+                                  "cutoffDate":  "2026-07-21",
+                                  "eventTitle":  "만족도 조사 문구 변경 (NPS 관점 포함)",
+                                  "before":  {
+                                                 "sent":  2370,
+                                                 "responded":  57,
+                                                 "responseRate":  2.41,
+                                                 "avgScore":  3.58
+                                             },
+                                  "after":  {
+                                                "sent":  462,
+                                                "responded":  11,
+                                                "responseRate":  2.38,
+                                                "avgScore":  4.45
+                                            }
+                              }
+                          ]
 };
 
 (function () {
@@ -1158,6 +1205,57 @@ window.CSAT_DATA = {
 
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '[자동 집계] ' + D.collectedAt;
+
+  /* ── 정책 전/후 비교 ── */
+  (function () {
+    var comparisons = D.policyComparisons || [];
+    if (comparisons.length === 0) return;
+    document.getElementById('compare-section').style.display = 'block';
+    var wrap = document.getElementById('compare-cards');
+
+    function pct(a, b) {
+      if (a === 0) return b > 0 ? '+∞' : '0%p';
+      var diff = Math.round((b - a) * 10) / 10;
+      return (diff > 0 ? '+' : '') + diff;
+    }
+
+    comparisons.forEach(function (PC) {
+      if (!PC.before || !PC.after) return;
+      var box = document.createElement('div');
+      box.className = 'card';
+      box.style.marginBottom = '16px';
+      box.style.padding = '14px 0';
+
+      var title = document.createElement('div');
+      title.style.cssText = 'font-size:13px;font-weight:700;padding:0 16px 4px;';
+      title.textContent = PC.eventTitle;
+      box.appendChild(title);
+
+      var note = document.createElement('p');
+      note.className = 'compare-note';
+      note.style.padding = '0 16px';
+      note.textContent = PC.cutoffDate + ' 기준. 이후 구간(' + PC.after.sent + '건)은 표본이 적을 수 있어요.';
+      box.appendChild(note);
+
+      var rows = [
+        { label: '응답건수', before: PC.before.responded + '건', after: PC.after.responded + '건', diff: pct(PC.before.responded, PC.after.responded) },
+        { label: '응답률', before: PC.before.responseRate + '%', after: PC.after.responseRate + '%', diff: pct(PC.before.responseRate, PC.after.responseRate) + '%p' },
+        { label: '평균 별점', before: PC.before.avgScore.toFixed(2), after: PC.after.avgScore.toFixed(2), diff: pct(PC.before.avgScore, PC.after.avgScore) }
+      ];
+      var table = document.createElement('table');
+      table.className = 'compare-table';
+      var tbodyRows = rows.map(function (r) {
+        var isUp = String(r.diff).indexOf('+') === 0;
+        var isDown = String(r.diff).indexOf('-') === 0;
+        var cls = isUp ? 'compare-up' : (isDown ? 'compare-down' : '');
+        return '<tr><td>' + r.label + '</td><td>' + r.before + '</td><td>' + r.after + '</td><td class="' + cls + '">' + r.diff + '</td></tr>';
+      }).join('');
+      table.innerHTML =
+        '<thead><tr><th></th><th>이전</th><th>이후</th><th>변화</th></tr></thead><tbody>' + tbodyRows + '</tbody>';
+      box.appendChild(table);
+      wrap.appendChild(box);
+    });
+  })();
 
   /* ── 수동 집계 버튼 (수동/자동 통틀어 1시간 제약) ── */
   (function () {
