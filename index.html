@@ -366,6 +366,8 @@
     </div>
   </div>
 
+  <div id="announce-section" style="display:none;margin-bottom:16px;"></div>
+
   <p class="section-title" id="trend-title">CSAT 운영 일별 트렌드</p>
   <div class="card trend-card">
     <div class="trend-legend">
@@ -448,7 +450,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-22 19:28",
+    "collectedAt":  "2026-07-22 19:58",
     "totalScanned":  3348,
     "totalSent":  3348,
     "totalResponded":  223,
@@ -2468,6 +2470,13 @@ window.CSAT_DATA = {
                                             }
                               }
                           ],
+    "announcements":  [
+                          {
+                              "date":  "2026-07-22",
+                              "title":  "CSAT 집계 스크립트 응답 누락 버그 3건 수정",
+                              "description":  "응답률이 2.7~5.2%대로 들쭉날쭉해 보였던 원인 3가지를 찾아 수정함. ① 상담 종료 직후 스크랩 시점엔 무응답이었다가 나중에 설문을 채운 경우 영구히 0점(무응답)으로 고정되던 버그 → 최근 14일 내 재확인 로직 추가. ② 한 상담에 설문 폼 메시지가 여러 개 있을 때 시간 정보를 잘못된(더 이른) 메시지에서 가져오던 버그 → 실제 값이 채워진 메시지 기준으로 수정. ③ 같은 상담에 설문이 두 번 발송되어 둘 다 응답된 경우 최신 응답만 남고 이전 응답이 유실되던 버그 → 응답 전부를 개별 기록으로 반영하도록 수정. 자동 수집 스케줄(평일 매시간)이 수정 전 스크립트로 덮어쓰면서 잠깐씩 옛 수치로 되돌아간 것도 원인 중 하나였음. 최종 응답률 6.7%로 안정화 (223/3348건)."
+                          }
+                      ],
     "tagCsat":  [
                     {
                         "tag":  "문의/Q6_환불요청",
@@ -2590,6 +2599,26 @@ window.CSAT_DATA = {
 
   /* ── Header ── */
   document.getElementById('collected-at').textContent = '[자동 집계] ' + D.collectedAt;
+
+  /* ── 운영 공지 (짧은 안내/장애 리포트) ── */
+  (function () {
+    var items = D.announcements || [];
+    if (items.length === 0) return;
+    var section = document.getElementById('announce-section');
+    section.style.display = 'block';
+    items.forEach(function (a) {
+      var box = document.createElement('div');
+      box.className = 'card';
+      box.style.borderLeft = '3px solid var(--accent)';
+      box.style.padding = '12px 16px';
+      box.style.marginBottom = '8px';
+      box.innerHTML =
+        '<div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">📢 ' + a.date + '</div>' +
+        '<div style="font-size:13.5px;font-weight:700;margin-bottom:4px;">' + a.title + '</div>' +
+        '<div style="font-size:12.5px;color:var(--text-2);line-height:1.6;">' + a.description + '</div>';
+      section.appendChild(box);
+    });
+  })();
 
   /* ── 정책 전/후 비교 ── */
   (function () {
