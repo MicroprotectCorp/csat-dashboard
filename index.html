@@ -425,7 +425,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-22 09:34",
+    "collectedAt":  "2026-07-22 09:38",
     "totalScanned":  2832,
     "totalSent":  2832,
     "totalResponded":  68,
@@ -1160,6 +1160,7 @@ window.CSAT_DATA = {
                               {
                                   "cutoffDate":  "2026-07-20",
                                   "eventTitle":  "즉시 종결 가능 건 바로 종료하라고 매니저 공지",
+                                  "description":  "처리 완료돼서 바로 종결 가능한 상담은 무응답 대기 없이 즉시 종료하도록 전체 매니저에게 공지. CSAT 응답률 개선 목적.",
                                   "before":  {
                                                  "sent":  1934,
                                                  "responded":  53,
@@ -1176,6 +1177,7 @@ window.CSAT_DATA = {
                               {
                                   "cutoffDate":  "2026-07-21",
                                   "eventTitle":  "만족도 조사 문구 변경",
+                                  "description":  "\"오늘 상담은 어떠셨나요? *환불 결과와 무관\" → \"이번 상담은 어떠셨나요?\"로 문구 수정. \u0027(환불 결과와 무관)\u0027 문구를 삭제한 것. 1주일간 모니터링 필요.",
                                   "before":  {
                                                  "sent":  2370,
                                                  "responded":  57,
@@ -1230,6 +1232,13 @@ window.CSAT_DATA = {
       title.style.cssText = 'font-size:13px;font-weight:700;padding:0 16px 4px;';
       title.textContent = PC.eventTitle;
       box.appendChild(title);
+
+      if (PC.description) {
+        var desc = document.createElement('div');
+        desc.style.cssText = 'font-size:12px;color:var(--text-2);padding:0 16px 6px;line-height:1.5;';
+        desc.textContent = PC.description;
+        box.appendChild(desc);
+      }
 
       var note = document.createElement('p');
       note.className = 'compare-note';
