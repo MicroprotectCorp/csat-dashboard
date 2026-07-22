@@ -366,11 +366,6 @@
     </div>
   </div>
 
-  <div id="compare-section" style="display:none;">
-    <p class="section-title">정책 전/후 비교</p>
-    <div id="compare-cards"></div>
-  </div>
-
   <p class="section-title" id="trend-title">CSAT 운영 일별 트렌드</p>
   <div class="card trend-card">
     <div class="trend-legend">
@@ -378,6 +373,11 @@
       <span><span class="legend-dot line"></span>평균 별점</span>
     </div>
     <canvas id="trend-canvas" height="110"></canvas>
+  </div>
+
+  <div id="compare-section" style="display:none;">
+    <p class="section-title">정책 전/후 비교</p>
+    <div id="compare-cards"></div>
   </div>
 
   <p class="section-title">별점 분포</p>
@@ -447,7 +447,7 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-22 10:02",
+    "collectedAt":  "2026-07-22 10:08",
     "totalScanned":  2837,
     "totalSent":  2837,
     "totalResponded":  68,
