@@ -131,8 +131,11 @@
     user-select: none;
   }
   .section-title.toggle .chev {
-    display: inline-block; transition: transform .15s ease; font-size: 13px;
-    color: var(--accent); font-weight: 900;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    transition: transform .15s ease; font-size: 13px; font-weight: 900;
+    flex-shrink: 0;
   }
   .section-title.toggle.collapsed .chev { transform: rotate(-90deg); }
   .collapsible-body {
@@ -151,6 +154,19 @@
     font-size: 12px; font-weight: 700; color: var(--accent);
     background: rgba(127,127,127,0.14);
     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+  .collapse-footer-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 4px; padding: 10px; border-radius: 10px;
+    border: 1px dashed var(--border); cursor: pointer;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    user-select: none;
+  }
+  .collapse-footer-btn .chev {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: 900;
+    transform: rotate(180deg);
   }
 
   /* Card shell */
@@ -2972,12 +2988,21 @@ window.CSAT_DATA = {
       wrap.appendChild(box);
     });
 
+    var footerBtn = document.createElement('div');
+    footerBtn.className = 'collapse-footer-btn';
+    footerBtn.innerHTML = '<span class="chev">▾</span>접어서 숨기기';
+    wrap.appendChild(footerBtn);
+
     var toggleBtn = document.getElementById('compare-toggle');
     function toggleCompare() {
       toggleBtn.classList.toggle('collapsed');
       wrap.classList.toggle('collapsed');
     }
     toggleBtn.addEventListener('click', toggleCompare);
+    footerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleCompare();
+    });
     wrap.addEventListener('click', function () {
       if (wrap.classList.contains('collapsed')) toggleCompare();
     });
