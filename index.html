@@ -423,30 +423,37 @@
   <p class="section-title">별점 분포</p>
   <div class="card" id="dist-card"></div>
 
-  <div id="compare-section" style="display:none;">
-    <p class="section-title toggle collapsed" id="compare-toggle"><span class="chev">▾</span>정책 전/후 비교</p>
-    <div id="compare-cards" class="collapsible-body collapsed"></div>
-  </div>
+  <div id="detail-section" style="display:none;">
+    <p class="section-title toggle collapsed" id="detail-toggle"><span class="chev">▾</span>정책 전/후 비교 · 상세 CSAT</p>
+    <div id="detail-body" class="collapsible-body collapsed">
 
-  <div id="refund-csat-section" style="display:none;">
-    <p class="section-title">환불 처리 여부별 CSAT</p>
-    <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
-    <div class="card" style="overflow-x:auto;">
-      <table class="compare-table">
-        <thead><tr><th></th><th>건수</th><th>평균 별점</th></tr></thead>
-        <tbody id="refund-csat-tbody"></tbody>
-      </table>
-    </div>
-  </div>
+      <div id="compare-section" style="display:none;">
+        <p class="section-title">정책 전/후 비교</p>
+        <div id="compare-cards"></div>
+      </div>
 
-  <div id="tag-csat-section" style="display:none;">
-    <p class="section-title">태그별 CSAT</p>
-    <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중 3건 이상 붙은 태그만, 건수 많은 순. 주 1회 정도 갱신돼요.</p>
-    <div class="card" style="overflow-x:auto;max-height:210px;overflow-y:auto;">
-      <table class="compare-table">
-        <thead><tr><th>태그</th><th>건수</th><th>평균 별점</th></tr></thead>
-        <tbody id="tag-csat-tbody"></tbody>
-      </table>
+      <div id="refund-csat-section" style="display:none;">
+        <p class="section-title">환불 처리 여부별 CSAT</p>
+        <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
+        <div class="card" style="overflow-x:auto;">
+          <table class="compare-table">
+            <thead><tr><th></th><th>건수</th><th>평균 별점</th></tr></thead>
+            <tbody id="refund-csat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tag-csat-section" style="display:none;">
+        <p class="section-title">태그별 CSAT</p>
+        <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중 3건 이상 붙은 태그만, 건수 많은 순. 주 1회 정도 갱신돼요.</p>
+        <div class="card" style="overflow-x:auto;max-height:210px;overflow-y:auto;">
+          <table class="compare-table">
+            <thead><tr><th>태그</th><th>건수</th><th>평균 별점</th></tr></thead>
+            <tbody id="tag-csat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -2931,10 +2938,13 @@ window.CSAT_DATA = {
     });
   })();
 
-  /* ── 정책 전/후 비교 ── */
+  /* ── 정책 전/후 비교 + 환불/태그별 CSAT: 하나의 접기 블록으로 통합 ── */
+  var detailHasContent = false;
+
   (function () {
     var comparisons = D.policyComparisons || [];
     if (comparisons.length === 0) return;
+    detailHasContent = true;
     document.getElementById('compare-section').style.display = 'block';
     var wrap = document.getElementById('compare-cards');
 
@@ -2987,31 +2997,13 @@ window.CSAT_DATA = {
       box.appendChild(table);
       wrap.appendChild(box);
     });
-
-    var footerBtn = document.createElement('div');
-    footerBtn.className = 'collapse-footer-btn';
-    footerBtn.innerHTML = '<span class="chev">▾</span>접어서 숨기기';
-    wrap.appendChild(footerBtn);
-
-    var toggleBtn = document.getElementById('compare-toggle');
-    function toggleCompare() {
-      toggleBtn.classList.toggle('collapsed');
-      wrap.classList.toggle('collapsed');
-    }
-    toggleBtn.addEventListener('click', toggleCompare);
-    footerBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      toggleCompare();
-    });
-    wrap.addEventListener('click', function () {
-      if (wrap.classList.contains('collapsed')) toggleCompare();
-    });
   })();
 
   /* ── 환불 처리 여부별 CSAT / 태그별 CSAT ── */
   (function () {
     var RC = D.refundCsat;
     if (RC && (RC.refunded.count > 0 || RC.notRefunded.count > 0)) {
+      detailHasContent = true;
       document.getElementById('refund-csat-section').style.display = 'block';
       var refundTbody = document.getElementById('refund-csat-tbody');
       [
@@ -3026,6 +3018,7 @@ window.CSAT_DATA = {
 
     var tagCsatList = D.tagCsat || [];
     if (tagCsatList.length > 0) {
+      detailHasContent = true;
       document.getElementById('tag-csat-section').style.display = 'block';
       var tagCsatTbody = document.getElementById('tag-csat-tbody');
       tagCsatList.forEach(function (t) {
@@ -3034,6 +3027,32 @@ window.CSAT_DATA = {
         tagCsatTbody.appendChild(tr);
       });
     }
+  })();
+
+  /* ── 정책비교/환불/태그 통합 블록 접기·펼치기 ── */
+  (function () {
+    if (!detailHasContent) return;
+    document.getElementById('detail-section').style.display = 'block';
+    var detailToggle = document.getElementById('detail-toggle');
+    var detailBody = document.getElementById('detail-body');
+
+    var footerBtn = document.createElement('div');
+    footerBtn.className = 'collapse-footer-btn';
+    footerBtn.innerHTML = '<span class="chev">▾</span>접어서 숨기기';
+    detailBody.appendChild(footerBtn);
+
+    function toggleDetail() {
+      detailToggle.classList.toggle('collapsed');
+      detailBody.classList.toggle('collapsed');
+    }
+    detailToggle.addEventListener('click', toggleDetail);
+    footerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleDetail();
+    });
+    detailBody.addEventListener('click', function () {
+      if (detailBody.classList.contains('collapsed')) toggleDetail();
+    });
   })();
 
   /* ── 수동 집계 버튼 (수동/자동 통틀어 1시간 제약) ── */
