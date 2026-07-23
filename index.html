@@ -131,11 +131,43 @@
     user-select: none;
   }
   .section-title.toggle .chev {
-    display: inline-block; transition: transform .15s ease; font-size: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    transition: transform .15s ease; font-size: 13px; font-weight: 900;
+    flex-shrink: 0;
   }
   .section-title.toggle.collapsed .chev { transform: rotate(-90deg); }
-  .collapsible-body { overflow: hidden; }
-  .collapsible-body.collapsed { display: none; }
+  .collapsible-body {
+    position: relative; overflow: hidden;
+    max-height: 4000px;
+    transition: max-height .3s ease;
+  }
+  .collapsible-body.collapsed {
+    max-height: 130px;
+    cursor: pointer;
+  }
+  .collapsible-body.collapsed::after {
+    content: '펼쳐서 보기';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    background: rgba(127,127,127,0.14);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+  .collapse-footer-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 4px; padding: 10px; border-radius: 10px;
+    border: 1px dashed var(--border); cursor: pointer;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    user-select: none;
+  }
+  .collapse-footer-btn .chev {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: 900;
+    transform: rotate(180deg);
+  }
 
   /* Card shell */
   .card {
@@ -391,30 +423,37 @@
   <p class="section-title">별점 분포</p>
   <div class="card" id="dist-card"></div>
 
-  <div id="compare-section" style="display:none;">
-    <p class="section-title toggle" id="compare-toggle"><span class="chev">▾</span>정책 전/후 비교</p>
-    <div id="compare-cards" class="collapsible-body"></div>
-  </div>
+  <div id="detail-section" style="display:none;">
+    <p class="section-title toggle collapsed" id="detail-toggle"><span class="chev">▾</span>정책 전/후 비교 · 상세 CSAT</p>
+    <div id="detail-body" class="collapsible-body collapsed">
 
-  <div id="refund-csat-section" style="display:none;">
-    <p class="section-title">환불 처리 여부별 CSAT</p>
-    <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
-    <div class="card" style="overflow-x:auto;">
-      <table class="compare-table">
-        <thead><tr><th></th><th>건수</th><th>평균 별점</th></tr></thead>
-        <tbody id="refund-csat-tbody"></tbody>
-      </table>
-    </div>
-  </div>
+      <div id="compare-section" style="display:none;">
+        <p class="section-title">정책 전/후 비교</p>
+        <div id="compare-cards"></div>
+      </div>
 
-  <div id="tag-csat-section" style="display:none;">
-    <p class="section-title">태그별 CSAT</p>
-    <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중 3건 이상 붙은 태그만, 건수 많은 순. 주 1회 정도 갱신돼요.</p>
-    <div class="card" style="overflow-x:auto;max-height:210px;overflow-y:auto;">
-      <table class="compare-table">
-        <thead><tr><th>태그</th><th>건수</th><th>평균 별점</th></tr></thead>
-        <tbody id="tag-csat-tbody"></tbody>
-      </table>
+      <div id="refund-csat-section" style="display:none;">
+        <p class="section-title">환불 처리 여부별 CSAT</p>
+        <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
+        <div class="card" style="overflow-x:auto;">
+          <table class="compare-table">
+            <thead><tr><th></th><th>건수</th><th>평균 별점</th></tr></thead>
+            <tbody id="refund-csat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tag-csat-section" style="display:none;">
+        <p class="section-title">태그별 CSAT</p>
+        <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중 3건 이상 붙은 태그만, 건수 많은 순. 주 1회 정도 갱신돼요.</p>
+        <div class="card" style="overflow-x:auto;max-height:210px;overflow-y:auto;">
+          <table class="compare-table">
+            <thead><tr><th>태그</th><th>건수</th><th>평균 별점</th></tr></thead>
+            <tbody id="tag-csat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -460,18 +499,18 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-07-23 12:22",
-  "totalScanned": 4211,
-  "totalSent": 4211,
-  "totalResponded": 247,
+  "collectedAt": "2026-07-23 13:16",
+  "totalScanned": 4220,
+  "totalSent": 4220,
+  "totalResponded": 248,
   "responseRate": 5.9,
-  "avgScore": 3.47,
+  "avgScore": 3.49,
   "scoreMap": {
-    "5": 116,
-    "4": 26,
+    "5": 117,
+    "4": 27,
     "3": 28,
     "2": 13,
-    "1": 64
+    "1": 63
   },
   "responses": [
     {
@@ -2435,12 +2474,20 @@ window.CSAT_DATA = {
       "assigneeName": "allie"
     },
     {
-      "chatId": "6a617b379895ce295d65",
-      "stars": 1,
-      "comment": "통화상담 요청",
-      "time": "2026-07-23 11:53",
+      "chatId": "6a602d29df68e5fca7e8",
+      "stars": 4,
+      "comment": "",
+      "time": "2026-07-22 15:01",
       "assigneeId": "636057",
       "assigneeName": "jacob"
+    },
+    {
+      "chatId": "6a6184c7f0365419b569",
+      "stars": 5,
+      "comment": "",
+      "time": "2026-07-23 12:27",
+      "assigneeId": "631507",
+      "assigneeName": "allie"
     },
     {
       "chatId": "6a616851e98c6e5d91c8",
@@ -2451,29 +2498,29 @@ window.CSAT_DATA = {
       "assigneeName": "jacob"
     }
   ],
-  "noResponseCount": 3964,
+  "noResponseCount": 3972,
   "dailyStats": {
     "2026-07-23": {
-      "sent": 88,
+      "sent": 96,
       "responded": 7,
-      "responseRate": 8.0,
-      "avgScore": 3.71,
+      "responseRate": 7.3,
+      "avgScore": 4.29,
       "scoreMap": {
-        "5": 4,
+        "5": 5,
         "4": 1,
         "3": 0,
         "2": 0,
-        "1": 2
+        "1": 1
       }
     },
     "2026-07-22": {
-      "sent": 539,
-      "responded": 36,
-      "responseRate": 6.7,
-      "avgScore": 3.64,
+      "sent": 540,
+      "responded": 37,
+      "responseRate": 6.9,
+      "avgScore": 3.65,
       "scoreMap": {
         "5": 17,
-        "4": 7,
+        "4": 8,
         "3": 3,
         "2": 0,
         "1": 9
@@ -2585,18 +2632,39 @@ window.CSAT_DATA = {
     }
   },
   "agentStats": {
-    "629325": {
-      "name": "Jiu",
-      "sent": 964,
-      "responded": 49,
-      "responseRate": 5.1,
-      "avgScore": 3.53
+    "656326": {
+      "name": "heizle",
+      "sent": 749,
+      "responded": 24,
+      "responseRate": 3.2,
+      "avgScore": 3.79
+    },
+    "631507": {
+      "name": "allie",
+      "sent": 1513,
+      "responded": 59,
+      "responseRate": 3.9,
+      "avgScore": 3.34
+    },
+    "651322": {
+      "name": "aileen",
+      "sent": 9,
+      "responded": 0,
+      "responseRate": 0.0,
+      "avgScore": 0
     },
     "609327": {
       "name": "Summer",
-      "sent": 159,
+      "sent": 161,
       "responded": 14,
-      "responseRate": 8.8,
+      "responseRate": 8.7,
+      "avgScore": 3.86
+    },
+    "565238": {
+      "name": "Randy",
+      "sent": 218,
+      "responded": 21,
+      "responseRate": 9.6,
       "avgScore": 3.86
     },
     "647650": {
@@ -2606,47 +2674,26 @@ window.CSAT_DATA = {
       "responseRate": 7.1,
       "avgScore": 5.0
     },
-    "656326": {
-      "name": "heizle",
-      "sent": 749,
-      "responded": 24,
-      "responseRate": 3.2,
-      "avgScore": 3.79
-    },
-    "636057": {
-      "name": "jacob",
-      "sent": 563,
-      "responded": 79,
-      "responseRate": 14.0,
-      "avgScore": 3.25
-    },
-    "631507": {
-      "name": "allie",
-      "sent": 1512,
-      "responded": 58,
-      "responseRate": 3.8,
-      "avgScore": 3.31
-    },
-    "565238": {
-      "name": "Randy",
-      "sent": 218,
-      "responded": 21,
-      "responseRate": 9.6,
-      "avgScore": 3.86
-    },
-    "651322": {
-      "name": "aileen",
-      "sent": 9,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
-    },
     "unknown": {
       "name": "unknown",
       "sent": 9,
       "responded": 0,
       "responseRate": 0.0,
       "avgScore": 0
+    },
+    "629325": {
+      "name": "Jiu",
+      "sent": 965,
+      "responded": 49,
+      "responseRate": 5.1,
+      "avgScore": 3.53
+    },
+    "636057": {
+      "name": "jacob",
+      "sent": 568,
+      "responded": 79,
+      "responseRate": 13.9,
+      "avgScore": 3.29
     }
   },
   "policyComparisons": [
@@ -2661,10 +2708,10 @@ window.CSAT_DATA = {
         "avgScore": 3.35
       },
       "after": {
-        "sent": 1672,
-        "responded": 91,
-        "responseRate": 5.44,
-        "avgScore": 3.69
+        "sent": 1681,
+        "responded": 92,
+        "responseRate": 5.47,
+        "avgScore": 3.74
       }
     },
     {
@@ -2678,10 +2725,10 @@ window.CSAT_DATA = {
         "avgScore": 3.41
       },
       "after": {
-        "sent": 1161,
-        "responded": 73,
-        "responseRate": 6.29,
-        "avgScore": 3.62
+        "sent": 1170,
+        "responded": 74,
+        "responseRate": 6.32,
+        "avgScore": 3.68
       }
     }
   ],
@@ -2689,7 +2736,7 @@ window.CSAT_DATA = {
     {
       "date": "2026-07-22",
       "title": "응답률이 2.7~5.2%대로 들쭉날쭉해 보였던 원인 3가지를 찾아 수정함",
-      "description": "최근 14일 내 재확인 로직 추가 + 1일 다수응답 반영 + 실제 만족도 메세지 기준 수정<br>최종 응답률 6.7%로 안정화 (223/3348건)."
+      "description": "최근 14일 내 재확인 로직 추가 + 1일 다수응답 반영 + 실제 만족도 메세지 기준 수정"
     }
   ],
   "tagCsat": [
@@ -2915,10 +2962,13 @@ window.CSAT_DATA = {
     });
   })();
 
-  /* ── 정책 전/후 비교 ── */
+  /* ── 정책 전/후 비교 + 환불/태그별 CSAT: 하나의 접기 블록으로 통합 ── */
+  var detailHasContent = false;
+
   (function () {
     var comparisons = D.policyComparisons || [];
     if (comparisons.length === 0) return;
+    detailHasContent = true;
     document.getElementById('compare-section').style.display = 'block';
     var wrap = document.getElementById('compare-cards');
 
@@ -2971,18 +3021,13 @@ window.CSAT_DATA = {
       box.appendChild(table);
       wrap.appendChild(box);
     });
-
-    var toggleBtn = document.getElementById('compare-toggle');
-    toggleBtn.addEventListener('click', function () {
-      toggleBtn.classList.toggle('collapsed');
-      wrap.classList.toggle('collapsed');
-    });
   })();
 
   /* ── 환불 처리 여부별 CSAT / 태그별 CSAT ── */
   (function () {
     var RC = D.refundCsat;
     if (RC && (RC.refunded.count > 0 || RC.notRefunded.count > 0)) {
+      detailHasContent = true;
       document.getElementById('refund-csat-section').style.display = 'block';
       var refundTbody = document.getElementById('refund-csat-tbody');
       [
@@ -2997,6 +3042,7 @@ window.CSAT_DATA = {
 
     var tagCsatList = D.tagCsat || [];
     if (tagCsatList.length > 0) {
+      detailHasContent = true;
       document.getElementById('tag-csat-section').style.display = 'block';
       var tagCsatTbody = document.getElementById('tag-csat-tbody');
       tagCsatList.forEach(function (t) {
@@ -3005,6 +3051,32 @@ window.CSAT_DATA = {
         tagCsatTbody.appendChild(tr);
       });
     }
+  })();
+
+  /* ── 정책비교/환불/태그 통합 블록 접기·펼치기 ── */
+  (function () {
+    if (!detailHasContent) return;
+    document.getElementById('detail-section').style.display = 'block';
+    var detailToggle = document.getElementById('detail-toggle');
+    var detailBody = document.getElementById('detail-body');
+
+    var footerBtn = document.createElement('div');
+    footerBtn.className = 'collapse-footer-btn';
+    footerBtn.innerHTML = '<span class="chev">▾</span>접어서 숨기기';
+    detailBody.appendChild(footerBtn);
+
+    function toggleDetail() {
+      detailToggle.classList.toggle('collapsed');
+      detailBody.classList.toggle('collapsed');
+    }
+    detailToggle.addEventListener('click', toggleDetail);
+    footerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleDetail();
+    });
+    detailBody.addEventListener('click', function () {
+      if (detailBody.classList.contains('collapsed')) toggleDetail();
+    });
   })();
 
   /* ── 수동 집계 버튼 (수동/자동 통틀어 1시간 제약) ── */
