@@ -131,11 +131,27 @@
     user-select: none;
   }
   .section-title.toggle .chev {
-    display: inline-block; transition: transform .15s ease; font-size: 9px;
+    display: inline-block; transition: transform .15s ease; font-size: 13px;
+    color: var(--accent); font-weight: 900;
   }
   .section-title.toggle.collapsed .chev { transform: rotate(-90deg); }
-  .collapsible-body { overflow: hidden; }
-  .collapsible-body.collapsed { display: none; }
+  .collapsible-body {
+    position: relative; overflow: hidden;
+    max-height: 4000px;
+    transition: max-height .3s ease;
+  }
+  .collapsible-body.collapsed {
+    max-height: 130px;
+    cursor: pointer;
+  }
+  .collapsible-body.collapsed::after {
+    content: '펼쳐서 보기';
+    position: absolute; left: 0; right: 0; bottom: 0; height: 90px;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px;
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    background: linear-gradient(to bottom, rgba(0,0,0,0), var(--bg) 80%);
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  }
 
   /* Card shell */
   .card {
@@ -392,8 +408,8 @@
   <div class="card" id="dist-card"></div>
 
   <div id="compare-section" style="display:none;">
-    <p class="section-title toggle" id="compare-toggle"><span class="chev">▾</span>정책 전/후 비교</p>
-    <div id="compare-cards" class="collapsible-body"></div>
+    <p class="section-title toggle collapsed" id="compare-toggle"><span class="chev">▾</span>정책 전/후 비교</p>
+    <div id="compare-cards" class="collapsible-body collapsed"></div>
   </div>
 
   <div id="refund-csat-section" style="display:none;">
@@ -460,9 +476,9 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-07-23 11:25",
-    "totalScanned":  4152,
-    "totalSent":  4152,
+    "collectedAt":  "2026-07-23 11:45",
+    "totalScanned":  4178,
+    "totalSent":  4178,
     "totalResponded":  245,
     "responseRate":  5.9,
     "avgScore":  3.49,
@@ -2435,12 +2451,12 @@ window.CSAT_DATA = {
                           "assigneeName":  "allie"
                       }
                   ],
-    "noResponseCount":  3907,
+    "noResponseCount":  3933,
     "dailyStats":  {
                        "2026-07-23":  {
-                                          "sent":  29,
+                                          "sent":  55,
                                           "responded":  5,
-                                          "responseRate":  17.2,
+                                          "responseRate":  9.1,
                                           "avgScore":  4.8,
                                           "scoreMap":  {
                                                            "5":  4,
@@ -2578,14 +2594,14 @@ window.CSAT_DATA = {
                                   },
                        "609327":  {
                                       "name":  "Summer",
-                                      "sent":  157,
+                                      "sent":  159,
                                       "responded":  14,
-                                      "responseRate":  8.9,
+                                      "responseRate":  8.8,
                                       "avgScore":  3.86
                                   },
                        "629325":  {
                                       "name":  "Jiu",
-                                      "sent":  954,
+                                      "sent":  956,
                                       "responded":  49,
                                       "responseRate":  5.1,
                                       "avgScore":  3.53
@@ -2599,7 +2615,7 @@ window.CSAT_DATA = {
                                   },
                        "631507":  {
                                       "name":  "allie",
-                                      "sent":  1482,
+                                      "sent":  1504,
                                       "responded":  58,
                                       "responseRate":  3.9,
                                       "avgScore":  3.31
@@ -2645,9 +2661,9 @@ window.CSAT_DATA = {
                                                  "avgScore":  3.35
                                              },
                                   "after":  {
-                                                "sent":  1613,
+                                                "sent":  1639,
                                                 "responded":  89,
-                                                "responseRate":  5.52,
+                                                "responseRate":  5.43,
                                                 "avgScore":  3.75
                                             }
                               },
@@ -2662,9 +2678,9 @@ window.CSAT_DATA = {
                                                  "avgScore":  3.41
                                              },
                                   "after":  {
-                                                "sent":  1102,
+                                                "sent":  1128,
                                                 "responded":  71,
-                                                "responseRate":  6.44,
+                                                "responseRate":  6.29,
                                                 "avgScore":  3.69
                                             }
                               }
@@ -2957,9 +2973,13 @@ window.CSAT_DATA = {
     });
 
     var toggleBtn = document.getElementById('compare-toggle');
-    toggleBtn.addEventListener('click', function () {
+    function toggleCompare() {
       toggleBtn.classList.toggle('collapsed');
       wrap.classList.toggle('collapsed');
+    }
+    toggleBtn.addEventListener('click', toggleCompare);
+    wrap.addEventListener('click', function () {
+      if (wrap.classList.contains('collapsed')) toggleCompare();
     });
   })();
 
