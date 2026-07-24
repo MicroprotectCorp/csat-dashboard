@@ -10,6 +10,8 @@
     --star:       #F59E0B;
     --star-empty: #D9DCE6;
     --good:       #16A34A;
+    --warn:       #D97706;
+    --bad:        #DC2626;
     --bg:         #EEF0F7;
     --surface:    #FFFFFF;
     --surface-2:  #F4F5FB;
@@ -26,6 +28,8 @@
       --star:       #FBBF24;
       --star-empty: #2D3148;
       --good:       #22C55E;
+      --warn:       #F59E0B;
+      --bad:        #F87171;
       --bg:         #0A0D17;
       --surface:    #131726;
       --surface-2:  #1A1F33;
@@ -38,13 +42,13 @@
   }
   :root[data-theme="light"] {
     --accent:#3D6FE8; --accent-dim:#2A55C4; --star:#F59E0B; --star-empty:#D9DCE6;
-    --good:#16A34A; --bg:#EEF0F7; --surface:#FFFFFF; --surface-2:#F4F5FB;
+    --good:#16A34A; --warn:#D97706; --bad:#DC2626; --bg:#EEF0F7; --surface:#FFFFFF; --surface-2:#F4F5FB;
     --border:#E0E3EF; --text-1:#0F1828; --text-2:#5C6480; --text-3:#9AA0B8;
     --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
   }
   :root[data-theme="dark"] {
     --accent:#5B8BF5; --accent-dim:#3D6FE8; --star:#FBBF24; --star-empty:#2D3148;
-    --good:#22C55E; --bg:#0A0D17; --surface:#131726; --surface-2:#1A1F33;
+    --good:#22C55E; --warn:#F59E0B; --bad:#F87171; --bg:#0A0D17; --surface:#131726; --surface-2:#1A1F33;
     --border:#252C46; --text-1:#E8ECF8; --text-2:#8892B4; --text-3:#515A7A;
     --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.2);
   }
@@ -309,6 +313,55 @@
   .d-btn:hover  { border-color: var(--accent); color: var(--accent); background: var(--surface); }
   .d-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+  /* Calendar date filter */
+  .cal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cal-nav {
+    width: 26px; height: 26px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text-2); font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .15s;
+  }
+  .cal-nav:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .cal-nav:disabled { opacity: .35; cursor: default; }
+  .cal-title {
+    font-size: 13px; font-weight: 700; color: var(--text-1); min-width: 72px; text-align: center;
+    cursor: pointer; padding: 3px 8px; border-radius: 7px; border: 1.5px solid transparent;
+  }
+  .cal-title:hover { color: var(--accent); background: var(--surface); }
+  .cal-title.active { color: var(--accent); border-color: var(--accent); background: var(--surface); }
+  .cal-all-btn { margin-left: auto; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+  .cal-dow {
+    font-size: 10px; font-weight: 700; color: var(--text-3); text-align: center;
+    padding-bottom: 3px; letter-spacing: .02em;
+  }
+  .cal-cell {
+    position: relative; border-radius: 9px; padding: 6px 4px 5px;
+    min-height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    gap: 2px; font-size: 11px; border: 1.5px solid transparent;
+  }
+  .cal-cell.blank { visibility: hidden; }
+  .cal-cell.no-data { color: var(--text-3); }
+  .cal-cell.has-data {
+    cursor: pointer; background: var(--surface); border-color: var(--border);
+    transition: transform .1s, border-color .15s;
+  }
+  .cal-cell.has-data:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .cal-cell.has-data.active { border-color: var(--accent); border-width: 2px; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .cal-date { font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+  .cal-score { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 11px; }
+  .cal-score .cal-star { font-size: 9px; }
+  .cal-count { font-size: 9px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .cal-score.sc-5 { color: var(--good); }
+  .cal-score.sc-4 { color: var(--good); }
+  .cal-score.sc-3 { color: var(--warn); }
+  .cal-score.sc-2 { color: var(--bad); }
+  .cal-score.sc-1 { color: var(--bad); }
+  .cal-cell.has-data.sc-bg-5 { background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+  .cal-cell.has-data.sc-bg-4 { background: color-mix(in srgb, var(--good) 8%, var(--surface)); }
+  .cal-cell.has-data.sc-bg-3 { background: color-mix(in srgb, var(--warn) 10%, var(--surface)); }
+  .cal-cell.has-data.sc-bg-2 { background: color-mix(in srgb, var(--bad) 10%, var(--surface)); }
+  .cal-cell.has-data.sc-bg-1 { background: color-mix(in srgb, var(--bad) 16%, var(--surface)); }
+
   /* Star filter */
   .star-filter-bar { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
   .s-btn {
@@ -386,7 +439,13 @@
 <div class="main">
 
   <div class="filter-wrap">
-    <div class="month-bar" id="date-bar"></div>
+    <div class="cal-header">
+      <button class="cal-nav" id="cal-prev" type="button">‹</button>
+      <span class="cal-title" id="cal-title" title="클릭하면 이 달 전체 통계를 봐요" role="button">—</span>
+      <button class="cal-nav" id="cal-next" type="button">›</button>
+      <button class="m-btn cal-all-btn active" id="cal-all-btn" type="button">전체</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
   </div>
 
   <div class="stats-row">
@@ -499,11 +558,11 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-07-24 18:15",
-  "totalScanned": 5095,
-  "totalSent": 5095,
+  "collectedAt": "2026-07-24 19:12",
+  "totalScanned": 5115,
+  "totalSent": 5115,
   "totalResponded": 294,
-  "responseRate": 5.8,
+  "responseRate": 5.7,
   "avgScore": 3.59,
   "scoreMap": {
     "5": 148,
@@ -2866,12 +2925,12 @@ window.CSAT_DATA = {
       "assigneeName": "Jiu"
     }
   ],
-  "noResponseCount": 4801,
+  "noResponseCount": 4821,
   "dailyStats": {
     "2026-07-24": {
-      "sent": 486,
+      "sent": 506,
       "responded": 26,
-      "responseRate": 5.3,
+      "responseRate": 5.1,
       "avgScore": 4.08,
       "scoreMap": {
         "5": 16,
@@ -3013,12 +3072,19 @@ window.CSAT_DATA = {
     }
   },
   "agentStats": {
-    "651322": {
-      "name": "aileen",
-      "sent": 10,
+    "unknown": {
+      "name": "unknown",
+      "sent": 9,
       "responded": 0,
       "responseRate": 0.0,
       "avgScore": 0
+    },
+    "629325": {
+      "name": "Jiu",
+      "sent": 1153,
+      "responded": 58,
+      "responseRate": 5.0,
+      "avgScore": 3.59
     },
     "656326": {
       "name": "heizle",
@@ -3026,13 +3092,6 @@ window.CSAT_DATA = {
       "responded": 31,
       "responseRate": 3.4,
       "avgScore": 4.06
-    },
-    "609327": {
-      "name": "Summer",
-      "sent": 217,
-      "responded": 21,
-      "responseRate": 9.7,
-      "avgScore": 4.0
     },
     "647650": {
       "name": "Olive",
@@ -3043,31 +3102,17 @@ window.CSAT_DATA = {
     },
     "636057": {
       "name": "jacob",
-      "sent": 704,
+      "sent": 706,
       "responded": 89,
       "responseRate": 12.6,
       "avgScore": 3.29
     },
-    "629325": {
-      "name": "Jiu",
-      "sent": 1153,
-      "responded": 58,
-      "responseRate": 5.0,
-      "avgScore": 3.59
-    },
-    "565238": {
-      "name": "Randy",
-      "sent": 239,
+    "609327": {
+      "name": "Summer",
+      "sent": 217,
       "responded": 21,
-      "responseRate": 8.8,
-      "avgScore": 3.86
-    },
-    "unknown": {
-      "name": "unknown",
-      "sent": 9,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
+      "responseRate": 9.7,
+      "avgScore": 4.0
     },
     "631507": {
       "name": "allie",
@@ -3075,6 +3120,20 @@ window.CSAT_DATA = {
       "responded": 72,
       "responseRate": 4.0,
       "avgScore": 3.51
+    },
+    "565238": {
+      "name": "Randy",
+      "sent": 256,
+      "responded": 21,
+      "responseRate": 8.2,
+      "avgScore": 3.86
+    },
+    "651322": {
+      "name": "aileen",
+      "sent": 11,
+      "responded": 0,
+      "responseRate": 0.0,
+      "avgScore": 0
     }
   },
   "policyComparisons": [
@@ -3089,9 +3148,9 @@ window.CSAT_DATA = {
         "avgScore": 3.36
       },
       "after": {
-        "sent": 2557,
+        "sent": 2577,
         "responded": 137,
-        "responseRate": 5.36,
+        "responseRate": 5.32,
         "avgScore": 3.85
       }
     },
@@ -3106,9 +3165,9 @@ window.CSAT_DATA = {
         "avgScore": 3.42
       },
       "after": {
-        "sent": 2046,
+        "sent": 2066,
         "responded": 119,
-        "responseRate": 5.82,
+        "responseRate": 5.76,
         "avgScore": 3.83
       }
     }
@@ -3526,48 +3585,113 @@ window.CSAT_DATA = {
     setInterval(render, 30000);
   })();
 
-  /* ── 날짜 필터 버튼 ── */
-  var dateBar = document.getElementById('date-bar');
-
+  /* ── 날짜 필터: 캘린더 ── */
   function ymLabel(ym) {
     var p = ym.split('-');
     return (parseInt(p[0]) % 100) + '년 ' + parseInt(p[1]) + '월';
   }
 
-  function addDateBtn(label, key) {
-    var btn = document.createElement('button');
-    btn.className = 'm-btn' + (key === 'all' ? ' active' : '');
-    btn.dataset.key = key;
-    btn.textContent = label;
-    btn.onclick = function() {
-      dateBar.querySelectorAll('.m-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      renderAll(key);
-    };
-    dateBar.appendChild(btn);
-  }
+  var dailyKeys = D.dailyStats ? Object.keys(D.dailyStats).filter(function (dk) { return dk !== '미상'; }).sort() : [];
+  var monthsWithData = Array.from(new Set(dailyKeys.map(function (dk) { return dk.substring(0, 7); }))).sort();
 
-  addDateBtn('전체', 'all');
-  if (D.dailyStats) {
-    Object.keys(D.dailyStats)
-      .filter(function(dk) { return dk !== '미상'; })
-      .sort().reverse()
-      .forEach(function(dk) {
-        var p = dk.split('-');
-        addDateBtn(parseInt(p[1]) + '월 ' + parseInt(p[2]) + '일', dk);
-      });
-  }
-
-  /* monthMap은 renderAll 내부 month: 처리에서만 사용 */
+  /* renderAll의 'month:YYYY-MM' 키 처리에서 사용 */
   var monthMap = {};
-  if (D.dailyStats) {
-    Object.keys(D.dailyStats).forEach(function(dk) {
-      if (dk === '미상') return;
-      var ym = dk.substring(0, 7);
-      if (!monthMap[ym]) monthMap[ym] = [];
-      monthMap[ym].push(dk);
-    });
+  dailyKeys.forEach(function (dk) {
+    var ym = dk.substring(0, 7);
+    if (!monthMap[ym]) monthMap[ym] = [];
+    monthMap[ym].push(dk);
+  });
+
+  var calGrid   = document.getElementById('cal-grid');
+  var calTitle  = document.getElementById('cal-title');
+  var calPrev   = document.getElementById('cal-prev');
+  var calNext   = document.getElementById('cal-next');
+  var calAllBtn = document.getElementById('cal-all-btn');
+
+  var selectedDateKey = 'all';
+  var currentYm = monthsWithData.length ? monthsWithData[monthsWithData.length - 1] : (function () {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  })();
+
+  function scoreClass(avg) {
+    if (avg >= 4.5) return '5';
+    if (avg >= 3.5) return '4';
+    if (avg >= 2.5) return '3';
+    if (avg >= 1.5) return '2';
+    return '1';
   }
+
+  function selectDate(key) {
+    selectedDateKey = key;
+    calAllBtn.classList.toggle('active', key === 'all');
+    calTitle.classList.toggle('active', key === 'month:' + currentYm);
+    calGrid.querySelectorAll('.cal-cell').forEach(function (el) {
+      el.classList.toggle('active', el.dataset.key === key);
+    });
+    renderAll(key);
+  }
+
+  function renderCalendar() {
+    calTitle.textContent = ymLabel(currentYm);
+    calTitle.classList.toggle('active', selectedDateKey === 'month:' + currentYm);
+    var idx = monthsWithData.indexOf(currentYm);
+    calPrev.disabled = monthsWithData.length > 0 && (idx <= 0);
+    calNext.disabled = monthsWithData.length > 0 && (idx === -1 || idx >= monthsWithData.length - 1);
+
+    calGrid.innerHTML = '';
+    ['일', '월', '화', '수', '목', '금', '토'].forEach(function (d) {
+      var el = document.createElement('div');
+      el.className = 'cal-dow';
+      el.textContent = d;
+      calGrid.appendChild(el);
+    });
+
+    var p = currentYm.split('-');
+    var year = parseInt(p[0]), month = parseInt(p[1]);
+    var firstDow = new Date(year, month - 1, 1).getDay();
+    var daysInMonth = new Date(year, month, 0).getDate();
+
+    for (var i = 0; i < firstDow; i++) {
+      var blank = document.createElement('div');
+      blank.className = 'cal-cell blank';
+      calGrid.appendChild(blank);
+    }
+
+    for (var day = 1; day <= daysInMonth; day++) {
+      var dk = currentYm + '-' + String(day).padStart(2, '0');
+      var stat = D.dailyStats ? D.dailyStats[dk] : null;
+      var cell = document.createElement('div');
+      cell.dataset.key = dk;
+
+      if (stat && stat.responded > 0) {
+        var sc = scoreClass(stat.avgScore);
+        cell.className = 'cal-cell has-data sc-bg-' + sc + (selectedDateKey === dk ? ' active' : '');
+        cell.innerHTML =
+          '<span class="cal-date">' + day + '</span>' +
+          '<span class="cal-score sc-' + sc + '"><span class="cal-star">★</span>' + stat.avgScore.toFixed(2) + '</span>' +
+          '<span class="cal-count">' + stat.responded + '건</span>';
+        cell.addEventListener('click', function () { selectDate(this.dataset.key); });
+      } else {
+        cell.className = 'cal-cell no-data';
+        cell.innerHTML = '<span class="cal-date">' + day + '</span>';
+      }
+      calGrid.appendChild(cell);
+    }
+  }
+
+  calPrev.addEventListener('click', function () {
+    var idx = monthsWithData.indexOf(currentYm);
+    if (idx > 0) { currentYm = monthsWithData[idx - 1]; renderCalendar(); }
+  });
+  calNext.addEventListener('click', function () {
+    var idx = monthsWithData.indexOf(currentYm);
+    if (idx !== -1 && idx < monthsWithData.length - 1) { currentYm = monthsWithData[idx + 1]; renderCalendar(); }
+  });
+  calAllBtn.addEventListener('click', function () { selectDate('all'); });
+  calTitle.addEventListener('click', function () { selectDate('month:' + currentYm); });
+
+  renderCalendar();
 
   /* ── 필터 상태 ── */
   var selectedStar   = 0;   // 0 = 전체
