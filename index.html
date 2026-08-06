@@ -153,11 +153,13 @@
   }
   .collapsible-body.collapsed::after {
     content: '펼쳐서 보기';
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
+    position: absolute; inset: 50% 0 0 0;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px;
     font-size: 12px; font-weight: 700; color: var(--accent);
     background: rgba(127,127,127,0.14);
     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 55%);
+    mask-image: linear-gradient(to bottom, transparent, black 55%);
   }
   .collapse-footer-btn {
     display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -564,18 +566,18 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-08-06 12:33",
-  "totalScanned": 9358,
-  "totalSent": 9358,
-  "totalResponded": 513,
+  "collectedAt": "2026-08-05 15:21",
+  "totalScanned": 8807,
+  "totalSent": 8807,
+  "totalResponded": 487,
   "responseRate": 5.5,
-  "avgScore": 3.81,
+  "avgScore": 3.79,
   "scoreMap": {
-    "5": 292,
-    "4": 53,
-    "3": 49,
+    "5": 275,
+    "4": 50,
+    "3": 46,
     "2": 17,
-    "1": 102
+    "1": 99
   },
   "responses": [
     {
@@ -4003,14 +4005,6 @@ window.CSAT_DATA = {
       "assigneeName": "Summer"
     },
     {
-      "chatId": "6a700482d913a74b5764",
-      "stars": 4,
-      "comment": "",
-      "time": "2026-08-05 15:49",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
       "chatId": "6a702086c9a9575c366a",
       "stars": 5,
       "comment": "",
@@ -4435,14 +4429,6 @@ window.CSAT_DATA = {
       "assigneeName": "조윤조"
     },
     {
-      "chatId": "6a713eba382a6b5688a0",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-06 11:51",
-      "assigneeId": "565238",
-      "assigneeName": "김태훈"
-    },
-    {
       "chatId": "6a728c9f4ee888af9a19",
       "stars": 5,
       "comment": "",
@@ -4489,216 +4475,10 @@ window.CSAT_DATA = {
       "time": "2026-08-05 14:58",
       "assigneeId": "667753",
       "assigneeName": "김로빈"
-    },
-    {
-      "chatId": "6a7292e03eb9359cd403",
-      "stars": 1,
-      "comment": "",
-      "time": "2026-08-05 16:10",
-      "assigneeId": "656326",
-      "assigneeName": "이수연"
-    },
-    {
-      "chatId": "6a72cc839ba078ec01bf",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-05 15:54",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72ababeb5758ce8a04",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-08-05 15:51",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72c9de73e6a7c10048",
-      "stars": 5,
-      "comment": "고생많으십니다",
-      "time": "2026-08-05 15:50",
-      "assigneeId": "656326",
-      "assigneeName": "이수연"
-    },
-    {
-      "chatId": "6a7290ee21940a4c47c5",
-      "stars": 1,
-      "comment": "완전별로임 5월에 20만원 결제했는데 총9건에160만원 예상한다기에 했더니두껀3만원 보험사에서 입금되구",
-      "time": "2026-08-05 15:48",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a700482d913a74b5764",
-      "stars": 3,
-      "comment": "",
-      "time": "2026-08-03 16:32",
-      "assigneeId": "636057",
-      "assigneeName": "jacob"
-    },
-    {
-      "chatId": "6a72d3a54e3ceb4d7210",
-      "stars": 5,
-      "comment": "신속한 일처리 감사합니다",
-      "time": "2026-08-05 16:53",
-      "assigneeId": "667753",
-      "assigneeName": "김로빈"
-    },
-    {
-      "chatId": "6a72c73380bb8b10b852",
-      "stars": 5,
-      "comment": "친절하게 답변해 주셔서 감사합니다",
-      "time": "2026-08-05 16:29",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
-    {
-      "chatId": "6a72a325a2079f0d001e",
-      "stars": 5,
-      "comment": "25년3월신청한것도환급안됐습니다",
-      "time": "2026-08-05 12:32",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72c68a4d0b3fc4cce3",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-05 17:53",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72ce69d4fc87ef514c",
-      "stars": 5,
-      "comment": "진행을볼수있게해주시면감사",
-      "time": "2026-08-05 17:51",
-      "assigneeId": "667753",
-      "assigneeName": "김로빈"
-    },
-    {
-      "chatId": "6a72e6089b0c0f028c3e",
-      "stars": 5,
-      "comment": "수수료환불 잘처리해주세요",
-      "time": "2026-08-05 17:44",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72c467366fe17979c1",
-      "stars": 1,
-      "comment": "왜 본인들 병원 서류 발급 못 받았다고 내가 받아야 할 돈이 줄어들어야합니까!?",
-      "time": "2026-08-05 17:44",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
-    {
-      "chatId": "6a72df341b46ff32adf5",
-      "stars": 4,
-      "comment": "",
-      "time": "2026-08-05 17:43",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72c7e20b1c9b579348",
-      "stars": 4,
-      "comment": "나이가 많은 사람들은 힘들어요",
-      "time": "2026-08-05 17:42",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
-    {
-      "chatId": "6a72969f049aa9c3d531",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-05 17:42",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
-    {
-      "chatId": "6a72d0a62089f39e6c34",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-05 17:38",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a72e1239b9e8314e48e",
-      "stars": 3,
-      "comment": "유선 고객센터 운영바람",
-      "time": "2026-08-05 17:33",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a7208255a1250f06d63",
-      "stars": 5,
-      "comment": "문자보단 직접 상담이 일처리가 빠를듯합니다.",
-      "time": "2026-08-05 17:42",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
-    {
-      "chatId": "6a73dd04c9f626585396",
-      "stars": 5,
-      "comment": "..",
-      "time": "2026-08-06 10:13",
-      "assigneeId": "565238",
-      "assigneeName": "김태훈"
-    },
-    {
-      "chatId": "6a73dabc8184bd9644a8",
-      "stars": 5,
-      "comment": "답변을 빠르게 잘 답변해주셨습니다.",
-      "time": "2026-08-06 10:41",
-      "assigneeId": "667753",
-      "assigneeName": "김로빈"
-    },
-    {
-      "chatId": "6a72a325a2079f0d001e",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-05 16:54",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a73edf69bfb2d844ae1",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-06 12:04",
-      "assigneeId": "636057",
-      "assigneeName": "김동아"
-    },
-    {
-      "chatId": "6a73ed76231f9cbd99f0",
-      "stars": 5,
-      "comment": "",
-      "time": "2026-08-06 11:37",
-      "assigneeId": "667753",
-      "assigneeName": "김로빈"
     }
   ],
-  "noResponseCount": 8845,
+  "noResponseCount": 8320,
   "commentOnlyResponses": [
-    {
-      "chatId": "6a73dcb6556abb0f4599",
-      "comment": "감사합니다",
-      "time": "2026-08-06 10:14",
-      "assigneeId": "565238",
-      "assigneeName": "김태훈"
-    },
-    {
-      "chatId": "6a72e7ed50e2e0527fc5",
-      "comment": "재접수부탁드려요 일처리는어떻게 되는건지좀 알려주세요",
-      "time": "2026-08-05 18:34",
-      "assigneeId": "609327",
-      "assigneeName": "조윤조"
-    },
     {
       "chatId": "6a718d4ab6f1fddaf3a5",
       "comment": "문소아과도 보험사에서 지급뎐게 없습니다",
@@ -4896,15 +4676,15 @@ window.CSAT_DATA = {
       "assigneeName": "jacob"
     },
     {
-      "chatId": "6a605f7c7e2a83b73f4d",
-      "comment": "상담원통해서 환불요청도 필요할듯",
+      "chatId": "6a601785f2fc8313880a",
+      "comment": "유선 상담 되면 좋겠네요",
       "time": "2026-07-22 15:40",
       "assigneeId": "636057",
       "assigneeName": "jacob"
     },
     {
-      "chatId": "6a601785f2fc8313880a",
-      "comment": "유선 상담 되면 좋겠네요",
+      "chatId": "6a605f7c7e2a83b73f4d",
+      "comment": "상담원통해서 환불요청도 필요할듯",
       "time": "2026-07-22 15:40",
       "assigneeId": "636057",
       "assigneeName": "jacob"
@@ -4995,30 +4775,17 @@ window.CSAT_DATA = {
     }
   ],
   "dailyStats": {
-    "2026-08-06": {
-      "sent": 46,
-      "responded": 5,
-      "responseRate": 10.9,
-      "avgScore": 5.0,
+    "2026-08-05": {
+      "sent": 150,
+      "responded": 7,
+      "responseRate": 4.7,
+      "avgScore": 4.14,
       "scoreMap": {
         "5": 5,
         "4": 0,
-        "3": 0,
+        "3": 1,
         "2": 0,
-        "1": 0
-      }
-    },
-    "2026-08-05": {
-      "sent": 655,
-      "responded": 27,
-      "responseRate": 4.1,
-      "avgScore": 4.07,
-      "scoreMap": {
-        "5": 17,
-        "4": 3,
-        "3": 3,
-        "2": 0,
-        "1": 4
+        "1": 1
       }
     },
     "2026-08-04": {
@@ -5036,13 +4803,13 @@ window.CSAT_DATA = {
     },
     "2026-08-03": {
       "sent": 472,
-      "responded": 27,
-      "responseRate": 5.7,
-      "avgScore": 4.74,
+      "responded": 26,
+      "responseRate": 5.5,
+      "avgScore": 4.81,
       "scoreMap": {
         "5": 24,
         "4": 1,
-        "3": 1,
+        "3": 0,
         "2": 0,
         "1": 1
       }
@@ -5257,47 +5024,19 @@ window.CSAT_DATA = {
     }
   },
   "agentStats": {
-    "629325": {
-      "name": "Jiu",
-      "sent": 1616,
-      "responded": 80,
-      "responseRate": 5.0,
-      "avgScore": 3.7
-    },
-    "667753": {
-      "name": "김로빈",
-      "sent": 62,
-      "responded": 6,
-      "responseRate": 9.7,
-      "avgScore": 4.33
-    },
-    "unknown": {
-      "name": "unknown",
-      "sent": 9,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
-    },
-    "636057": {
-      "name": "jacob",
-      "sent": 1670,
-      "responded": 174,
-      "responseRate": 10.4,
-      "avgScore": 3.7
-    },
-    "656326": {
-      "name": "heizle",
-      "sent": 1690,
-      "responded": 44,
-      "responseRate": 2.6,
-      "avgScore": 4.09
-    },
     "651322": {
       "name": "aileen",
-      "sent": 22,
+      "sent": 18,
       "responded": 0,
       "responseRate": 0.0,
       "avgScore": 0
+    },
+    "631507": {
+      "name": "allie",
+      "sent": 2604,
+      "responded": 103,
+      "responseRate": 4.0,
+      "avgScore": 3.66
     },
     "647650": {
       "name": "Olive",
@@ -5308,24 +5047,52 @@ window.CSAT_DATA = {
     },
     "609327": {
       "name": "Summer",
-      "sent": 773,
-      "responded": 61,
-      "responseRate": 7.9,
-      "avgScore": 3.97
+      "sent": 656,
+      "responded": 56,
+      "responseRate": 8.5,
+      "avgScore": 3.96
     },
-    "631507": {
-      "name": "allie",
-      "sent": 2601,
-      "responded": 103,
-      "responseRate": 4.0,
+    "unknown": {
+      "name": "unknown",
+      "sent": 9,
+      "responded": 0,
+      "responseRate": 0.0,
+      "avgScore": 0
+    },
+    "636057": {
+      "name": "jacob",
+      "sent": 1524,
+      "responded": 161,
+      "responseRate": 10.6,
       "avgScore": 3.66
+    },
+    "667753": {
+      "name": "김로빈",
+      "sent": 17,
+      "responded": 2,
+      "responseRate": 11.8,
+      "avgScore": 3.0
     },
     "565238": {
       "name": "Randy",
-      "sent": 865,
-      "responded": 42,
+      "sent": 753,
+      "responded": 40,
+      "responseRate": 5.3,
+      "avgScore": 4.15
+    },
+    "629325": {
+      "name": "Jiu",
+      "sent": 1618,
+      "responded": 80,
       "responseRate": 4.9,
-      "avgScore": 4.19
+      "avgScore": 3.7
+    },
+    "656326": {
+      "name": "heizle",
+      "sent": 1558,
+      "responded": 42,
+      "responseRate": 2.7,
+      "avgScore": 4.14
     }
   },
   "policyComparisons": [
@@ -5340,10 +5107,10 @@ window.CSAT_DATA = {
         "avgScore": 3.35
       },
       "after": {
-        "sent": 6820,
-        "responded": 355,
-        "responseRate": 5.21,
-        "avgScore": 4.01
+        "sent": 6269,
+        "responded": 329,
+        "responseRate": 5.25,
+        "avgScore": 4.0
       },
       "manualMetrics": {
         "sourceNote": "로컬 채팅 아카이브 교차분석(설문대상 5,650건 중 89%=5,031건 매칭, 실제 텍스트 있는 상담원 답변 기준) + Channel API 재조회(고객 회신 305건) 기준, summer 수동 분석(2026-07-28)",
@@ -5393,10 +5160,10 @@ window.CSAT_DATA = {
         "avgScore": 3.43
       },
       "after": {
-        "sent": 6309,
-        "responded": 336,
-        "responseRate": 5.33,
-        "avgScore": 4.01
+        "sent": 5758,
+        "responded": 310,
+        "responseRate": 5.38,
+        "avgScore": 4.0
       },
       "manualMetrics": null
     }
@@ -5480,14 +5247,14 @@ window.CSAT_DATA = {
       "avgScore": 3.12
     },
     {
-      "tag": "안내/A4_지급관련",
-      "count": 17,
-      "avgScore": 3.76
-    },
-    {
       "tag": "환불/R6_서류보완",
       "count": 17,
       "avgScore": 3.88
+    },
+    {
+      "tag": "안내/A4_지급관련",
+      "count": 17,
+      "avgScore": 3.76
     },
     {
       "tag": "처리/M10_재탐색",
@@ -5500,14 +5267,14 @@ window.CSAT_DATA = {
       "avgScore": 3.93
     },
     {
-      "tag": "처리/M6_서류전달",
-      "count": 14,
-      "avgScore": 4.07
-    },
-    {
       "tag": "환불/R8_실손미가입",
       "count": 14,
       "avgScore": 4.36
+    },
+    {
+      "tag": "처리/M6_서류전달",
+      "count": 14,
+      "avgScore": 4.07
     },
     {
       "tag": "처리/M8_재청구",
@@ -5515,9 +5282,9 @@ window.CSAT_DATA = {
       "avgScore": 5.0
     },
     {
-      "tag": "환불/R3_변심",
+      "tag": "환불/R5_지급불가항목",
       "count": 9,
-      "avgScore": 3.22
+      "avgScore": 3.67
     },
     {
       "tag": "특성/E4_유선요청",
@@ -5525,9 +5292,9 @@ window.CSAT_DATA = {
       "avgScore": 3.44
     },
     {
-      "tag": "환불/R5_지급불가항목",
+      "tag": "환불/R3_변심",
       "count": 9,
-      "avgScore": 3.67
+      "avgScore": 3.22
     },
     {
       "tag": "문의/Q9_보험사변경",
@@ -5535,14 +5302,14 @@ window.CSAT_DATA = {
       "avgScore": 4.88
     },
     {
-      "tag": "환불/R4_보험사오선택",
-      "count": 8,
-      "avgScore": 4.25
-    },
-    {
       "tag": "유선IVR",
       "count": 8,
       "avgScore": 3.88
+    },
+    {
+      "tag": "환불/R4_보험사오선택",
+      "count": 8,
+      "avgScore": 4.25
     },
     {
       "tag": "특성/E1_대외언급",
@@ -5555,11 +5322,6 @@ window.CSAT_DATA = {
       "avgScore": 4.0
     },
     {
-      "tag": "안내/A18_타채널",
-      "count": 6,
-      "avgScore": 3.0
-    },
-    {
       "tag": "환불/증빙확인완료_전액",
       "count": 6,
       "avgScore": 2.67
@@ -5570,14 +5332,14 @@ window.CSAT_DATA = {
       "avgScore": 4.0
     },
     {
+      "tag": "안내/A18_타채널",
+      "count": 6,
+      "avgScore": 3.0
+    },
+    {
       "tag": "안내/A17_서류보완",
       "count": 5,
       "avgScore": 3.8
-    },
-    {
-      "tag": "안내/A9_보험사변경",
-      "count": 4,
-      "avgScore": 4.75
     },
     {
       "tag": "문의/Q5_청구지연",
@@ -5585,14 +5347,39 @@ window.CSAT_DATA = {
       "avgScore": 3.0
     },
     {
-      "tag": "안내/A5_청구지연",
+      "tag": "안내/A9_보험사변경",
+      "count": 4,
+      "avgScore": 4.75
+    },
+    {
+      "tag": "안내/A16_신청확인",
       "count": 3,
-      "avgScore": 2.33
+      "avgScore": 4.33
     },
     {
       "tag": "안내/A10_계좌변경",
       "count": 3,
       "avgScore": 3.67
+    },
+    {
+      "tag": "문의/Q18_타채널",
+      "count": 3,
+      "avgScore": 2.33
+    },
+    {
+      "tag": "문의/Q14_탈퇴",
+      "count": 3,
+      "avgScore": 5.0
+    },
+    {
+      "tag": "안내/A5_청구지연",
+      "count": 3,
+      "avgScore": 2.33
+    },
+    {
+      "tag": "안내/A7_환불정책",
+      "count": 3,
+      "avgScore": 3.0
     },
     {
       "tag": "환불/보험사반송",
@@ -5603,26 +5390,6 @@ window.CSAT_DATA = {
       "tag": "처리/M3_보험사변경",
       "count": 3,
       "avgScore": 5.0
-    },
-    {
-      "tag": "안내/A16_신청확인",
-      "count": 3,
-      "avgScore": 4.33
-    },
-    {
-      "tag": "문의/Q14_탈퇴",
-      "count": 3,
-      "avgScore": 5.0
-    },
-    {
-      "tag": "문의/Q18_타채널",
-      "count": 3,
-      "avgScore": 2.33
-    },
-    {
-      "tag": "안내/A7_환불정책",
-      "count": 3,
-      "avgScore": 3.0
     }
   ],
   "refundCsat": {
