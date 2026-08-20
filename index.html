@@ -175,37 +175,10 @@
     padding: 4px 12px; cursor: pointer; white-space: nowrap;
   }
   .detail-link-btn:hover { background: var(--accent); color: #fff; }
+  .agent-detail-section { margin-bottom: 20px; }
   .agent-feedback-list { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
   .agent-feedback-item { font-size: 13px; line-height: 1.6; color: var(--text-1); display: flex; gap: 8px; }
   .agent-feedback-item .dot { flex-shrink: 0; margin-top: 2px; }
-
-  /* 담당자별 CSAT 상세 모달 */
-  .agent-detail-backdrop {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(10,13,23,0.55);
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px; backdrop-filter: blur(2px);
-    animation: fadeIn .15s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .agent-detail-modal {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35);
-    width: 100%; max-width: 640px; max-height: 88vh;
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-  .agent-detail-modal-head {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 20px 12px; flex-shrink: 0;
-  }
-  .agent-detail-modal-body { padding: 0 20px 20px; overflow-y: auto; }
-  .agent-detail-close {
-    width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid var(--border); background: var(--surface);
-    color: var(--text-2); font-size: 14px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .agent-detail-close:hover { color: var(--text-1); border-color: var(--text-3); }
   .collapse-footer-btn .chev {
     display: inline-flex; align-items: center; justify-content: center;
     width: 20px; height: 20px; border-radius: 50%;
@@ -567,22 +540,15 @@
     <button type="button" class="detail-link-btn" id="agent-detail-btn">담당자별 CSAT 자세히 보기 →</button>
   </div>
 
-  <div class="agent-detail-backdrop" id="agent-detail-backdrop" style="display:none;">
-    <div class="agent-detail-modal">
-      <div class="agent-detail-modal-head">
-        <p class="section-title" style="margin-bottom:0;">담당자별 회신율 · 평균 별점</p>
-        <button type="button" class="agent-detail-close" id="agent-detail-close" aria-label="닫기">✕</button>
-      </div>
-      <div class="agent-detail-modal-body">
-        <div class="card trend-card">
-          <div class="trend-legend" id="agent-detail-legend"></div>
-          <canvas id="agent-detail-canvas" height="220"></canvas>
-          <div id="agent-detail-tooltip"></div>
-        </div>
-        <div class="card" style="margin-top:10px;">
-          <div class="agent-feedback-list" id="agent-feedback-list"></div>
-        </div>
-      </div>
+  <div class="agent-detail-section" id="agent-detail-section" style="display:none;">
+    <p class="section-title">담당자별 회신율 · 평균 별점</p>
+    <div class="card trend-card">
+      <div class="trend-legend" id="agent-detail-legend"></div>
+      <canvas id="agent-detail-canvas" height="220"></canvas>
+      <div id="agent-detail-tooltip"></div>
+    </div>
+    <div class="card" style="margin-top:10px;">
+      <div class="agent-feedback-list" id="agent-feedback-list"></div>
     </div>
   </div>
 
@@ -627,7 +593,7 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-08-20 18:31",
+  "collectedAt": "2026-08-20 19:33",
   "totalScanned": 15256,
   "totalSent": 15256,
   "totalResponded": 887,
@@ -8660,6 +8626,48 @@ window.CSAT_DATA = {
     }
   },
   "agentStats": {
+    "651322": {
+      "name": "aileen",
+      "sent": 36,
+      "responded": 0,
+      "responseRate": 0.0,
+      "avgScore": 0
+    },
+    "647650": {
+      "name": "Olive",
+      "sent": 50,
+      "responded": 3,
+      "responseRate": 6.0,
+      "avgScore": 5.0
+    },
+    "565238": {
+      "name": "Randy",
+      "sent": 1909,
+      "responded": 62,
+      "responseRate": 3.2,
+      "avgScore": 4.08
+    },
+    "631507": {
+      "name": "allie",
+      "sent": 2575,
+      "responded": 101,
+      "responseRate": 3.9,
+      "avgScore": 3.63
+    },
+    "668885": {
+      "name": "남규민",
+      "sent": 522,
+      "responded": 52,
+      "responseRate": 10.0,
+      "avgScore": 4.62
+    },
+    "667753": {
+      "name": "김로빈",
+      "sent": 949,
+      "responded": 85,
+      "responseRate": 9.0,
+      "avgScore": 4.52
+    },
     "unknown": {
       "name": "unknown",
       "sent": 9,
@@ -8674,19 +8682,12 @@ window.CSAT_DATA = {
       "responseRate": 2.9,
       "avgScore": 4.38
     },
-    "565238": {
-      "name": "Randy",
-      "sent": 1909,
-      "responded": 62,
-      "responseRate": 3.2,
-      "avgScore": 4.08
-    },
-    "667753": {
-      "name": "김로빈",
-      "sent": 949,
-      "responded": 85,
-      "responseRate": 9.0,
-      "avgScore": 4.52
+    "609327": {
+      "name": "Summer",
+      "sent": 1756,
+      "responded": 163,
+      "responseRate": 9.3,
+      "avgScore": 4.09
     },
     "636057": {
       "name": "jacob",
@@ -8695,47 +8696,12 @@ window.CSAT_DATA = {
       "responseRate": 8.6,
       "avgScore": 3.75
     },
-    "609327": {
-      "name": "Summer",
-      "sent": 1756,
-      "responded": 163,
-      "responseRate": 9.3,
-      "avgScore": 4.09
-    },
-    "631507": {
-      "name": "allie",
-      "sent": 2575,
-      "responded": 101,
-      "responseRate": 3.9,
-      "avgScore": 3.63
-    },
-    "647650": {
-      "name": "Olive",
-      "sent": 50,
-      "responded": 3,
-      "responseRate": 6.0,
-      "avgScore": 5.0
-    },
-    "651322": {
-      "name": "aileen",
-      "sent": 36,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
-    },
     "629325": {
       "name": "Jiu",
       "sent": 1603,
       "responded": 78,
       "responseRate": 4.9,
       "avgScore": 3.77
-    },
-    "668885": {
-      "name": "남규민",
-      "sent": 522,
-      "responded": 52,
-      "responseRate": 10.0,
-      "avgScore": 4.62
     }
   },
   "policyComparisons": [
@@ -8910,14 +8876,14 @@ window.CSAT_DATA = {
       "avgScore": 3.93
     },
     {
-      "tag": "환불/R8_실손미가입",
-      "count": 14,
-      "avgScore": 4.36
-    },
-    {
       "tag": "처리/M6_서류전달",
       "count": 14,
       "avgScore": 4.07
+    },
+    {
+      "tag": "환불/R8_실손미가입",
+      "count": 14,
+      "avgScore": 4.36
     },
     {
       "tag": "처리/M8_재청구",
@@ -8925,19 +8891,24 @@ window.CSAT_DATA = {
       "avgScore": 5.0
     },
     {
-      "tag": "환불/R3_변심",
-      "count": 9,
-      "avgScore": 3.22
-    },
-    {
       "tag": "특성/E4_유선요청",
       "count": 9,
       "avgScore": 3.44
     },
     {
+      "tag": "환불/R3_변심",
+      "count": 9,
+      "avgScore": 3.22
+    },
+    {
       "tag": "환불/R5_지급불가항목",
       "count": 9,
       "avgScore": 3.67
+    },
+    {
+      "tag": "환불/R4_보험사오선택",
+      "count": 8,
+      "avgScore": 4.25
     },
     {
       "tag": "유선IVR",
@@ -8950,14 +8921,14 @@ window.CSAT_DATA = {
       "avgScore": 4.88
     },
     {
-      "tag": "환불/R4_보험사오선택",
-      "count": 8,
-      "avgScore": 4.25
-    },
-    {
       "tag": "특성/E1_대외언급",
       "count": 7,
       "avgScore": 2.71
+    },
+    {
+      "tag": "환불/증빙확인완료_전액",
+      "count": 6,
+      "avgScore": 2.67
     },
     {
       "tag": "안내/A18_타채널",
@@ -8965,19 +8936,14 @@ window.CSAT_DATA = {
       "avgScore": 3.0
     },
     {
-      "tag": "문의/Q2_서비스",
-      "count": 6,
-      "avgScore": 4.0
-    },
-    {
       "tag": "안내/A2_서비스",
       "count": 6,
       "avgScore": 4.0
     },
     {
-      "tag": "환불/증빙확인완료_전액",
+      "tag": "문의/Q2_서비스",
       "count": 6,
-      "avgScore": 2.67
+      "avgScore": 4.0
     },
     {
       "tag": "안내/A17_서류보완",
@@ -8995,22 +8961,12 @@ window.CSAT_DATA = {
       "avgScore": 4.75
     },
     {
-      "tag": "처리/M3_보험사변경",
-      "count": 3,
-      "avgScore": 5.0
-    },
-    {
-      "tag": "안내/A10_계좌변경",
-      "count": 3,
-      "avgScore": 3.67
-    },
-    {
       "tag": "안내/A7_환불정책",
       "count": 3,
       "avgScore": 3.0
     },
     {
-      "tag": "문의/Q14_탈퇴",
+      "tag": "처리/M3_보험사변경",
       "count": 3,
       "avgScore": 5.0
     },
@@ -9020,9 +8976,14 @@ window.CSAT_DATA = {
       "avgScore": 2.67
     },
     {
-      "tag": "안내/A16_신청확인",
+      "tag": "안내/A10_계좌변경",
       "count": 3,
-      "avgScore": 4.33
+      "avgScore": 3.67
+    },
+    {
+      "tag": "안내/A5_청구지연",
+      "count": 3,
+      "avgScore": 2.33
     },
     {
       "tag": "문의/Q18_타채널",
@@ -9030,9 +8991,14 @@ window.CSAT_DATA = {
       "avgScore": 2.33
     },
     {
-      "tag": "안내/A5_청구지연",
+      "tag": "안내/A16_신청확인",
       "count": 3,
-      "avgScore": 2.33
+      "avgScore": 4.33
+    },
+    {
+      "tag": "문의/Q14_탈퇴",
+      "count": 3,
+      "avgScore": 5.0
     }
   ],
   "refundCsat": {
@@ -9793,21 +9759,17 @@ window.CSAT_DATA = {
   /* ── 담당자별 CSAT 상세 (회신율 + 평균 별점) ── */
   (function () {
     var btn = document.getElementById('agent-detail-btn');
-    var backdrop = document.getElementById('agent-detail-backdrop');
-    var closeBtn = document.getElementById('agent-detail-close');
+    var section = document.getElementById('agent-detail-section');
     var canvas = document.getElementById('agent-detail-canvas');
     var legendEl = document.getElementById('agent-detail-legend');
     var tooltip = document.getElementById('agent-detail-tooltip');
     var feedbackList = document.getElementById('agent-feedback-list');
-    if (!btn || !backdrop || !canvas) return;
+    if (!btn || !section || !canvas) return;
 
     var MIN_SENT = 20; // 표본 너무 적은 계정(테스트 등)은 제외
-    var REAL_NAME = { lily: '한지연', jacob: '김동아', randy: '김태훈', summer: '조윤조', jiu: '김미노', allie: '조예진', david: '구본민', olive: '이승희', aileen: '강수진', heizle: '이수연' };
-    var EXCLUDE_LEFT = { lily: true, jiu: true, allie: true, david: true, olive: true, aileen: true }; // 퇴사자 - 현재 CSAT 비교에서 제외
     var agents = Object.keys(D.agentStats || {})
       .map(function (id) { return Object.assign({ id: id }, D.agentStats[id]); })
-      .filter(function (a) { return a.name !== 'unknown' && a.sent >= MIN_SENT && !EXCLUDE_LEFT[(a.name || '').toLowerCase()]; })
-      .map(function (a) { a.name = REAL_NAME[(a.name || '').toLowerCase()] || a.name; return a; })
+      .filter(function (a) { return a.name !== 'unknown' && a.sent >= MIN_SENT; })
       .sort(function (a, b) { return b.responseRate - a.responseRate; });
 
     var barColorResolved, lineColorResolved;
@@ -9968,29 +9930,20 @@ window.CSAT_DATA = {
       }).join('');
     }
 
-    function openModal() {
-      backdrop.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      if (!drawn) {
-        draw();
-        renderFeedback();
-        drawn = true;
-      } else {
-        draw(); // 모달 열 때마다 최신 폭으로 다시 그려서 레이아웃 깨짐 방지
+    btn.addEventListener('click', function () {
+      var opening = section.style.display === 'none';
+      section.style.display = opening ? 'block' : 'none';
+      btn.textContent = opening ? '담당자별 CSAT 접기 ↑' : '담당자별 CSAT 자세히 보기 →';
+      if (opening) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!drawn) {
+          draw();
+          renderFeedback();
+          drawn = true;
+        }
       }
-    }
-    function closeModal() {
-      backdrop.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    backdrop.addEventListener('click', function (e) { if (e.target === backdrop) closeModal(); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && backdrop.style.display !== 'none') closeModal();
     });
-    window.addEventListener('resize', function () { if (drawn && backdrop.style.display !== 'none') draw(); });
+    window.addEventListener('resize', function () { if (drawn) draw(); });
   })();
 
   /* ── Distribution ── */
