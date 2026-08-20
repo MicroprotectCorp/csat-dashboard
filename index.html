@@ -168,6 +168,17 @@
     font-size: 12px; font-weight: 700; color: var(--accent);
     user-select: none;
   }
+  .detail-link-btn {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid var(--accent); border-radius: 999px;
+    padding: 4px 12px; cursor: pointer; white-space: nowrap;
+  }
+  .detail-link-btn:hover { background: var(--accent); color: #fff; }
+  .agent-detail-section { margin-bottom: 20px; }
+  .agent-feedback-list { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
+  .agent-feedback-item { font-size: 13px; line-height: 1.6; color: var(--text-1); display: flex; gap: 8px; }
+  .agent-feedback-item .dot { flex-shrink: 0; margin-top: 2px; }
   .collapse-footer-btn .chev {
     display: inline-flex; align-items: center; justify-content: center;
     width: 20px; height: 20px; border-radius: 50%;
@@ -212,10 +223,10 @@
   }
   .legend-dot.bar  { background: var(--star); }
   .legend-dot.line { background: var(--accent); border-radius: 50%; }
-  canvas#trend-canvas { display: block; width: 100%; cursor: crosshair; }
+  canvas#trend-canvas, canvas#agent-detail-canvas { display: block; width: 100%; cursor: crosshair; }
 
   /* Tooltip */
-  #trend-tooltip {
+  #trend-tooltip, #agent-detail-tooltip {
     position: fixed; pointer-events: none;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 8px; padding: 8px 12px;
@@ -524,7 +535,23 @@
     <div id="comment-only-list" class="response-list" style="max-height:280px;"></div>
   </div>
 
-  <p class="section-title">응답 목록</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
+    <p class="section-title" style="margin-bottom:0;">응답 목록</p>
+    <button type="button" class="detail-link-btn" id="agent-detail-btn">담당자별 CSAT 자세히 보기 →</button>
+  </div>
+
+  <div class="agent-detail-section" id="agent-detail-section" style="display:none;">
+    <p class="section-title">담당자별 회신율 · 평균 별점</p>
+    <div class="card trend-card">
+      <div class="trend-legend" id="agent-detail-legend"></div>
+      <canvas id="agent-detail-canvas" height="220"></canvas>
+      <div id="agent-detail-tooltip"></div>
+    </div>
+    <div class="card" style="margin-top:10px;">
+      <div class="agent-feedback-list" id="agent-feedback-list"></div>
+    </div>
+  </div>
+
   <div class="agent-filter-bar" id="agent-filter-bar" style="display:none"></div>
   <div class="star-filter-bar" id="star-filter-bar"></div>
   <div id="response-list" class="response-list"></div>
@@ -566,7 +593,7 @@
 
 <script>
 window.CSAT_DATA = {
-  "collectedAt": "2026-08-20 18:55",
+  "collectedAt": "2026-08-20 18:31",
   "totalScanned": 15256,
   "totalSent": 15256,
   "totalResponded": 887,
@@ -8599,12 +8626,12 @@ window.CSAT_DATA = {
     }
   },
   "agentStats": {
-    "647650": {
-      "name": "Olive",
-      "sent": 50,
-      "responded": 3,
-      "responseRate": 6.0,
-      "avgScore": 5.0
+    "unknown": {
+      "name": "unknown",
+      "sent": 9,
+      "responded": 0,
+      "responseRate": 0.0,
+      "avgScore": 0
     },
     "656326": {
       "name": "heizle",
@@ -8613,13 +8640,6 @@ window.CSAT_DATA = {
       "responseRate": 2.9,
       "avgScore": 4.38
     },
-    "667753": {
-      "name": "김로빈",
-      "sent": 949,
-      "responded": 85,
-      "responseRate": 9.0,
-      "avgScore": 4.52
-    },
     "565238": {
       "name": "Randy",
       "sent": 1909,
@@ -8627,12 +8647,40 @@ window.CSAT_DATA = {
       "responseRate": 3.2,
       "avgScore": 4.08
     },
+    "667753": {
+      "name": "김로빈",
+      "sent": 949,
+      "responded": 85,
+      "responseRate": 9.0,
+      "avgScore": 4.52
+    },
+    "636057": {
+      "name": "jacob",
+      "sent": 3052,
+      "responded": 261,
+      "responseRate": 8.6,
+      "avgScore": 3.75
+    },
     "609327": {
       "name": "Summer",
       "sent": 1756,
       "responded": 163,
       "responseRate": 9.3,
       "avgScore": 4.09
+    },
+    "631507": {
+      "name": "allie",
+      "sent": 2575,
+      "responded": 101,
+      "responseRate": 3.9,
+      "avgScore": 3.63
+    },
+    "647650": {
+      "name": "Olive",
+      "sent": 50,
+      "responded": 3,
+      "responseRate": 6.0,
+      "avgScore": 5.0
     },
     "651322": {
       "name": "aileen",
@@ -8654,27 +8702,6 @@ window.CSAT_DATA = {
       "responded": 52,
       "responseRate": 10.0,
       "avgScore": 4.62
-    },
-    "631507": {
-      "name": "allie",
-      "sent": 2575,
-      "responded": 101,
-      "responseRate": 3.9,
-      "avgScore": 3.63
-    },
-    "636057": {
-      "name": "jacob",
-      "sent": 3052,
-      "responded": 261,
-      "responseRate": 8.6,
-      "avgScore": 3.75
-    },
-    "unknown": {
-      "name": "unknown",
-      "sent": 9,
-      "responded": 0,
-      "responseRate": 0.0,
-      "avgScore": 0
     }
   },
   "policyComparisons": [
@@ -8814,14 +8841,14 @@ window.CSAT_DATA = {
       "avgScore": 3.88
     },
     {
-      "tag": "문의/Q3_진행상황",
-      "count": 20,
-      "avgScore": 3.85
-    },
-    {
       "tag": "문의/Q8_환불이후",
       "count": 20,
       "avgScore": 2.95
+    },
+    {
+      "tag": "문의/Q3_진행상황",
+      "count": 20,
+      "avgScore": 3.85
     },
     {
       "tag": "안내/A4_지급관련",
@@ -8829,14 +8856,14 @@ window.CSAT_DATA = {
       "avgScore": 3.76
     },
     {
-      "tag": "안내/A6_환불요청",
-      "count": 17,
-      "avgScore": 2.88
-    },
-    {
       "tag": "환불/R6_서류보완",
       "count": 17,
       "avgScore": 3.88
+    },
+    {
+      "tag": "안내/A6_환불요청",
+      "count": 17,
+      "avgScore": 2.88
     },
     {
       "tag": "처리/M10_재탐색",
@@ -8844,14 +8871,14 @@ window.CSAT_DATA = {
       "avgScore": 4.38
     },
     {
-      "tag": "환불/R8_실손미가입",
-      "count": 14,
-      "avgScore": 4.36
-    },
-    {
       "tag": "문의/Q17_서류보완",
       "count": 14,
       "avgScore": 3.93
+    },
+    {
+      "tag": "환불/R8_실손미가입",
+      "count": 14,
+      "avgScore": 4.36
     },
     {
       "tag": "처리/M6_서류전달",
@@ -8869,14 +8896,14 @@ window.CSAT_DATA = {
       "avgScore": 3.22
     },
     {
-      "tag": "환불/R5_지급불가항목",
-      "count": 9,
-      "avgScore": 3.67
-    },
-    {
       "tag": "특성/E4_유선요청",
       "count": 9,
       "avgScore": 3.44
+    },
+    {
+      "tag": "환불/R5_지급불가항목",
+      "count": 9,
+      "avgScore": 3.67
     },
     {
       "tag": "유선IVR",
@@ -8884,14 +8911,14 @@ window.CSAT_DATA = {
       "avgScore": 3.88
     },
     {
-      "tag": "환불/R4_보험사오선택",
-      "count": 8,
-      "avgScore": 4.25
-    },
-    {
       "tag": "문의/Q9_보험사변경",
       "count": 8,
       "avgScore": 4.88
+    },
+    {
+      "tag": "환불/R4_보험사오선택",
+      "count": 8,
+      "avgScore": 4.25
     },
     {
       "tag": "특성/E1_대외언급",
@@ -8899,14 +8926,9 @@ window.CSAT_DATA = {
       "avgScore": 2.71
     },
     {
-      "tag": "환불/증빙확인완료_전액",
+      "tag": "안내/A18_타채널",
       "count": 6,
-      "avgScore": 2.67
-    },
-    {
-      "tag": "안내/A2_서비스",
-      "count": 6,
-      "avgScore": 4.0
+      "avgScore": 3.0
     },
     {
       "tag": "문의/Q2_서비스",
@@ -8914,9 +8936,14 @@ window.CSAT_DATA = {
       "avgScore": 4.0
     },
     {
-      "tag": "안내/A18_타채널",
+      "tag": "안내/A2_서비스",
       "count": 6,
-      "avgScore": 3.0
+      "avgScore": 4.0
+    },
+    {
+      "tag": "환불/증빙확인완료_전액",
+      "count": 6,
+      "avgScore": 2.67
     },
     {
       "tag": "안내/A17_서류보완",
@@ -8924,39 +8951,14 @@ window.CSAT_DATA = {
       "avgScore": 3.8
     },
     {
-      "tag": "안내/A9_보험사변경",
-      "count": 4,
-      "avgScore": 4.75
-    },
-    {
       "tag": "문의/Q5_청구지연",
       "count": 4,
       "avgScore": 3.0
     },
     {
-      "tag": "안내/A7_환불정책",
-      "count": 3,
-      "avgScore": 3.0
-    },
-    {
-      "tag": "안내/A16_신청확인",
-      "count": 3,
-      "avgScore": 4.33
-    },
-    {
-      "tag": "안내/A5_청구지연",
-      "count": 3,
-      "avgScore": 2.33
-    },
-    {
-      "tag": "환불/보험사반송",
-      "count": 3,
-      "avgScore": 2.67
-    },
-    {
-      "tag": "문의/Q14_탈퇴",
-      "count": 3,
-      "avgScore": 5.0
+      "tag": "안내/A9_보험사변경",
+      "count": 4,
+      "avgScore": 4.75
     },
     {
       "tag": "처리/M3_보험사변경",
@@ -8969,7 +8971,32 @@ window.CSAT_DATA = {
       "avgScore": 3.67
     },
     {
+      "tag": "안내/A7_환불정책",
+      "count": 3,
+      "avgScore": 3.0
+    },
+    {
+      "tag": "문의/Q14_탈퇴",
+      "count": 3,
+      "avgScore": 5.0
+    },
+    {
+      "tag": "환불/보험사반송",
+      "count": 3,
+      "avgScore": 2.67
+    },
+    {
+      "tag": "안내/A16_신청확인",
+      "count": 3,
+      "avgScore": 4.33
+    },
+    {
       "tag": "문의/Q18_타채널",
+      "count": 3,
+      "avgScore": 2.33
+    },
+    {
+      "tag": "안내/A5_청구지연",
       "count": 3,
       "avgScore": 2.33
     }
@@ -9728,6 +9755,196 @@ window.CSAT_DATA = {
   // 레이아웃 완료 후 그리기
   setTimeout(drawTrend, 50);
   window.addEventListener('resize', drawTrend);
+
+  /* ── 담당자별 CSAT 상세 (회신율 + 평균 별점) ── */
+  (function () {
+    var btn = document.getElementById('agent-detail-btn');
+    var section = document.getElementById('agent-detail-section');
+    var canvas = document.getElementById('agent-detail-canvas');
+    var legendEl = document.getElementById('agent-detail-legend');
+    var tooltip = document.getElementById('agent-detail-tooltip');
+    var feedbackList = document.getElementById('agent-feedback-list');
+    if (!btn || !section || !canvas) return;
+
+    var MIN_SENT = 20; // 표본 너무 적은 계정(테스트 등)은 제외
+    var agents = Object.keys(D.agentStats || {})
+      .map(function (id) { return Object.assign({ id: id }, D.agentStats[id]); })
+      .filter(function (a) { return a.name !== 'unknown' && a.sent >= MIN_SENT; })
+      .sort(function (a, b) { return b.responseRate - a.responseRate; });
+
+    var barColorResolved, lineColorResolved;
+    var lineColor = '#F59E0B';
+
+    legendEl.innerHTML =
+      '<span><span class="legend-dot bar"></span>회신율(%)</span>' +
+      '<span><span class="legend-dot" style="background:' + lineColor + ';border-radius:50%;"></span>평균 별점</span>';
+
+    var PAD = { top: 16, right: 34, bottom: 44, left: 30 };
+    var drawn = false;
+
+    function getVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+    function draw() {
+      barColorResolved = getVar('--star') || '#F59E0B';
+      lineColorResolved = getVar('--accent') || '#3D6FE8';
+      var container = canvas.parentElement;
+      var W = Math.max(320, container.getBoundingClientRect().width - 28);
+      var cssH = 240;
+      canvas.width = Math.round(W * window.devicePixelRatio);
+      canvas.height = Math.round(cssH * window.devicePixelRatio);
+      canvas.style.width = W + 'px';
+      canvas.style.height = cssH + 'px';
+      var ctx = canvas.getContext('2d');
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      ctx.clearRect(0, 0, W, cssH);
+
+      var borderColor = getVar('--border') || '#E0E3EF';
+      var text3Color = getVar('--text-3') || '#9AA0B8';
+      var text2Color = getVar('--text-2') || '#5C6480';
+
+      var plotW = W - PAD.left - PAD.right;
+      var plotH = cssH - PAD.top - PAD.bottom;
+      if (agents.length === 0) return;
+
+      var maxRate = Math.max(1, Math.max.apply(null, agents.map(function (a) { return a.responseRate; })) * 1.25);
+      var maxScore = 5;
+
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 0.5;
+      [0, 0.5, 1].forEach(function (f) {
+        var y = PAD.top + plotH * (1 - f);
+        ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + plotW, y); ctx.stroke();
+      });
+
+      var n = agents.length;
+      var slotW = plotW / n;
+      var barW = Math.min(40, slotW * 0.45);
+
+      function xCenter(i) { return PAD.left + (i + 0.5) * slotW; }
+      function yRate(v) { return PAD.top + plotH * (1 - v / maxRate); }
+      function yScore(v) { return PAD.top + plotH * (1 - v / maxScore); }
+
+      agents.forEach(function (a, i) {
+        var x = xCenter(i);
+        var yTop = yRate(a.responseRate);
+        var barH = PAD.top + plotH - yTop;
+        if (barH <= 0) return;
+        ctx.fillStyle = barColorResolved;
+        var rr = 3;
+        ctx.beginPath();
+        ctx.moveTo(x - barW / 2 + rr, yTop);
+        ctx.lineTo(x + barW / 2 - rr, yTop);
+        ctx.arcTo(x + barW / 2, yTop, x + barW / 2, yTop + rr, rr);
+        ctx.lineTo(x + barW / 2, PAD.top + plotH);
+        ctx.lineTo(x - barW / 2, PAD.top + plotH);
+        ctx.arcTo(x - barW / 2, yTop, x - barW / 2 + rr, yTop, rr);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      var pts = agents.map(function (a, i) { return { x: xCenter(i), y: yScore(a.avgScore), v: a.avgScore }; });
+      ctx.strokeStyle = lineColorResolved;
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      pts.forEach(function (p, i) { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+      ctx.stroke();
+      pts.forEach(function (p) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = lineColorResolved;
+        ctx.fill();
+        ctx.strokeStyle = getVar('--surface') || '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      ctx.font = '10px -apple-system, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      agents.forEach(function (a, i) {
+        ctx.save();
+        var x = xCenter(i);
+        ctx.translate(x, cssH - 6);
+        ctx.fillStyle = text2Color;
+        ctx.fillText(a.name, 0, 0);
+        ctx.restore();
+      });
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = text3Color;
+      [0, 0.5, 1].forEach(function (f) { ctx.fillText(Math.round(maxRate * f) + '%', PAD.left - 6, PAD.top + plotH * (1 - f) + 3); });
+      ctx.textAlign = 'left';
+      ctx.fillStyle = lineColorResolved;
+      [0, 0.5, 1].forEach(function (f) { ctx.fillText((maxScore * f).toFixed(1), PAD.left + plotW + 4, PAD.top + plotH * (1 - f) + 3); });
+    }
+
+    canvas.addEventListener('mousemove', function (e) {
+      if (agents.length === 0) return;
+      var rect = canvas.getBoundingClientRect();
+      var mx = e.clientX - rect.left;
+      var plotW = canvas.offsetWidth - PAD.left - PAD.right;
+      var slotW = plotW / agents.length;
+      var idx = Math.floor((mx - PAD.left) / slotW);
+      if (idx < 0 || idx >= agents.length) { tooltip.style.display = 'none'; return; }
+      var a = agents[idx];
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 12) + 'px';
+      tooltip.style.top = (e.clientY - 10) + 'px';
+      tooltip.innerHTML =
+        '<strong>' + a.name + '</strong><br>' +
+        '회신율 ' + a.responseRate + '% (' + a.responded + '/' + a.sent + ')<br>' +
+        '평균 별점 ★ ' + a.avgScore;
+    });
+    canvas.addEventListener('mouseleave', function () { tooltip.style.display = 'none'; });
+
+    function renderFeedback() {
+      if (agents.length === 0) {
+        feedbackList.innerHTML = '<div class="agent-feedback-item">표본이 충분한 담당자가 아직 없어요.</div>';
+        return;
+      }
+      var totalSent = agents.reduce(function (s, a) { return s + a.sent; }, 0);
+      var totalResp = agents.reduce(function (s, a) { return s + a.responded; }, 0);
+      var teamRate = totalSent > 0 ? Math.round(totalResp / totalSent * 1000) / 10 : 0;
+      var teamScore = Math.round(agents.reduce(function (s, a) { return s + a.avgScore * a.responded; }, 0) / Math.max(1, totalResp) * 100) / 100;
+
+      var byRate = agents.slice().sort(function (a, b) { return b.responseRate - a.responseRate; });
+      var byScore = agents.slice().sort(function (a, b) { return b.avgScore - a.avgScore; });
+
+      var lines = [];
+      lines.push('팀 평균 회신율은 ' + teamRate + '%, 평균 별점은 ★' + teamScore + '입니다 (표본 ' + MIN_SENT + '건 이상 담당자 ' + agents.length + '명 기준).');
+      if (byRate.length > 1) {
+        lines.push('회신율이 가장 높은 담당자는 ' + byRate[0].name + '(' + byRate[0].responseRate + '%), 가장 낮은 담당자는 ' + byRate[byRate.length - 1].name + '(' + byRate[byRate.length - 1].responseRate + '%)입니다.');
+      }
+      if (byScore.length > 1) {
+        lines.push('평균 별점이 가장 높은 담당자는 ' + byScore[0].name + '(★' + byScore[0].avgScore + '), 가장 낮은 담당자는 ' + byScore[byScore.length - 1].name + '(★' + byScore[byScore.length - 1].avgScore + ')입니다.');
+      }
+      var lowScoreAgents = agents.filter(function (a) { return a.avgScore > 0 && a.avgScore < teamScore - 0.3; });
+      if (lowScoreAgents.length > 0) {
+        lines.push('팀 평균보다 별점이 뚜렷하게 낮은 담당자: ' + lowScoreAgents.map(function (a) { return a.name + '(★' + a.avgScore + ')'; }).join(', '));
+      }
+
+      feedbackList.innerHTML = lines.map(function (t) {
+        return '<div class="agent-feedback-item"><span class="dot">▪</span><span>' + t + '</span></div>';
+      }).join('');
+    }
+
+    btn.addEventListener('click', function () {
+      var opening = section.style.display === 'none';
+      section.style.display = opening ? 'block' : 'none';
+      btn.textContent = opening ? '담당자별 CSAT 접기 ↑' : '담당자별 CSAT 자세히 보기 →';
+      if (opening) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!drawn) {
+          draw();
+          renderFeedback();
+          drawn = true;
+        }
+      }
+    });
+    window.addEventListener('resize', function () { if (drawn) draw(); });
+  })();
 
   /* ── Distribution ── */
   function renderDist(sm, totalResponded) {
