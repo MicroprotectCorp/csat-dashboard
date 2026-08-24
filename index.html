@@ -6801,8 +6801,9 @@ window.CSAT_DATA = {
     }
   },
   "guideCompliance": {
-    "generatedAt": "2026-08-24T09:41:00.439Z",
+    "generatedAt": "2026-08-24T10:06:31.860Z",
     "sinceDate": "2026-08-04",
+    "followupSinceDate": "2026-08-19",
     "scannedFiles": 12,
     "scannedChats": 4292,
     "rows": [
@@ -6812,8 +6813,8 @@ window.CSAT_DATA = {
         "totalChats": 1291,
         "csatPct": 0,
         "csatCount": "0/986",
-        "reminderPct": 0,
-        "reminderCount": "0/11"
+        "followupPct": 50,
+        "followupCount": "9/18"
       },
       {
         "id": "565238",
@@ -6821,8 +6822,8 @@ window.CSAT_DATA = {
         "totalChats": 980,
         "csatPct": 0,
         "csatCount": "0/48",
-        "reminderPct": null,
-        "reminderCount": "0/0"
+        "followupPct": 0,
+        "followupCount": "0/4"
       },
       {
         "id": "656326",
@@ -6830,8 +6831,8 @@ window.CSAT_DATA = {
         "totalChats": 969,
         "csatPct": 86.7,
         "csatCount": "156/180",
-        "reminderPct": 0,
-        "reminderCount": "0/118"
+        "followupPct": 16.7,
+        "followupCount": "1/6"
       },
       {
         "id": "609327",
@@ -6839,8 +6840,8 @@ window.CSAT_DATA = {
         "totalChats": 946,
         "csatPct": 63.4,
         "csatCount": "535/844",
-        "reminderPct": 0.1,
-        "reminderCount": "1/709"
+        "followupPct": 61.9,
+        "followupCount": "13/21"
       }
     ]
   },
@@ -7779,13 +7780,13 @@ window.CSAT_DATA = {
       }
       var cards = [
         { label: 'CSAT 참여 안내', pct: gc.csatPct, count: gc.csatCount },
-        { label: '무응답 리마인드', pct: gc.reminderPct, count: gc.reminderCount }
+        { label: 'CSAT 추가의견 재응대', pct: gc.followupPct, count: gc.followupCount }
       ];
       kpiGrid.innerHTML = cards.map(function (c) {
         var valTxt = c.pct == null ? '해당없음' : c.pct + '%';
         var cls = c.pct == null ? '' : pctClass(c.pct);
         return '<div class="kpi-card"><div class="kpi-label">' + c.label + '</div><div class="kpi-value ' + cls + '">' + valTxt + '</div><div class="kpi-sub">' + (c.pct == null ? '해당 상담 없음' : c.count + '건 중') + '</div></div>';
-      }).join('') + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">' + (GC ? GC.sinceDate + ' 이후 · 채팅상담 ' + GC.scannedChats.toLocaleString() + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' : '') + '</p>';
+      }).join('') + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">CSAT 참여 안내: ' + (GC ? GC.sinceDate : '') + ' 이후 · CSAT 추가의견 재응대: ' + (GC ? (GC.followupSinceDate || GC.sinceDate) : '') + ' 이후 · 채팅상담 ' + (GC ? GC.scannedChats.toLocaleString() : '0') + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' + '</p>';
     }
 
     function renderDistFor(id) {
