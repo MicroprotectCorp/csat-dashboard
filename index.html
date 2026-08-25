@@ -11508,7 +11508,6 @@ window.CSAT_DATA = {
         "detail": "환불·결제취소 등 \"돈 관련 결과\"성 문의는 구조적으로 낮고(환불요청 ★3.9, 결제취소이후 ★3.09), 보험사변경 같은 단순 요청은 높아요(★4.78) — 응대 품질과 무관하게 갈리는 부분이 있어요."
       }
     ],
-    "notFactor": "첫 응답 속도는 별점과 무관했어요 — 1점~5점 전 구간에서 중앙값 8~11분으로 거의 동일. 상담원이 얼마나 빨리 받았는지는 CSAT을 가르는 변수가 아니었어요.",
     "midRangeCauses": [
       "가장 많이 나온 불만은 챗봇/AI 자동응대 흐름이 어렵다는 것이에요 — \"AI라 생소하고 어려워요\", \"상담이 너무너무 어려워요, 쉽게 좀\" 등. 상담원 문제가 아니라 초반 봇 UX 문제로 보여요.",
       "전화 상담이 없다는 불만도 반복적으로 나와요.",
@@ -11743,7 +11742,9 @@ window.CSAT_DATA = {
       document.getElementById('csat-factors-list').innerHTML = CF.factors.map(function (f, i) {
         return '<div class="csat-factor-row"><div class="csat-factor-num">' + (i + 1) + '</div><div><div class="csat-factor-title">' + f.title + '</div><div class="csat-factor-detail">' + f.detail + '</div></div></div>';
       }).join('');
-      if (CF.notFactor) document.getElementById('csat-factors-notfactor').textContent = '💬 ' + CF.notFactor;
+      var notFactorEl = document.getElementById('csat-factors-notfactor');
+      if (CF.notFactor) { notFactorEl.textContent = '💬 ' + CF.notFactor; }
+      else { notFactorEl.style.display = 'none'; }
       var mrList = document.getElementById('csat-midrange-list');
       mrList.innerHTML = (CF.midRangeCauses || []).map(function (t) {
         return '<div class="agent-feedback-item"><span class="dot">▪</span><span>' + t + '</span></div>';
