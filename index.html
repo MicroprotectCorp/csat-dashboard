@@ -337,6 +337,16 @@
     border-radius: 999px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
   }
 
+  .csat-factor-row { display: flex; gap: 12px; margin-bottom: 14px; }
+  .csat-factor-row:last-child { margin-bottom: 0; }
+  .csat-factor-num {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .csat-factor-title { font-size: 13px; font-weight: 700; color: var(--text-1); margin-bottom: 3px; }
+  .csat-factor-detail { font-size: 12.5px; color: var(--text-2); line-height: 1.55; }
+
   /* Empty & notice */
   .empty-state {
     background: var(--surface); border: 1px dashed var(--border);
@@ -676,6 +686,19 @@
         <div id="compare-cards"></div>
       </div>
 
+      <div id="csat-factors-section" style="display:none;">
+        <p class="section-title">CSAT 영향 요인 분석</p>
+        <div class="card">
+          <p style="font-size:11px;color:var(--text-3);margin:0 0 12px;" id="csat-factors-source"></p>
+          <div id="csat-factors-list"></div>
+          <p id="csat-factors-notfactor" style="font-size:12px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);line-height:1.6;"></p>
+        </div>
+        <div class="card" style="margin-top:14px;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--text-1);margin-bottom:10px;">중간 점수대(2~4점)는 왜 나올까? — 실제 코멘트 기반</div>
+          <div id="csat-midrange-list" class="agent-feedback-list" style="padding:0;"></div>
+        </div>
+      </div>
+
       <div id="refund-csat-section" style="display:none;">
         <p class="section-title">환불 처리 여부별 CSAT</p>
         <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
@@ -808,11 +831,11 @@ window.CSAT_DATA = {
   "responseRate": 5.9,
   "avgScore": 4.05,
   "scoreMap": {
-    "5": 623,
-    "4": 105,
-    "3": 63,
+    "1": 153,
     "2": 24,
-    "1": 153
+    "3": 63,
+    "4": 105,
+    "5": 623
   },
   "responses": [
     {
@@ -9172,11 +9195,11 @@ window.CSAT_DATA = {
       "responseRate": 12.9,
       "avgScore": 4.78,
       "scoreMap": {
-        "5": 16,
-        "4": 0,
-        "3": 2,
+        "1": 0,
         "2": 0,
-        "1": 0
+        "3": 2,
+        "4": 0,
+        "5": 16
       }
     },
     "2026-08-24": {
@@ -9185,11 +9208,11 @@ window.CSAT_DATA = {
       "responseRate": 5.6,
       "avgScore": 4.31,
       "scoreMap": {
-        "5": 16,
-        "4": 6,
-        "3": 2,
+        "1": 2,
         "2": 0,
-        "1": 2
+        "3": 2,
+        "4": 6,
+        "5": 16
       }
     },
     "2026-08-21": {
@@ -9198,11 +9221,11 @@ window.CSAT_DATA = {
       "responseRate": 6.1,
       "avgScore": 4.65,
       "scoreMap": {
-        "5": 23,
-        "4": 6,
-        "3": 1,
+        "1": 0,
         "2": 1,
-        "1": 0
+        "3": 1,
+        "4": 6,
+        "5": 23
       }
     },
     "2026-08-20": {
@@ -9211,11 +9234,11 @@ window.CSAT_DATA = {
       "responseRate": 6.9,
       "avgScore": 4.67,
       "scoreMap": {
-        "5": 27,
-        "4": 3,
-        "3": 2,
+        "1": 1,
         "2": 0,
-        "1": 1
+        "3": 2,
+        "4": 3,
+        "5": 27
       }
     },
     "2026-08-19": {
@@ -9224,11 +9247,11 @@ window.CSAT_DATA = {
       "responseRate": 5.3,
       "avgScore": 4.47,
       "scoreMap": {
-        "5": 30,
-        "4": 1,
-        "3": 1,
+        "1": 4,
         "2": 0,
-        "1": 4
+        "3": 1,
+        "4": 1,
+        "5": 30
       }
     },
     "2026-08-18": {
@@ -9237,11 +9260,11 @@ window.CSAT_DATA = {
       "responseRate": 7.3,
       "avgScore": 4.4,
       "scoreMap": {
-        "5": 32,
-        "4": 8,
-        "3": 0,
+        "1": 4,
         "2": 1,
-        "1": 4
+        "3": 0,
+        "4": 8,
+        "5": 32
       }
     },
     "2026-08-14": {
@@ -9250,11 +9273,11 @@ window.CSAT_DATA = {
       "responseRate": 6.2,
       "avgScore": 4.73,
       "scoreMap": {
-        "5": 28,
-        "4": 3,
-        "3": 1,
+        "1": 1,
         "2": 0,
-        "1": 1
+        "3": 1,
+        "4": 3,
+        "5": 28
       }
     },
     "2026-08-13": {
@@ -9263,11 +9286,11 @@ window.CSAT_DATA = {
       "responseRate": 7.2,
       "avgScore": 4.32,
       "scoreMap": {
-        "5": 33,
-        "4": 3,
-        "3": 1,
+        "1": 4,
         "2": 3,
-        "1": 4
+        "3": 1,
+        "4": 3,
+        "5": 33
       }
     },
     "2026-08-12": {
@@ -9276,11 +9299,11 @@ window.CSAT_DATA = {
       "responseRate": 5.6,
       "avgScore": 4.14,
       "scoreMap": {
-        "5": 26,
-        "4": 2,
-        "3": 0,
+        "1": 7,
         "2": 0,
-        "1": 7
+        "3": 0,
+        "4": 2,
+        "5": 26
       }
     },
     "2026-08-11": {
@@ -9289,11 +9312,11 @@ window.CSAT_DATA = {
       "responseRate": 7.2,
       "avgScore": 4.47,
       "scoreMap": {
-        "5": 36,
-        "4": 4,
-        "3": 0,
+        "1": 5,
         "2": 0,
-        "1": 5
+        "3": 0,
+        "4": 4,
+        "5": 36
       }
     },
     "2026-08-10": {
@@ -9302,11 +9325,11 @@ window.CSAT_DATA = {
       "responseRate": 5.7,
       "avgScore": 3.88,
       "scoreMap": {
-        "5": 19,
-        "4": 5,
-        "3": 3,
+        "1": 6,
         "2": 1,
-        "1": 6
+        "3": 3,
+        "4": 5,
+        "5": 19
       }
     },
     "2026-08-07": {
@@ -9315,11 +9338,11 @@ window.CSAT_DATA = {
       "responseRate": 6.4,
       "avgScore": 3.78,
       "scoreMap": {
-        "5": 22,
-        "4": 3,
-        "3": 1,
+        "1": 9,
         "2": 1,
-        "1": 9
+        "3": 1,
+        "4": 3,
+        "5": 22
       }
     },
     "2026-08-06": {
@@ -9328,11 +9351,11 @@ window.CSAT_DATA = {
       "responseRate": 5.6,
       "avgScore": 4.51,
       "scoreMap": {
-        "5": 27,
-        "4": 5,
-        "3": 0,
+        "1": 3,
         "2": 0,
-        "1": 3
+        "3": 0,
+        "4": 5,
+        "5": 27
       }
     },
     "2026-08-05": {
@@ -9341,11 +9364,11 @@ window.CSAT_DATA = {
       "responseRate": 4.7,
       "avgScore": 3.87,
       "scoreMap": {
-        "5": 17,
-        "4": 5,
-        "3": 3,
+        "1": 6,
         "2": 0,
-        "1": 6
+        "3": 3,
+        "4": 5,
+        "5": 17
       }
     },
     "2026-08-04": {
@@ -9354,11 +9377,11 @@ window.CSAT_DATA = {
       "responseRate": 7.4,
       "avgScore": 3.91,
       "scoreMap": {
-        "5": 20,
-        "4": 3,
-        "3": 3,
+        "1": 6,
         "2": 1,
-        "1": 6
+        "3": 3,
+        "4": 3,
+        "5": 20
       }
     },
     "2026-08-03": {
@@ -9367,11 +9390,11 @@ window.CSAT_DATA = {
       "responseRate": 5.7,
       "avgScore": 4.74,
       "scoreMap": {
-        "5": 24,
-        "4": 1,
-        "3": 1,
+        "1": 1,
         "2": 0,
-        "1": 1
+        "3": 1,
+        "4": 1,
+        "5": 24
       }
     },
     "2026-07-31": {
@@ -9380,11 +9403,11 @@ window.CSAT_DATA = {
       "responseRate": 3.6,
       "avgScore": 4.53,
       "scoreMap": {
-        "5": 13,
-        "4": 2,
-        "3": 1,
+        "1": 1,
         "2": 0,
-        "1": 1
+        "3": 1,
+        "4": 2,
+        "5": 13
       }
     },
     "2026-07-30": {
@@ -9393,11 +9416,11 @@ window.CSAT_DATA = {
       "responseRate": 3.6,
       "avgScore": 4.11,
       "scoreMap": {
-        "5": 12,
-        "4": 2,
-        "3": 1,
+        "1": 3,
         "2": 0,
-        "1": 3
+        "3": 1,
+        "4": 2,
+        "5": 12
       }
     },
     "2026-07-29": {
@@ -9406,11 +9429,11 @@ window.CSAT_DATA = {
       "responseRate": 2.9,
       "avgScore": 3.89,
       "scoreMap": {
-        "5": 11,
-        "4": 2,
-        "3": 1,
+        "1": 4,
         "2": 0,
-        "1": 4
+        "3": 1,
+        "4": 2,
+        "5": 11
       }
     },
     "2026-07-28": {
@@ -9419,11 +9442,11 @@ window.CSAT_DATA = {
       "responseRate": 8.6,
       "avgScore": 3.56,
       "scoreMap": {
-        "5": 19,
-        "4": 5,
-        "3": 4,
+        "1": 10,
         "2": 1,
-        "1": 10
+        "3": 4,
+        "4": 5,
+        "5": 19
       }
     },
     "2026-07-27": {
@@ -9432,11 +9455,11 @@ window.CSAT_DATA = {
       "responseRate": 5.2,
       "avgScore": 4.28,
       "scoreMap": {
-        "5": 19,
-        "4": 5,
-        "3": 2,
+        "1": 3,
         "2": 0,
-        "1": 3
+        "3": 2,
+        "4": 5,
+        "5": 19
       }
     },
     "2026-07-24": {
@@ -9445,11 +9468,11 @@ window.CSAT_DATA = {
       "responseRate": 5.7,
       "avgScore": 4.03,
       "scoreMap": {
-        "5": 18,
-        "4": 3,
-        "3": 3,
+        "1": 4,
         "2": 1,
-        "1": 4
+        "3": 3,
+        "4": 3,
+        "5": 18
       }
     },
     "2026-07-23": {
@@ -9458,11 +9481,11 @@ window.CSAT_DATA = {
       "responseRate": 5.9,
       "avgScore": 4.07,
       "scoreMap": {
-        "5": 20,
-        "4": 2,
-        "3": 1,
+        "1": 5,
         "2": 1,
-        "1": 5
+        "3": 1,
+        "4": 2,
+        "5": 20
       }
     },
     "2026-07-22": {
@@ -9471,11 +9494,11 @@ window.CSAT_DATA = {
       "responseRate": 7.2,
       "avgScore": 3.62,
       "scoreMap": {
-        "5": 18,
-        "4": 8,
-        "3": 3,
+        "1": 10,
         "2": 0,
-        "1": 10
+        "3": 3,
+        "4": 8,
+        "5": 18
       }
     },
     "2026-07-21": {
@@ -9484,11 +9507,11 @@ window.CSAT_DATA = {
       "responseRate": 5.8,
       "avgScore": 3.48,
       "scoreMap": {
-        "5": 16,
-        "4": 3,
-        "3": 2,
+        "1": 10,
         "2": 0,
-        "1": 10
+        "3": 2,
+        "4": 3,
+        "5": 16
       }
     },
     "2026-07-20": {
@@ -9497,11 +9520,11 @@ window.CSAT_DATA = {
       "responseRate": 3.7,
       "avgScore": 4.05,
       "scoreMap": {
-        "5": 13,
-        "4": 0,
-        "3": 3,
+        "1": 3,
         "2": 0,
-        "1": 3
+        "3": 3,
+        "4": 0,
+        "5": 13
       }
     },
     "2026-07-16": {
@@ -9510,11 +9533,11 @@ window.CSAT_DATA = {
       "responseRate": 5.4,
       "avgScore": 3.21,
       "scoreMap": {
-        "5": 10,
-        "4": 1,
-        "3": 4,
+        "1": 7,
         "2": 2,
-        "1": 7
+        "3": 4,
+        "4": 1,
+        "5": 10
       }
     },
     "2026-07-15": {
@@ -9523,24 +9546,24 @@ window.CSAT_DATA = {
       "responseRate": 6.4,
       "avgScore": 2.88,
       "scoreMap": {
-        "5": 8,
-        "4": 3,
-        "3": 3,
+        "1": 11,
         "2": 0,
-        "1": 11
+        "3": 3,
+        "4": 3,
+        "5": 8
       }
     },
     "2026-07-14": {
       "sent": 476,
       "responded": 24,
-      "responseRate": 5.0,
+      "responseRate": 5,
       "avgScore": 3.62,
       "scoreMap": {
-        "5": 11,
-        "4": 1,
-        "3": 7,
+        "1": 3,
         "2": 2,
-        "1": 3
+        "3": 7,
+        "4": 1,
+        "5": 11
       }
     },
     "2026-07-13": {
@@ -9549,11 +9572,11 @@ window.CSAT_DATA = {
       "responseRate": 7.9,
       "avgScore": 3.49,
       "scoreMap": {
-        "5": 16,
-        "4": 7,
-        "3": 2,
+        "1": 9,
         "2": 3,
-        "1": 9
+        "3": 2,
+        "4": 7,
+        "5": 16
       }
     },
     "2026-07-10": {
@@ -9562,34 +9585,90 @@ window.CSAT_DATA = {
       "responseRate": 6.6,
       "avgScore": 3.77,
       "scoreMap": {
-        "5": 17,
-        "4": 2,
-        "3": 3,
+        "1": 5,
         "2": 3,
-        "1": 5
+        "3": 3,
+        "4": 2,
+        "5": 17
       }
     },
     "2026-07-09": {
       "sent": 301,
       "responded": 18,
-      "responseRate": 6.0,
+      "responseRate": 6,
       "avgScore": 2.89,
       "scoreMap": {
-        "5": 6,
-        "4": 1,
-        "3": 2,
+        "1": 6,
         "2": 3,
-        "1": 6
+        "3": 2,
+        "4": 1,
+        "5": 6
       }
     }
   },
   "agentStats": {
+    "565238": {
+      "name": "Randy",
+      "sent": 2035,
+      "responded": 65,
+      "responseRate": 3.2,
+      "avgScore": 4.05
+    },
+    "609327": {
+      "name": "Summer",
+      "sent": 1917,
+      "responded": 178,
+      "responseRate": 9.3,
+      "avgScore": 4.1
+    },
+    "629325": {
+      "name": "Jiu",
+      "sent": 1603,
+      "responded": 78,
+      "responseRate": 4.9,
+      "avgScore": 3.77
+    },
+    "631507": {
+      "name": "allie",
+      "sent": 2573,
+      "responded": 101,
+      "responseRate": 3.9,
+      "avgScore": 3.63
+    },
+    "636057": {
+      "name": "jacob",
+      "sent": 3327,
+      "responded": 279,
+      "responseRate": 8.4,
+      "avgScore": 3.81
+    },
     "647650": {
       "name": "Olive",
       "sent": 50,
       "responded": 3,
-      "responseRate": 6.0,
-      "avgScore": 5.0
+      "responseRate": 6,
+      "avgScore": 5
+    },
+    "651322": {
+      "name": "aileen",
+      "sent": 43,
+      "responded": 3,
+      "responseRate": 7,
+      "avgScore": 4.67
+    },
+    "656326": {
+      "name": "heizle",
+      "sent": 3001,
+      "responded": 91,
+      "responseRate": 3,
+      "avgScore": 4.38
+    },
+    "667753": {
+      "name": "김로빈",
+      "sent": 1137,
+      "responded": 101,
+      "responseRate": 8.9,
+      "avgScore": 4.58
     },
     "668885": {
       "name": "남규민",
@@ -9602,64 +9681,8 @@ window.CSAT_DATA = {
       "name": "unknown",
       "sent": 9,
       "responded": 0,
-      "responseRate": 0.0,
+      "responseRate": 0,
       "avgScore": 0
-    },
-    "565238": {
-      "name": "Randy",
-      "sent": 2035,
-      "responded": 65,
-      "responseRate": 3.2,
-      "avgScore": 4.05
-    },
-    "656326": {
-      "name": "heizle",
-      "sent": 3001,
-      "responded": 91,
-      "responseRate": 3.0,
-      "avgScore": 4.38
-    },
-    "636057": {
-      "name": "jacob",
-      "sent": 3327,
-      "responded": 279,
-      "responseRate": 8.4,
-      "avgScore": 3.81
-    },
-    "651322": {
-      "name": "aileen",
-      "sent": 43,
-      "responded": 3,
-      "responseRate": 7.0,
-      "avgScore": 4.67
-    },
-    "631507": {
-      "name": "allie",
-      "sent": 2573,
-      "responded": 101,
-      "responseRate": 3.9,
-      "avgScore": 3.63
-    },
-    "609327": {
-      "name": "Summer",
-      "sent": 1917,
-      "responded": 178,
-      "responseRate": 9.3,
-      "avgScore": 4.1
-    },
-    "667753": {
-      "name": "김로빈",
-      "sent": 1137,
-      "responded": 101,
-      "responseRate": 8.9,
-      "avgScore": 4.58
-    },
-    "629325": {
-      "name": "Jiu",
-      "sent": 1603,
-      "responded": 78,
-      "responseRate": 4.9,
-      "avgScore": 3.77
     }
   },
   "agentWeeklyTrend": [
@@ -9681,7 +9704,7 @@ window.CSAT_DATA = {
       "assigneeId": "636057",
       "name": "jacob",
       "week": "2026-W28",
-      "avgScore": 3.0,
+      "avgScore": 3,
       "count": 7
     },
     {
@@ -9828,7 +9851,7 @@ window.CSAT_DATA = {
       "assigneeId": "656326",
       "name": "heizle",
       "week": "2026-W32",
-      "avgScore": 4.0,
+      "avgScore": 4,
       "count": 10
     },
     {
@@ -9975,7 +9998,7 @@ window.CSAT_DATA = {
       "assigneeId": "667753",
       "name": "김로빈",
       "week": "2026-W35",
-      "avgScore": 5.0,
+      "avgScore": 5,
       "count": 5
     },
     {
@@ -10004,47 +10027,36 @@ window.CSAT_DATA = {
         "avgScore": 4.19
       },
       "manualMetrics": {
-        "sourceNote": "종료 시간별(마지막 답변→종료 소요시간) CSAT 회신률, 로컬 채팅 아카이브 전수 교차분석 기준, summer 수동 분석(2026-08-25)",
-        "caveat": "종료 소요시간이 짧을수록 회신률이 높고, 정책 시행 후 모든 구간에서 회신률이 함께 상승했어요.",
+        "sourceNote": "로컬 채팅 아카이브 전수 교차분석 기준, summer 수동 분석(2026-08-25)",
+        "caveat": "① 상담원이 빨리 종료할수록 회신률이 높고, 정책 시행 후 모든 구간에서 함께 상승했어요. ② CSAT는 종료 즉시 뜨는 설문이라 고객이 응답하면 대부분 5분 안에 응답해요(5분 이후는 거의 추가되지 않음) — 그래서 '즉시 응답률' 하나로 보는 게 가장 명확해요.",
         "items": [
           {
-            "label": "15분 이내 종료 · 회신률",
+            "label": "[상담원] 15분 이내 종료 · 회신률",
             "before": "7.5% (26/348)",
             "after": "9.9% (172/1732)",
             "diff": "+2.4%p"
           },
           {
-            "label": "15분~1시간 종료 · 회신률",
+            "label": "[상담원] 15분~1시간 종료 · 회신률",
             "before": "1.8% (13/708)",
             "after": "4.1% (20/489)",
             "diff": "+2.3%p"
           },
           {
-            "label": "1시간 초과 종료 · 회신률",
+            "label": "[상담원] 1시간 초과 종료 · 회신률",
             "before": "1.0% (54/5682)",
             "after": "2.6% (61/2346)",
             "diff": "+1.6%p"
+          },
+          {
+            "label": "[고객] 종료 후 5분 이내 회신률",
+            "before": "1.0% (67/6738)",
+            "after": "3.7% (167/4568)",
+            "diff": "+2.7%p"
           }
         ]
-      }
-    },
-    {
-      "cutoffDate": "2026-07-21",
-      "eventTitle": "만족도 조사 문구 변경",
-      "description": "\"오늘 상담은 어떠셨나요? *환불 결과와 무관\" → \"이번 상담은 어떠셨나요?\"로 문구 수정.",
-      "before": {
-        "sent": 3049,
-        "responded": 177,
-        "responseRate": 5.81,
-        "avgScore": 3.43
       },
-      "after": {
-        "sent": 13316,
-        "responded": 791,
-        "responseRate": 5.94,
-        "avgScore": 4.19
-      },
-      "manualMetrics": null
+      "hideTopTable": true
     }
   ],
   "announcements": [
@@ -10158,7 +10170,7 @@ window.CSAT_DATA = {
     {
       "tag": "처리/M8_재청구",
       "count": 11,
-      "avgScore": 5.0
+      "avgScore": 5
     },
     {
       "tag": "환불/R3_변심",
@@ -10198,12 +10210,12 @@ window.CSAT_DATA = {
     {
       "tag": "안내/A2_서비스",
       "count": 6,
-      "avgScore": 4.0
+      "avgScore": 4
     },
     {
       "tag": "안내/A18_타채널",
       "count": 6,
-      "avgScore": 3.0
+      "avgScore": 3
     },
     {
       "tag": "환불/증빙확인완료_전액",
@@ -10213,7 +10225,7 @@ window.CSAT_DATA = {
     {
       "tag": "문의/Q2_서비스",
       "count": 6,
-      "avgScore": 4.0
+      "avgScore": 4
     },
     {
       "tag": "안내/A17_서류보완",
@@ -10228,7 +10240,7 @@ window.CSAT_DATA = {
     {
       "tag": "문의/Q5_청구지연",
       "count": 4,
-      "avgScore": 3.0
+      "avgScore": 3
     },
     {
       "tag": "안내/A16_신청확인",
@@ -10253,17 +10265,17 @@ window.CSAT_DATA = {
     {
       "tag": "안내/A7_환불정책",
       "count": 3,
-      "avgScore": 3.0
+      "avgScore": 3
     },
     {
       "tag": "처리/M3_보험사변경",
       "count": 3,
-      "avgScore": 5.0
+      "avgScore": 5
     },
     {
       "tag": "문의/Q14_탈퇴",
       "count": 3,
-      "avgScore": 5.0
+      "avgScore": 5
     },
     {
       "tag": "안내/A5_청구지연",
@@ -10282,52 +10294,61 @@ window.CSAT_DATA = {
     }
   },
   "guideCompliance": {
-    "generatedAt": "2026-08-24T10:06:31.86Z",
+    "generatedAt": "2026-08-25T04:16:17.133Z",
     "sinceDate": "2026-08-04",
     "followupSinceDate": "2026-08-19",
-    "scannedFiles": 12,
-    "scannedChats": 4292,
+    "scannedFiles": 14,
+    "scannedChats": 4695,
     "rows": [
       {
         "id": "636057",
         "name": "김동아",
-        "totalChats": 1291,
+        "totalChats": 1441,
         "csatPct": 0,
-        "csatCount": "0/986",
-        "followupPct": 50,
-        "followupCount": "9/18"
-      },
-      {
-        "id": "565238",
-        "name": "김태훈",
-        "totalChats": 980,
-        "csatPct": 0,
-        "csatCount": "0/48",
-        "followupPct": 0,
-        "followupCount": "0/4"
+        "csatCount": "0/1088",
+        "followupPct": 61.9,
+        "followupCount": "13/21"
       },
       {
         "id": "656326",
         "name": "이수연",
-        "totalChats": 969,
-        "csatPct": 86.7,
-        "csatCount": "156/180",
-        "followupPct": 16.7,
-        "followupCount": "1/6"
+        "totalChats": 1069,
+        "csatPct": 87.4,
+        "csatCount": "180/206",
+        "followupPct": 33.3,
+        "followupCount": "2/6"
+      },
+      {
+        "id": "565238",
+        "name": "김태훈",
+        "totalChats": 1032,
+        "csatPct": 0,
+        "csatCount": "0/49",
+        "followupPct": 0,
+        "followupCount": "0/4"
       },
       {
         "id": "609327",
         "name": "조윤조",
-        "totalChats": 946,
-        "csatPct": 63.4,
-        "csatCount": "535/844",
-        "followupPct": 61.9,
-        "followupCount": "13/21"
+        "totalChats": 1029,
+        "csatPct": 65.5,
+        "csatCount": "601/917",
+        "followupPct": 81.8,
+        "followupCount": "18/22"
+      },
+      {
+        "id": "651322",
+        "name": "강수진",
+        "totalChats": 22,
+        "csatPct": 33.3,
+        "csatCount": "5/15",
+        "followupPct": 100,
+        "followupCount": "1/1"
       }
     ]
   },
   "waitVsRating": {
-    "generatedAt": "2026-08-24T00:10:00+00:00",
+    "generatedAt": "2026-08-24T09:10:00+09:00",
     "sinceDate": "2026-07-09",
     "matchedChats": 485,
     "buckets": [
@@ -10378,31 +10399,31 @@ window.CSAT_DATA = {
     "609327": "📌 31주차(7/27~8/2)→32주차(8/3~8/9) 응답 건수가 14건→44건(3.1배)으로 뛴 진짜 원인은 종결 방식 구성 변화예요. 31주차엔 종료 상담의 82%가 '무응답 자동종결'(고객 이탈, CSAT 응답률 5~6%대)이었는데, 32주차엔 실제 답변 후 정상종결한 비중이 18%→46%로 늘었어요 — 정상종결은 무응답종결보다 CSAT 응답률이 2~3배 높아서, 이 구성 변화만으로 응답 수 증가분의 대부분이 설명돼요(구성비만 W31 그대로 두고 계산하면 예상 응답 39.5건 vs 실제 44건). 배경은 7/31 단기직 퇴사(김미노·조예진·구본민·이승희)로 밀린 상담이 재배정되며 처리 건수도 198건→362건(1.8배)으로 늘어난 것. 같은 기간 전사 응답 건수는 1.3배만 늘어서, 이 변화는 CSAT 참여 안내 문구(8/4~) 효과보다는 조윤조님 개인 물량·종결 방식 변화가 핵심이에요 (참여 안내는 7월 말부터 이미 50%대로 하고 계셨음)."
   },
   "responseTimeStats": {
-    "generatedAt": "2026-08-25T02:24:05.774Z",
+    "generatedAt": "2026-08-25T04:16:18.399Z",
     "sinceDate": "2026-07-09",
-    "scannedFiles": 34,
-    "scannedChats": 9666,
+    "scannedFiles": 36,
+    "scannedChats": 10118,
     "overall": {
-      "avgFirstReplyMs": 1347792,
-      "avgFirstReplyText": "22분",
-      "medianFirstReplyMs": 565987,
+      "avgFirstReplyMs": 1429322,
+      "avgFirstReplyText": "24분",
+      "medianFirstReplyMs": 554855,
       "medianFirstReplyText": "9분",
-      "avgResolutionMs": 88915290,
-      "avgResolutionText": "24시간 42분",
-      "medianResolutionMs": 10682165,
-      "medianResolutionText": "2시간 58분"
+      "avgResolutionMs": 89896641,
+      "avgResolutionText": "24시간 58분",
+      "medianResolutionMs": 10609727,
+      "medianResolutionText": "2시간 57분"
     },
     "byAgent": [
       {
         "id": "636057",
         "name": "김동아",
-        "avgFirstReplyMs": 1024951,
-        "avgFirstReplyText": "17분",
-        "avgResolutionMs": 74132570,
-        "avgResolutionText": "20시간 36분",
-        "cpdAvg": 71.1,
-        "activeDays": 25,
-        "totalClosed": 1778,
+        "avgFirstReplyMs": 989059,
+        "avgFirstReplyText": "16분",
+        "avgResolutionMs": 75174144,
+        "avgResolutionText": "20시간 53분",
+        "cpdAvg": 70.2,
+        "activeDays": 27,
+        "totalClosed": 1895,
         "dailyClosed": [
           {
             "date": "2026-07-09",
@@ -10503,6 +10524,14 @@ window.CSAT_DATA = {
           {
             "date": "2026-08-20",
             "count": 79
+          },
+          {
+            "date": "2026-08-24",
+            "count": 81
+          },
+          {
+            "date": "2026-08-25",
+            "count": 36
           }
         ]
       },
@@ -10582,13 +10611,13 @@ window.CSAT_DATA = {
       {
         "id": "656326",
         "name": "이수연",
-        "avgFirstReplyMs": 855145,
-        "avgFirstReplyText": "14분",
-        "avgResolutionMs": 31190169,
-        "avgResolutionText": "8시간 40분",
-        "cpdAvg": 68.7,
-        "activeDays": 24,
-        "totalClosed": 1648,
+        "avgFirstReplyMs": 1167280,
+        "avgFirstReplyText": "19분",
+        "avgResolutionMs": 33515987,
+        "avgResolutionText": "9시간 19분",
+        "cpdAvg": 66.3,
+        "activeDays": 26,
+        "totalClosed": 1723,
         "dailyClosed": [
           {
             "date": "2026-07-09",
@@ -10685,19 +10714,27 @@ window.CSAT_DATA = {
           {
             "date": "2026-08-20",
             "count": 70
+          },
+          {
+            "date": "2026-08-24",
+            "count": 67
+          },
+          {
+            "date": "2026-08-25",
+            "count": 8
           }
         ]
       },
       {
         "id": "565238",
         "name": "김태훈",
-        "avgFirstReplyMs": 1618742,
-        "avgFirstReplyText": "27분",
-        "avgResolutionMs": 214833126,
-        "avgResolutionText": "59시간 41분",
-        "cpdAvg": 47.5,
-        "activeDays": 25,
-        "totalClosed": 1187,
+        "avgFirstReplyMs": 2100422,
+        "avgFirstReplyText": "35분",
+        "avgResolutionMs": 214147804,
+        "avgResolutionText": "59시간 29분",
+        "cpdAvg": 47.3,
+        "activeDays": 26,
+        "totalClosed": 1229,
         "dailyClosed": [
           {
             "date": "2026-07-09",
@@ -10798,19 +10835,23 @@ window.CSAT_DATA = {
           {
             "date": "2026-08-20",
             "count": 66
+          },
+          {
+            "date": "2026-08-24",
+            "count": 42
           }
         ]
       },
       {
         "id": "609327",
         "name": "조윤조",
-        "avgFirstReplyMs": 3643990,
-        "avgFirstReplyText": "1시간 1분",
-        "avgResolutionMs": 111056855,
-        "avgResolutionText": "30시간 51분",
-        "cpdAvg": 48.2,
-        "activeDays": 23,
-        "totalClosed": 1108,
+        "avgFirstReplyMs": 3465940,
+        "avgFirstReplyText": "58분",
+        "avgResolutionMs": 115447877,
+        "avgResolutionText": "32시간 4분",
+        "cpdAvg": 46.7,
+        "activeDays": 25,
+        "totalClosed": 1167,
         "dailyClosed": [
           {
             "date": "2026-07-09",
@@ -10903,19 +10944,27 @@ window.CSAT_DATA = {
           {
             "date": "2026-08-20",
             "count": 36
+          },
+          {
+            "date": "2026-08-24",
+            "count": 46
+          },
+          {
+            "date": "2026-08-25",
+            "count": 13
           }
         ]
       },
       {
         "id": "651322",
         "name": "강수진",
-        "avgFirstReplyMs": 30191376,
-        "avgFirstReplyText": "8시간 23분",
-        "avgResolutionMs": 40765291,
-        "avgResolutionText": "11시간 19분",
+        "avgFirstReplyMs": 24745264,
+        "avgFirstReplyText": "6시간 52분",
+        "avgResolutionMs": 34795193,
+        "avgResolutionText": "9시간 40분",
         "cpdAvg": 1.7,
-        "activeDays": 6,
-        "totalClosed": 10,
+        "activeDays": 7,
+        "totalClosed": 12,
         "dailyClosed": [
           {
             "date": "2026-07-13",
@@ -10940,78 +10989,80 @@ window.CSAT_DATA = {
           {
             "date": "2026-08-05",
             "count": 4
+          },
+          {
+            "date": "2026-08-24",
+            "count": 2
           }
         ]
       }
     ]
   },
   "aiAnalysis": {
-    "generatedAt": "2026-08-25T02:40:05.393Z",
+    "generatedAt": "2026-08-25T04:16:19.770Z",
     "sinceDate": "2026-07-09",
-    "scannedFiles": 34,
-    "scannedChats": 13152,
-    "classified": 6534,
+    "scannedFiles": 36,
+    "scannedChats": 13744,
+    "classified": 6891,
     "overall": {
-      "posPct": 68.2,
-      "negPct": 12.7,
-      "neutralPct": 19.1,
-      "posCount": 4456,
-      "negCount": 832,
-      "neutralCount": 1246
+      "posPct": 67.8,
+      "negPct": 12.9,
+      "neutralPct": 19.3,
+      "posCount": 4670,
+      "negCount": 888,
+      "neutralCount": 1333
     },
     "posBreakdown": [
       {
         "label": "응대품질",
-        "count": 4537,
+        "count": 4800,
         "pct": 32.5
       },
       {
         "label": "고객노력도",
-        "count": 4531,
-        "pct": 32.4
+        "count": 4756,
+        "pct": 32.2
       },
       {
         "label": "공감및배려",
-        "count": 3634,
+        "count": 3843,
         "pct": 26
       },
       {
         "label": "고객감정",
-        "count": 1277,
-        "pct": 9.1
+        "count": 1366,
+        "pct": 9.3
       }
     ],
     "negBreakdown": [
       {
         "label": "고객노력도",
-        "count": 2003,
-        "pct": 67.6
+        "count": 2135,
+        "pct": 67.3
       },
       {
         "label": "공감및배려",
-        "count": 642,
-        "pct": 21.7
+        "count": 686,
+        "pct": 21.6
       },
       {
         "label": "고객감정",
-        "count": 274,
-        "pct": 9.2
+        "count": 298,
+        "pct": 9.4
       },
       {
         "label": "응대품질",
-        "count": 46,
+        "count": 52,
         "pct": 1.6
       }
     ],
     "topics": [
       {
         "label": "환불 요청",
-        "count": 3565,
-        "negPct": 14.9,
-        "negCount": 531,
+        "count": 3769,
+        "negPct": 15,
+        "negCount": 564,
         "sparkline": [
-          172,
-          163,
           177,
           158,
           0,
@@ -11023,17 +11074,17 @@ window.CSAT_DATA = {
           131,
           0,
           0,
-          0
+          0,
+          171,
+          33
         ]
       },
       {
         "label": "지급 여부 문의 (청구서 발송 후)",
-        "count": 880,
-        "negPct": 7.4,
-        "negCount": 65,
+        "count": 930,
+        "negPct": 7.7,
+        "negCount": 72,
         "sparkline": [
-          27,
-          25,
           43,
           40,
           0,
@@ -11045,17 +11096,17 @@ window.CSAT_DATA = {
           37,
           0,
           0,
-          0
+          0,
+          41,
+          9
         ]
       },
       {
         "label": "청구 진행상황 문의 (청구서 발송 전)",
-        "count": 446,
-        "negPct": 12.6,
-        "negCount": 56,
+        "count": 461,
+        "negPct": 12.8,
+        "negCount": 59,
         "sparkline": [
-          34,
-          26,
           19,
           28,
           0,
@@ -11067,17 +11118,17 @@ window.CSAT_DATA = {
           17,
           0,
           0,
-          0
+          0,
+          11,
+          4
         ]
       },
       {
         "label": "서류보완 요청 관련 문의",
-        "count": 399,
-        "negPct": 7.5,
-        "negCount": 30,
+        "count": 419,
+        "negPct": 7.6,
+        "negCount": 32,
         "sparkline": [
-          14,
-          24,
           21,
           22,
           0,
@@ -11089,17 +11140,17 @@ window.CSAT_DATA = {
           21,
           0,
           0,
-          0
+          0,
+          19,
+          1
         ]
       },
       {
         "label": "보험사 변경 요청",
-        "count": 245,
-        "negPct": 6.5,
-        "negCount": 16,
+        "count": 259,
+        "negPct": 6.6,
+        "negCount": 17,
         "sparkline": [
-          8,
-          12,
           4,
           12,
           0,
@@ -11111,17 +11162,17 @@ window.CSAT_DATA = {
           15,
           0,
           0,
-          0
+          0,
+          10,
+          4
         ]
       },
       {
         "label": "결제취소 이후 문의",
-        "count": 233,
-        "negPct": 16.7,
-        "negCount": 39,
+        "count": 250,
+        "negPct": 17.6,
+        "negCount": 44,
         "sparkline": [
-          6,
-          10,
           5,
           7,
           0,
@@ -11133,17 +11184,17 @@ window.CSAT_DATA = {
           6,
           0,
           0,
-          0
+          0,
+          14,
+          3
         ]
       },
       {
         "label": "서비스 일반 문의",
-        "count": 182,
-        "negPct": 11.5,
-        "negCount": 21,
+        "count": 193,
+        "negPct": 11.9,
+        "negCount": 23,
         "sparkline": [
-          6,
-          13,
           14,
           21,
           0,
@@ -11155,17 +11206,17 @@ window.CSAT_DATA = {
           7,
           0,
           0,
-          0
+          0,
+          7,
+          4
         ]
       },
       {
         "label": "기타/미분류",
-        "count": 149,
-        "negPct": 16.1,
-        "negCount": 24,
+        "count": 154,
+        "negPct": 16.2,
+        "negCount": 25,
         "sparkline": [
-          5,
-          7,
           5,
           7,
           0,
@@ -11177,17 +11228,17 @@ window.CSAT_DATA = {
           4,
           0,
           0,
-          0
+          0,
+          3,
+          2
         ]
       },
       {
         "label": "서비스 신청 방법 문의",
-        "count": 90,
-        "negPct": 7.8,
-        "negCount": 7,
+        "count": 93,
+        "negPct": 8.6,
+        "negCount": 8,
         "sparkline": [
-          3,
-          1,
           4,
           3,
           0,
@@ -11199,17 +11250,17 @@ window.CSAT_DATA = {
           3,
           0,
           0,
-          0
+          0,
+          2,
+          1
         ]
       },
       {
         "label": "환불 정책 문의",
-        "count": 78,
-        "negPct": 11.5,
+        "count": 87,
+        "negPct": 10.3,
         "negCount": 9,
         "sparkline": [
-          7,
-          8,
           8,
           7,
           0,
@@ -11221,17 +11272,17 @@ window.CSAT_DATA = {
           9,
           0,
           0,
-          0
+          0,
+          7,
+          2
         ]
       },
       {
         "label": "청구 지연 문의",
-        "count": 74,
-        "negPct": 6.8,
-        "negCount": 5,
+        "count": 80,
+        "negPct": 7.5,
+        "negCount": 6,
         "sparkline": [
-          2,
-          5,
           1,
           1,
           0,
@@ -11243,17 +11294,17 @@ window.CSAT_DATA = {
           5,
           0,
           0,
+          0,
+          6,
           0
         ]
       },
       {
         "label": "신청 여부/정보 확인",
-        "count": 69,
-        "negPct": 10.1,
+        "count": 70,
+        "negPct": 10,
         "negCount": 7,
         "sparkline": [
-          4,
-          4,
           3,
           4,
           0,
@@ -11265,6 +11316,8 @@ window.CSAT_DATA = {
           4,
           0,
           0,
+          0,
+          1,
           0
         ]
       },
@@ -11274,8 +11327,6 @@ window.CSAT_DATA = {
         "negPct": 18.5,
         "negCount": 12,
         "sparkline": [
-          1,
-          2,
           5,
           3,
           0,
@@ -11287,17 +11338,17 @@ window.CSAT_DATA = {
           1,
           0,
           0,
+          0,
+          0,
           0
         ]
       },
       {
         "label": "탈퇴 문의",
-        "count": 26,
-        "negPct": 23.1,
+        "count": 27,
+        "negPct": 22.2,
         "negCount": 6,
         "sparkline": [
-          2,
-          1,
           0,
           0,
           0,
@@ -11309,17 +11360,17 @@ window.CSAT_DATA = {
           1,
           0,
           0,
+          0,
+          1,
           0
         ]
       },
       {
         "label": "기타 문의",
-        "count": 21,
-        "negPct": 14.3,
+        "count": 22,
+        "negPct": 13.6,
         "negCount": 3,
         "sparkline": [
-          0,
-          0,
           1,
           2,
           0,
@@ -11331,7 +11382,9 @@ window.CSAT_DATA = {
           3,
           0,
           0,
-          0
+          0,
+          0,
+          1
         ]
       },
       {
@@ -11340,10 +11393,10 @@ window.CSAT_DATA = {
         "negPct": 8.3,
         "negCount": 1,
         "sparkline": [
+          1,
+          1,
           0,
-          2,
-          1,
-          1,
+          0,
           0,
           0,
           0,
@@ -11359,7 +11412,7 @@ window.CSAT_DATA = {
     ]
   },
   "commentOnlyStatus": {
-    "generatedAt": "2026-08-25T03:27:05.587Z",
+    "generatedAt": "2026-08-25T04:16:10.439Z",
     "ruleStartDate": "2026-08-19",
     "status": {
       "6a4df299e3a9d1436fe0": "na",
@@ -11431,11 +11484,37 @@ window.CSAT_DATA = {
       "6a87b69f697a9959cb10": "handled",
       "6a7ec13cd8d73a78750c": "handled",
       "6a8bab74dc2b9ecca31f": "handled",
-      "6a757f53b82c4f8b48a6": "pending",
+      "6a757f53b82c4f8b48a6": "handled",
       "6a8801f01a92f58d2ba0": "handled",
       "6a8be7f2bc4be674b139": "handled",
-      "6a8513ed4fce92c154d3": "pending"
+      "6a8513ed4fce92c154d3": "pending",
+      "6a8cfab4257d5027d0c5": "pending"
     }
+  },
+  "csatFactors": {
+    "generatedAt": "2026-08-25T15:00:00+09:00",
+    "sourceNote": "응답 757건(원문 대조 가능한 건) 정량분석 + 2~4점 코멘트 원문 정성분석, summer 수동 분석(2026-08-25)",
+    "factors": [
+      {
+        "title": "전체 처리(해결) 소요시간",
+        "detail": "1점 상담은 해결까지 중앙값 21시간(1274분), 5점은 1.8시간(108분) — 오래 끌수록 점수가 뚜렷하게 낮아져요."
+      },
+      {
+        "title": "무응답 종결 여부",
+        "detail": "1점 상담의 27.3%가 무응답으로 종료됨(5점은 12.8%, 2배 이상 차이) — \"답을 못 받았다\"는 경험 자체가 감점 요인이에요."
+      },
+      {
+        "title": "문의 이슈의 성격(결과 불만족형 vs 단순요청형)",
+        "detail": "환불·결제취소 등 \"돈 관련 결과\"성 문의는 구조적으로 낮고(환불요청 ★3.9, 결제취소이후 ★3.09), 보험사변경 같은 단순 요청은 높아요(★4.78) — 응대 품질과 무관하게 갈리는 부분이 있어요."
+      }
+    ],
+    "notFactor": "첫 응답 속도는 별점과 무관했어요 — 1점~5점 전 구간에서 중앙값 8~11분으로 거의 동일. 상담원이 얼마나 빨리 받았는지는 CSAT을 가르는 변수가 아니었어요.",
+    "midRangeCauses": [
+      "가장 많이 나온 불만은 챗봇/AI 자동응대 흐름이 어렵다는 것이에요 — \"AI라 생소하고 어려워요\", \"상담이 너무너무 어려워요, 쉽게 좀\" 등. 상담원 문제가 아니라 초반 봇 UX 문제로 보여요.",
+      "전화 상담이 없다는 불만도 반복적으로 나와요.",
+      "상담원 응대는 만족했지만 환급액·수수료 등 결과가 기대에 못 미쳐서 점수를 깎은 경우가 많아요 (\"최선을 다하셨을거 같아 감사합니다\"라고 남기면서도 3점을 주는 식).",
+      "처리 시간이 오래 걸렸다는 불만도 일부 있어요 (요인 1과 같은 맥락)."
+    ]
   }
 };
 
@@ -11654,6 +11733,21 @@ window.CSAT_DATA = {
         tr.innerHTML = '<td>' + t.tag + '</td><td>' + t.count + '건</td><td>' + t.avgScore.toFixed(2) + '</td>';
         tagCsatTbody.appendChild(tr);
       });
+    }
+
+    var CF = D.csatFactors;
+    if (CF && CF.factors && CF.factors.length > 0) {
+      detailHasContent = true;
+      document.getElementById('csat-factors-section').style.display = 'block';
+      document.getElementById('csat-factors-source').textContent = CF.sourceNote || '';
+      document.getElementById('csat-factors-list').innerHTML = CF.factors.map(function (f, i) {
+        return '<div class="csat-factor-row"><div class="csat-factor-num">' + (i + 1) + '</div><div><div class="csat-factor-title">' + f.title + '</div><div class="csat-factor-detail">' + f.detail + '</div></div></div>';
+      }).join('');
+      if (CF.notFactor) document.getElementById('csat-factors-notfactor').textContent = '💬 ' + CF.notFactor;
+      var mrList = document.getElementById('csat-midrange-list');
+      mrList.innerHTML = (CF.midRangeCauses || []).map(function (t) {
+        return '<div class="agent-feedback-item"><span class="dot">▪</span><span>' + t + '</span></div>';
+      }).join('');
     }
   })();
 
