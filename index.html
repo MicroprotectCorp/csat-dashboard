@@ -494,6 +494,22 @@
   .wvr-track { height: 18px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
   .wvr-fill { height: 100%; border-radius: 6px; transition: width .5s ease; }
   .wvr-meta { font-size: 11.5px; color: var(--text-3); text-align: right; font-variant-numeric: tabular-nums; }
+  /* AI 상담 분석 */
+  .ai-overall-bar { display: flex; height: 22px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+  .ai-overall-bar > div { height: 100%; }
+  .ai-overall-legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--text-2); margin-bottom: 18px; flex-wrap: wrap; }
+  .ai-overall-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+  .ai-factor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 600px) { .ai-factor-grid { grid-template-columns: 1fr; } }
+  .ai-factor-title { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .ai-factor-title.good { color: var(--good); }
+  .ai-factor-title.bad { color: var(--bad); }
+  .ai-factor-row { display: grid; grid-template-columns: 90px 1fr 44px; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+  .ai-factor-row .lbl { color: var(--text-2); }
+  .ai-factor-row .track { height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+  .ai-factor-row .fill { height: 100%; border-radius: 4px; }
+  .ai-factor-row .pct { text-align: right; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .ai-topic-spark { display: block; }
   canvas#insight-trend-canvas, canvas#insight-cpd-canvas, canvas#insight-wvr-canvas { display: block; width: 100%; cursor: crosshair; }
   #insight-trend-tooltip, #insight-cpd-tooltip, #insight-wvr-tooltip {
     position: fixed; pointer-events: none;
@@ -602,6 +618,33 @@
 
   <p class="section-title">별점 분포</p>
   <div class="card" id="dist-card"></div>
+
+  <div id="ai-analysis-section" style="display:none;">
+    <p class="section-title">AI 상담 분석 <span style="font-weight:600;text-transform:none;letter-spacing:0;opacity:.7;">(베타 · 키워드 기반 근사치)</span></p>
+    <div class="card">
+      <p style="font-size:11.5px;color:var(--text-3);margin:0 0 14px;line-height:1.6;">채널톡 자체 AI 분석이 아니라, 실제 대화 원문을 읽고 만든 패턴 기반 추정치예요. 방향성 참고용으로만 봐주세요.</p>
+      <div id="ai-overall-bar" class="ai-overall-bar"></div>
+      <div id="ai-overall-legend" class="ai-overall-legend"></div>
+      <div class="ai-factor-grid">
+        <div>
+          <div class="ai-factor-title good">긍정 요인</div>
+          <div id="ai-pos-factors"></div>
+        </div>
+        <div>
+          <div class="ai-factor-title bad">부정 요인</div>
+          <div id="ai-neg-factors"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">토픽 분석 <span style="font-weight:600;text-transform:none;letter-spacing:0;opacity:.7;">(상담 수 기준 Top 10)</span></p>
+    <div class="card" style="overflow-x:auto;padding:0;">
+      <table class="compare-table" id="ai-topic-table">
+        <thead><tr><th>토픽</th><th>상담 수</th><th>부정 비율</th><th>최근 14일 추이</th></tr></thead>
+        <tbody id="ai-topic-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 
   <div id="detail-section" style="display:none;">
     <p class="section-title toggle collapsed" id="detail-toggle"><span class="chev">▾</span>정책 전/후 비교 · 상세 CSAT</p>
@@ -7569,6 +7612,419 @@ window.CSAT_DATA = {
         ]
       }
     ]
+  },
+  "aiAnalysis": {
+    "generatedAt": "2026-08-25T02:40:05.393Z",
+    "sinceDate": "2026-07-09",
+    "scannedFiles": 34,
+    "scannedChats": 13152,
+    "classified": 6534,
+    "overall": {
+      "posPct": 68.2,
+      "negPct": 12.7,
+      "neutralPct": 19.1,
+      "posCount": 4456,
+      "negCount": 832,
+      "neutralCount": 1246
+    },
+    "posBreakdown": [
+      {
+        "label": "응대품질",
+        "count": 4537,
+        "pct": 32.5
+      },
+      {
+        "label": "고객노력도",
+        "count": 4531,
+        "pct": 32.4
+      },
+      {
+        "label": "공감및배려",
+        "count": 3634,
+        "pct": 26
+      },
+      {
+        "label": "고객감정",
+        "count": 1277,
+        "pct": 9.1
+      }
+    ],
+    "negBreakdown": [
+      {
+        "label": "고객노력도",
+        "count": 2003,
+        "pct": 67.6
+      },
+      {
+        "label": "공감및배려",
+        "count": 642,
+        "pct": 21.7
+      },
+      {
+        "label": "고객감정",
+        "count": 274,
+        "pct": 9.2
+      },
+      {
+        "label": "응대품질",
+        "count": 46,
+        "pct": 1.6
+      }
+    ],
+    "topics": [
+      {
+        "label": "환불 요청",
+        "count": 3565,
+        "negPct": 14.9,
+        "negCount": 531,
+        "sparkline": [
+          172,
+          163,
+          177,
+          158,
+          0,
+          0,
+          0,
+          0,
+          178,
+          178,
+          131,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "지급 여부 문의 (청구서 발송 후)",
+        "count": 880,
+        "negPct": 7.4,
+        "negCount": 65,
+        "sparkline": [
+          27,
+          25,
+          43,
+          40,
+          0,
+          0,
+          0,
+          0,
+          56,
+          66,
+          37,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "청구 진행상황 문의 (청구서 발송 전)",
+        "count": 446,
+        "negPct": 12.6,
+        "negCount": 56,
+        "sparkline": [
+          34,
+          26,
+          19,
+          28,
+          0,
+          0,
+          0,
+          0,
+          27,
+          12,
+          17,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "서류보완 요청 관련 문의",
+        "count": 399,
+        "negPct": 7.5,
+        "negCount": 30,
+        "sparkline": [
+          14,
+          24,
+          21,
+          22,
+          0,
+          0,
+          0,
+          0,
+          24,
+          20,
+          21,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "보험사 변경 요청",
+        "count": 245,
+        "negPct": 6.5,
+        "negCount": 16,
+        "sparkline": [
+          8,
+          12,
+          4,
+          12,
+          0,
+          0,
+          0,
+          0,
+          12,
+          12,
+          15,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "결제취소 이후 문의",
+        "count": 233,
+        "negPct": 16.7,
+        "negCount": 39,
+        "sparkline": [
+          6,
+          10,
+          5,
+          7,
+          0,
+          0,
+          0,
+          0,
+          6,
+          6,
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "서비스 일반 문의",
+        "count": 182,
+        "negPct": 11.5,
+        "negCount": 21,
+        "sparkline": [
+          6,
+          13,
+          14,
+          21,
+          0,
+          0,
+          0,
+          0,
+          10,
+          12,
+          7,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "기타/미분류",
+        "count": 149,
+        "negPct": 16.1,
+        "negCount": 24,
+        "sparkline": [
+          5,
+          7,
+          5,
+          7,
+          0,
+          0,
+          0,
+          0,
+          3,
+          8,
+          4,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "서비스 신청 방법 문의",
+        "count": 90,
+        "negPct": 7.8,
+        "negCount": 7,
+        "sparkline": [
+          3,
+          1,
+          4,
+          3,
+          0,
+          0,
+          0,
+          0,
+          5,
+          8,
+          3,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "환불 정책 문의",
+        "count": 78,
+        "negPct": 11.5,
+        "negCount": 9,
+        "sparkline": [
+          7,
+          8,
+          8,
+          7,
+          0,
+          0,
+          0,
+          0,
+          7,
+          6,
+          9,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "청구 지연 문의",
+        "count": 74,
+        "negPct": 6.8,
+        "negCount": 5,
+        "sparkline": [
+          2,
+          5,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          5,
+          3,
+          5,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "신청 여부/정보 확인",
+        "count": 69,
+        "negPct": 10.1,
+        "negCount": 7,
+        "sparkline": [
+          4,
+          4,
+          3,
+          4,
+          0,
+          0,
+          0,
+          0,
+          1,
+          4,
+          4,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "계좌 변경 요청",
+        "count": 65,
+        "negPct": 18.5,
+        "negCount": 12,
+        "sparkline": [
+          1,
+          2,
+          5,
+          3,
+          0,
+          0,
+          0,
+          0,
+          3,
+          2,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "탈퇴 문의",
+        "count": 26,
+        "negPct": 23.1,
+        "negCount": 6,
+        "sparkline": [
+          2,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          3,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "기타 문의",
+        "count": 21,
+        "negPct": 14.3,
+        "negCount": 3,
+        "sparkline": [
+          0,
+          0,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          3,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "label": "타채널 문의",
+        "count": 12,
+        "negPct": 8.3,
+        "negCount": 1,
+        "sparkline": [
+          0,
+          2,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
   }
 };
 
@@ -7602,6 +8058,50 @@ window.CSAT_DATA = {
       var avgCpd = Math.round(agents.reduce(function (s, a) { return s + (a.cpdAvg || 0); }, 0) / agents.length * 10) / 10;
       document.getElementById('rt-cpd').textContent = avgCpd + '건';
     }
+  })();
+
+  /* ── AI 상담 분석 (베타): 긍부정 요인 + 토픽 ── */
+  (function () {
+    var AI = D.aiAnalysis;
+    if (!AI || !AI.overall) return;
+    var section = document.getElementById('ai-analysis-section');
+    section.style.display = '';
+
+    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626', text3 = getVar('--text-3') || '#9AA0B8';
+
+    var bar = document.getElementById('ai-overall-bar');
+    var o = AI.overall;
+    bar.innerHTML =
+      '<div style="width:' + o.posPct + '%;background:' + good + ';"></div>' +
+      '<div style="width:' + o.neutralPct + '%;background:' + text3 + ';opacity:.35;"></div>' +
+      '<div style="width:' + o.negPct + '%;background:' + bad + ';"></div>';
+    document.getElementById('ai-overall-legend').innerHTML =
+      '<span><span class="dot" style="background:' + good + ';"></span>긍정 ' + o.posPct + '% (' + o.posCount.toLocaleString() + '건)</span>' +
+      '<span><span class="dot" style="background:' + text3 + ';opacity:.5;"></span>중립 ' + o.neutralPct + '%</span>' +
+      '<span><span class="dot" style="background:' + bad + ';"></span>부정 ' + o.negPct + '% (' + o.negCount.toLocaleString() + '건)</span>';
+
+    function factorRows(list, color) {
+      var max = Math.max.apply(null, list.map(function (x) { return x.pct; }));
+      return list.map(function (x) {
+        var w = max > 0 ? Math.round(x.pct / max * 100) : 0;
+        return '<div class="ai-factor-row"><div class="lbl">' + x.label + '</div><div class="track"><div class="fill" style="width:' + w + '%;background:' + color + ';"></div></div><div class="pct">' + x.pct + '%</div></div>';
+      }).join('');
+    }
+    document.getElementById('ai-pos-factors').innerHTML = factorRows(AI.posBreakdown, good);
+    document.getElementById('ai-neg-factors').innerHTML = factorRows(AI.negBreakdown, bad);
+
+    var tbody = document.getElementById('ai-topic-tbody');
+    var accent = getVar('--accent') || '#3D6FE8';
+    tbody.innerHTML = AI.topics.slice(0, 10).map(function (t) {
+      var spark = t.sparkline;
+      var maxS = Math.max(1, Math.max.apply(null, spark));
+      var w = 90, h = 24, step = w / (spark.length - 1 || 1);
+      var pts = spark.map(function (v, i) { return (i * step) + ',' + (h - (v / maxS) * (h - 4) - 2); }).join(' ');
+      var negColor = t.negPct >= 30 ? bad : t.negPct >= 15 ? (getVar('--star') || '#F59E0B') : good;
+      return '<tr><td>' + t.label + '</td><td>' + t.count.toLocaleString() + '건</td>' +
+        '<td style="color:' + negColor + ';font-weight:700;">' + t.negPct + '%</td>' +
+        '<td><svg class="ai-topic-spark" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '"><polyline points="' + pts + '" fill="none" stroke="' + accent + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></td></tr>';
+    }).join('');
   })();
 
   /* ── Header ── */
