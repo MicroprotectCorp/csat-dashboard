@@ -857,14 +857,14 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-09-02 18:04",
-    "totalScanned":  18907,
-    "totalSent":  18907,
-    "totalResponded":  1199,
+    "collectedAt":  "2026-09-02 18:21",
+    "totalScanned":  18908,
+    "totalSent":  18908,
+    "totalResponded":  1200,
     "responseRate":  6.3,
     "avgScore":  4.12,
     "scoreMap":  {
-                     "5":  799,
+                     "5":  800,
                      "4":  127,
                      "3":  67,
                      "2":  25,
@@ -10462,6 +10462,14 @@ window.CSAT_DATA = {
                           "time":  "2026-09-02 16:30",
                           "assigneeId":  "668885",
                           "assigneeName":  "남규민"
+                      },
+                      {
+                          "chatId":  "6a97c49fed8d6e8b3ba4",
+                          "stars":  5,
+                          "comment":  "늦은시간까지 대응해주셨어요",
+                          "time":  "2026-09-02 18:19",
+                          "assigneeId":  "667753",
+                          "assigneeName":  "김로빈"
                       }
                   ],
     "noResponseCount":  17708,
@@ -11169,12 +11177,12 @@ window.CSAT_DATA = {
                              ],
     "dailyStats":  {
                        "2026-09-02":  {
-                                          "sent":  378,
-                                          "responded":  38,
-                                          "responseRate":  10.1,
+                                          "sent":  379,
+                                          "responded":  39,
+                                          "responseRate":  10.3,
                                           "avgScore":  4.74,
                                           "scoreMap":  {
-                                                           "5":  31,
+                                                           "5":  32,
                                                            "4":  6,
                                                            "3":  0,
                                                            "2":  0,
@@ -11715,10 +11723,10 @@ window.CSAT_DATA = {
                                    },
                        "667753":  {
                                       "name":  "김로빈",
-                                      "sent":  1690,
-                                      "responded":  163,
-                                      "responseRate":  9.6,
-                                      "avgScore":  4.53
+                                      "sent":  1691,
+                                      "responded":  164,
+                                      "responseRate":  9.7,
+                                      "avgScore":  4.54
                                   },
                        "668885":  {
                                       "name":  "남규민",
@@ -12104,8 +12112,8 @@ window.CSAT_DATA = {
                                  "assigneeId":  "667753",
                                  "name":  "김로빈",
                                  "week":  "2026-W36",
-                                 "avgScore":  4.7,
-                                 "count":  27
+                                 "avgScore":  4.71,
+                                 "count":  28
                              },
                              {
                                  "assigneeId":  "668885",
@@ -12127,10 +12135,10 @@ window.CSAT_DATA = {
                                                  "avgScore":  4.07
                                              },
                                   "after":  {
-                                                "sent":  1349,
-                                                "responded":  118,
-                                                "responseRate":  8.75,
-                                                "avgScore":  4.53
+                                                "sent":  1350,
+                                                "responded":  119,
+                                                "responseRate":  8.81,
+                                                "avgScore":  4.54
                                             },
                                   "manualMetrics":  {
                                                         "sourceNote":  "채널톡 API 실시간 교차분석 기준(2026-08-28) · 이모티콘 응답은 userChat.profile.csat 필드로 별도 저장되어 기존 별점 집계와는 섞이지 않음",
@@ -12387,6 +12395,13 @@ window.CSAT_DATA = {
                                            "avgScore":  3.58
                                        }
                    },
+    "leftAgentIds":  [
+                         "585262",
+                         "629325",
+                         "631507",
+                         "647650",
+                         "651322"
+                     ],
     "guideCompliance":  {
                             "generatedAt":  "2026-08-25T08:32:45.720Z",
                             "sinceDate":  "2026-08-04",
@@ -14185,10 +14200,12 @@ window.CSAT_DATA = {
     var agentBar = document.getElementById('agent-filter-bar');
     agentBar.innerHTML = '';
 
+    var leftIds = (D.leftAgentIds || []);
     var agents = {};
     responses.forEach(function(r) {
       var aid = r.assigneeId || '';
       if (!aid) return;
+      if (leftIds.indexOf(aid) !== -1) return; // 퇴사자 제외
       var nm = realName(r.assigneeName) || aid;
       if (!agents[aid]) agents[aid] = { id: aid, name: nm, count: 0 };
       agents[aid].count++;
