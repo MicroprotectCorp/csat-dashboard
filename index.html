@@ -337,6 +337,40 @@
     border-radius: 999px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
   }
 
+  .proposal-card {
+    border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, var(--border));
+    border-radius: 12px; padding: 18px 20px 20px; background: color-mix(in srgb, var(--accent) 5%, var(--surface-1));
+  }
+  .proposal-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 800;
+    color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border-radius: 999px; padding: 3px 11px; margin-bottom: 10px;
+  }
+  .proposal-title { font-size: 14.5px; font-weight: 800; color: var(--text-1); letter-spacing: -.01em; margin-bottom: 4px; }
+  .proposal-sub { font-size: 12px; color: var(--text-3); margin-bottom: 16px; line-height: 1.55; }
+  .proposal-flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
+  .proposal-step {
+    flex: 1 1 200px; min-width: 180px; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 15px; position: relative;
+  }
+  .proposal-step-label {
+    font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    margin-bottom: 8px; display: inline-block; padding: 2px 8px; border-radius: 999px;
+  }
+  .proposal-step.problem .proposal-step-label { color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, transparent); }
+  .proposal-step.action .proposal-step-label { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+  .proposal-step.effect .proposal-step-label { color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
+  .proposal-step-body { font-size: 12.5px; color: var(--text-2); line-height: 1.6; }
+  .proposal-step-body strong { color: var(--text-1); font-weight: 800; }
+  .proposal-arrow {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+    width: 28px; color: var(--text-3); font-size: 16px; font-weight: 700;
+  }
+  .proposal-effects { display: flex; flex-direction: column; gap: 8px; }
+  .proposal-effect-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .proposal-effect-row .arrow-up { color: var(--good); font-weight: 800; }
+  .proposal-basis { font-size: 11px; color: var(--text-3); margin-top: 14px; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 10px; }
+
   .csat-factor-row { display: flex; gap: 12px; margin-bottom: 14px; }
   .csat-factor-row:last-child { margin-bottom: 0; }
   .csat-factor-num {
@@ -739,6 +773,34 @@
       <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="duration-rating-insight"></p>
     </div>
 
+    <div id="reminder-proposal-section">
+      <p class="section-title">무응답 고객 리마인드 도입 제안</p>
+      <div class="proposal-card">
+        <span class="proposal-badge">💡 제안 · 아직 도입 전, 정성적 예상 효과</span>
+        <div class="proposal-title">무응답 고객에게 팔로업 알림톡을 먼저 챙기면?</div>
+        <div class="proposal-sub">아래 수치는 실제로 이 정책을 시행한 결과가 아니라, 지금까지 확인된 상관관계(종료 타이밍·처리시간 vs 회신율)를 근거로 "같은 원리가 반복된다면" 기대할 수 있는 방향성이에요.</div>
+        <div class="proposal-flow">
+          <div class="proposal-step problem">
+            <span class="proposal-step-label">지금</span>
+            <div class="proposal-step-body" id="proposal-problem-body">상담의 상당수가 응답 없는 상태로 장시간 방치되다가 무응답 자동 종료돼요.</div>
+          </div>
+          <div class="proposal-arrow">→</div>
+          <div class="proposal-step action">
+            <span class="proposal-step-label">제안</span>
+            <div class="proposal-step-body"><strong>무응답 고객 우선 팔로업</strong> — 방치되기 전에 리마인드 알림톡을 먼저 보내 재접촉하고, 답이 오면 곧바로 처리해 리드타임을 줄여요.</div>
+          </div>
+          <div class="proposal-arrow">→</div>
+          <div class="proposal-step effect">
+            <span class="proposal-step-label">기대 효과</span>
+            <div class="proposal-step-body">
+              <div class="proposal-effects" id="proposal-effects-body"></div>
+            </div>
+          </div>
+        </div>
+        <p class="proposal-basis" id="proposal-basis"></p>
+      </div>
+    </div>
+
     <div id="ai-analysis-section" style="display:none;">
       <p class="section-title">AI 상담 분석 <span style="font-weight:600;text-transform:none;letter-spacing:0;opacity:.7;">(자체 분석)</span></p>
       <div class="card">
@@ -879,14 +941,14 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-09-03 17:19",
-    "totalScanned":  19294,
-    "totalSent":  19294,
-    "totalResponded":  1241,
+    "collectedAt":  "2026-09-03 17:56",
+    "totalScanned":  19444,
+    "totalSent":  19444,
+    "totalResponded":  1243,
     "responseRate":  6.4,
     "avgScore":  4.13,
     "scoreMap":  {
-                     "5":  833,
+                     "5":  835,
                      "4":  131,
                      "3":  67,
                      "2":  26,
@@ -10820,9 +10882,25 @@ window.CSAT_DATA = {
                           "time":  "2026-09-03 16:21",
                           "assigneeId":  "668885",
                           "assigneeName":  "남규민"
+                      },
+                      {
+                          "chatId":  "6a9911c90b5e7e5153df",
+                          "stars":  5,
+                          "comment":  "만족",
+                          "time":  "2026-09-03 17:47",
+                          "assigneeId":  "636057",
+                          "assigneeName":  "김동아"
+                      },
+                      {
+                          "chatId":  "6a9910dc7337ab2f2da2",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-09-03 15:40",
+                          "assigneeId":  "667753",
+                          "assigneeName":  "김로빈"
                       }
                   ],
-    "noResponseCount":  18053,
+    "noResponseCount":  18201,
     "commentOnlyResponses":  [
                                  {
                                      "chatId":  "6a9529f18876e199808c",
@@ -11527,12 +11605,12 @@ window.CSAT_DATA = {
                              ],
     "dailyStats":  {
                        "2026-09-03":  {
-                                          "sent":  285,
-                                          "responded":  34,
-                                          "responseRate":  11.9,
-                                          "avgScore":  4.82,
+                                          "sent":  435,
+                                          "responded":  36,
+                                          "responseRate":  8.3,
+                                          "avgScore":  4.83,
                                           "scoreMap":  {
-                                                           "5":  30,
+                                                           "5":  32,
                                                            "4":  3,
                                                            "3":  0,
                                                            "2":  1,
@@ -12037,14 +12115,14 @@ window.CSAT_DATA = {
     "agentStats":  {
                        "565238":  {
                                       "name":  "Randy",
-                                      "sent":  2283,
+                                      "sent":  2358,
                                       "responded":  72,
-                                      "responseRate":  3.2,
+                                      "responseRate":  3.1,
                                       "avgScore":  3.9
                                   },
                        "609327":  {
                                       "name":  "Summer",
-                                      "sent":  2385,
+                                      "sent":  2388,
                                       "responded":  225,
                                       "responseRate":  9.4,
                                       "avgScore":  4.05
@@ -12072,8 +12150,8 @@ window.CSAT_DATA = {
                                   },
                        "636057":  {
                                       "name":  "jacob",
-                                      "sent":  3947,
-                                      "responded":  317,
+                                      "sent":  3984,
+                                      "responded":  318,
                                       "responseRate":  8,
                                       "avgScore":  3.9
                                   },
@@ -12086,16 +12164,16 @@ window.CSAT_DATA = {
                                    },
                        "667753":  {
                                       "name":  "김로빈",
-                                      "sent":  1777,
-                                      "responded":  174,
+                                      "sent":  1792,
+                                      "responded":  175,
                                       "responseRate":  9.8,
                                       "avgScore":  4.52
                                   },
                        "668885":  {
                                       "name":  "남규민",
-                                      "sent":  1148,
+                                      "sent":  1169,
                                       "responded":  157,
-                                      "responseRate":  13.7,
+                                      "responseRate":  13.4,
                                       "avgScore":  4.64
                                   },
                        "651322":  {
@@ -12107,7 +12185,7 @@ window.CSAT_DATA = {
                                   },
                        "656326":  {
                                       "name":  "heizle",
-                                      "sent":  3437,
+                                      "sent":  3436,
                                       "responded":  110,
                                       "responseRate":  3.2,
                                       "avgScore":  4.45
@@ -12454,8 +12532,8 @@ window.CSAT_DATA = {
                                  "assigneeId":  "636057",
                                  "name":  "jacob",
                                  "week":  "2026-W36",
-                                 "avgScore":  4.7,
-                                 "count":  20
+                                 "avgScore":  4.71,
+                                 "count":  21
                              },
                              {
                                  "assigneeId":  "565238",
@@ -12475,8 +12553,8 @@ window.CSAT_DATA = {
                                  "assigneeId":  "667753",
                                  "name":  "김로빈",
                                  "week":  "2026-W36",
-                                 "avgScore":  4.58,
-                                 "count":  38
+                                 "avgScore":  4.59,
+                                 "count":  39
                              },
                              {
                                  "assigneeId":  "668885",
@@ -12498,9 +12576,9 @@ window.CSAT_DATA = {
                                                  "avgScore":  4.07
                                              },
                                   "after":  {
-                                                "sent":  1735,
-                                                "responded":  160,
-                                                "responseRate":  9.22,
+                                                "sent":  1885,
+                                                "responded":  162,
+                                                "responseRate":  8.59,
                                                 "avgScore":  4.54
                                             },
                                   "manualMetrics":  {
@@ -14267,6 +14345,43 @@ window.CSAT_DATA = {
         '<td style="color:' + color + ';font-weight:700;">' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
     }).join('');
     document.getElementById('duration-rating-insight').textContent = DR.insight ? '💬 ' + DR.insight : '';
+  })();
+
+  /* ── 무응답 고객 리마인드 도입 제안 (정성적 시각화, 실측 아님) ── */
+  (function () {
+    var CT = D.closingTiming, DR = D.durationVsRating;
+    if (!CT || !CT.rows) return;
+    var midBuckets = CT.rows.filter(function (r) { return r.label !== '5분 이내'; });
+    var midTotal = midBuckets.reduce(function (s, r) { return s + r.total; }, 0);
+    var allTotal = CT.rows.reduce(function (s, r) { return s + r.total; }, 0);
+    var midPct = allTotal > 0 ? Math.round(midTotal / allTotal * 1000) / 10 : null;
+    var oneToDay = CT.rows.find(function (r) { return r.label === '1시간~24시간'; });
+
+    if (midPct != null && oneToDay) {
+      document.getElementById('proposal-problem-body').innerHTML =
+        '전체 상담의 <strong>' + midPct + '%</strong>가 5분 안에 종료되지 못하고 방치돼요. 그중 "1시간~24시간" 구간(' + oneToDay.total.toLocaleString() + '건)은 회신율이 ' + oneToDay.responseRate + '%까지 떨어져요 — 사실상 응답을 못 받고 흘려보내는 구간이에요.';
+    }
+
+    var effects = [];
+    var fastRow = CT.rows.find(function (r) { return r.label === '5분 이내'; });
+    if (fastRow && oneToDay && oneToDay.responseRate > 0) {
+      var mult = Math.round(fastRow.responseRate / oneToDay.responseRate * 10) / 10;
+      effects.push('<span class="arrow-up">▲</span> CSAT 회신율 — 빠르게 재접촉된 상담은 방치된 상담보다 회신율이 최대 ' + mult + '배 높았던 패턴과 같은 방향');
+    }
+    if (DR && DR.rows && DR.rows.length >= 2) {
+      var fastest = DR.rows[0], slowest = DR.rows[DR.rows.length - 1];
+      if (fastest.avgScore != null && slowest.avgScore != null) {
+        effects.push('<span class="arrow-up">▲</span> 평균 별점 — 처리 시간이 짧을수록 점수가 높았던 상관관계(★' + fastest.avgScore + ' vs ★' + slowest.avgScore + ')와 같은 방향');
+      }
+    }
+    effects.push('<span class="arrow-up">▲</span> 처리 리드타임 단축 — 고객이 답을 미루기 전에 먼저 챙기면 건당 대기 시간 자체가 줄어들어요');
+    effects.push('<span class="arrow-up">▲</span> 무응답 종결 비율 감소 — 1점 상담의 27.3%가 무응답 종결이었던 것과 반대 방향으로 작용할 것으로 기대');
+    document.getElementById('proposal-effects-body').innerHTML = effects.map(function (e) {
+      return '<div class="proposal-effect-row">' + e + '</div>';
+    }).join('');
+
+    document.getElementById('proposal-basis').textContent =
+      '📌 근거: "종료 타이밍 vs 회신율", "총 상담 진행 시간 vs 별점" 실측 분석(이 페이지 상단) — 인과관계가 아니라 상관관계이며, 실제 도입 후에는 이 페이지에서 별도 전/후 비교로 검증할 예정이에요.';
   })();
 
   /* ── AI 상담 분석 (베타): 긍부정 요인 + 토픽 ── */
