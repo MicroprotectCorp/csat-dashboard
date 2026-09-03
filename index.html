@@ -179,7 +179,7 @@
   .agent-feedback-item { font-size: 13px; line-height: 1.6; color: var(--text-1); display: flex; gap: 8px; }
   .agent-feedback-item .dot { flex-shrink: 0; margin-top: 2px; }
 
-  /* 담당자별 CSAT 상세 모달 */
+  /* 매니저별 CSAT 상세 모달 */
   .agent-detail-backdrop {
     position: fixed; inset: 0; z-index: 200;
     background: rgba(10,13,23,0.55);
@@ -604,7 +604,7 @@
   <div class="tab-nav">
     <button type="button" class="tab-btn active" id="tab-btn-overview" data-tab="overview">전체 현황</button>
     <button type="button" class="tab-btn" id="tab-btn-team" data-tab="team">팀 인사이트</button>
-    <button type="button" class="tab-btn" id="tab-btn-insights" data-tab="insights">담당자 인사이트</button>
+    <button type="button" class="tab-btn" id="tab-btn-insights" data-tab="insights">매니저 인사이트</button>
   </div>
 
   <div class="tab-panel active" id="tab-overview">
@@ -651,7 +651,7 @@
       <div class="stat-sub">중앙값 기준 · 여러 날에 걸친 상담 포함</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">평균 CPD (담당자 1인)</div>
+      <div class="stat-label">평균 CPD (매니저 1인)</div>
       <div class="stat-value accent" id="rt-cpd" style="font-size:22px;">—</div>
       <div class="stat-sub" id="rt-cpd-sub">종료일 기준 · 채널톡 자체 통계(인입 기준)와 다름</div>
     </div>
@@ -698,7 +698,7 @@
   <div class="tab-panel" id="tab-team">
 
     <div id="team-wvr-section">
-      <p class="section-title">담당자 배정 대기시간 vs 별점</p>
+      <p class="section-title">매니저 배정 대기시간 vs 별점</p>
       <div class="card trend-card">
         <canvas id="insight-wvr-canvas" height="150"></canvas>
         <div id="insight-wvr-tooltip"></div>
@@ -715,6 +715,28 @@
         </table>
       </div>
       <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="closing-timing-insight"></p>
+    </div>
+
+    <div id="closing-sent-section" style="display:none;">
+      <p class="section-title">종료 멘트 발송 여부 vs 회신율</p>
+      <div class="card" style="overflow-x:auto;padding:0;">
+        <table class="compare-table" id="closing-sent-table">
+          <thead><tr><th>구분</th><th>건수</th><th>회신율</th><th>평균 별점</th></tr></thead>
+          <tbody id="closing-sent-tbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="closing-sent-insight"></p>
+    </div>
+
+    <div id="duration-rating-section" style="display:none;">
+      <p class="section-title">총 상담 진행 시간 vs 별점</p>
+      <div class="card" style="overflow-x:auto;padding:0;">
+        <table class="compare-table" id="duration-rating-table">
+          <thead><tr><th>상담요청 → 종료까지</th><th>건수</th><th>회신율</th><th>평균 별점</th></tr></thead>
+          <tbody id="duration-rating-tbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="duration-rating-insight"></p>
     </div>
 
     <div id="ai-analysis-section" style="display:none;">
@@ -789,16 +811,16 @@
   <div class="tab-panel" id="tab-insights">
 
     <div class="agent-select-row">
-      <label for="insight-agent-select" style="font-size:12px;font-weight:700;color:var(--text-2);">담당자</label>
+      <label for="insight-agent-select" style="font-size:12px;font-weight:700;color:var(--text-2);">매니저</label>
       <select class="agent-select" id="insight-agent-select"></select>
       <span class="agent-select-meta" id="insight-agent-meta"></span>
     </div>
 
-    <p class="section-title">담당자별 CSAT 변화 (주간)</p>
+    <p class="section-title">매니저별 CSAT 변화 (주간)</p>
     <div class="card trend-card">
       <canvas id="insight-trend-canvas" height="180"></canvas>
       <div id="insight-trend-tooltip"></div>
-      <p id="insight-trend-empty" style="font-size:12px;color:var(--text-3);margin-top:8px;display:none;">이 담당자는 최근 주간 표본이 아직 부족해요 (주 3건 이상부터 집계).</p>
+      <p id="insight-trend-empty" style="font-size:12px;color:var(--text-3);margin-top:8px;display:none;">이 매니저는 최근 주간 표본이 아직 부족해요 (주 3건 이상부터 집계).</p>
       <div id="insight-agent-note" class="agent-note-card" style="display:none;"></div>
     </div>
 
@@ -813,7 +835,7 @@
       <p style="font-size:11px;color:var(--text-3);margin-top:8px;">채널톡 자체 통계는 인입(발화) 기준이라 여러 날에 걸친 상담이 누락될 수 있어요. 이 차트는 종료일 기준이라 실제 처리량과 더 가까워요.</p>
     </div>
 
-    <p class="section-title">별점 분포 (선택 담당자)</p>
+    <p class="section-title">별점 분포 (선택 매니저)</p>
     <div class="card" id="insight-dist-card"></div>
 
     <p class="section-title">요약 피드백</p>
@@ -857,14 +879,14 @@
 
 <script>
 window.CSAT_DATA = {
-    "collectedAt":  "2026-09-03 14:18",
-    "totalScanned":  19051,
-    "totalSent":  19051,
-    "totalResponded":  1215,
+    "collectedAt":  "2026-09-03 14:42",
+    "totalScanned":  19056,
+    "totalSent":  19056,
+    "totalResponded":  1216,
     "responseRate":  6.4,
     "avgScore":  4.12,
     "scoreMap":  {
-                     "5":  809,
+                     "5":  810,
                      "4":  130,
                      "3":  67,
                      "2":  25,
@@ -10590,9 +10612,17 @@ window.CSAT_DATA = {
                           "time":  "2026-09-03 12:22",
                           "assigneeId":  "668885",
                           "assigneeName":  "남규민"
+                      },
+                      {
+                          "chatId":  "6a90f7e3dbb7e0c8eb8d",
+                          "stars":  5,
+                          "comment":  "",
+                          "time":  "2026-08-28 14:04",
+                          "assigneeId":  "668885",
+                          "assigneeName":  "남규민"
                       }
                   ],
-    "noResponseCount":  17836,
+    "noResponseCount":  17840,
     "commentOnlyResponses":  [
                                  {
                                      "chatId":  "6a9529f18876e199808c",
@@ -11297,9 +11327,9 @@ window.CSAT_DATA = {
                              ],
     "dailyStats":  {
                        "2026-09-03":  {
-                                          "sent":  42,
+                                          "sent":  46,
                                           "responded":  9,
-                                          "responseRate":  21.4,
+                                          "responseRate":  19.6,
                                           "avgScore":  4.78,
                                           "scoreMap":  {
                                                            "5":  7,
@@ -11349,12 +11379,12 @@ window.CSAT_DATA = {
                                                        }
                                       },
                        "2026-08-28":  {
-                                          "sent":  286,
-                                          "responded":  20,
-                                          "responseRate":  7,
-                                          "avgScore":  4.35,
+                                          "sent":  287,
+                                          "responded":  21,
+                                          "responseRate":  7.3,
+                                          "avgScore":  4.38,
                                           "scoreMap":  {
-                                                           "5":  14,
+                                                           "5":  15,
                                                            "4":  3,
                                                            "3":  1,
                                                            "2":  0,
@@ -11856,16 +11886,16 @@ window.CSAT_DATA = {
                                    },
                        "667753":  {
                                       "name":  "김로빈",
-                                      "sent":  1700,
+                                      "sent":  1701,
                                       "responded":  169,
                                       "responseRate":  9.9,
                                       "avgScore":  4.5
                                   },
                        "668885":  {
                                       "name":  "남규민",
-                                      "sent":  1104,
-                                      "responded":  146,
-                                      "responseRate":  13.2,
+                                      "sent":  1108,
+                                      "responded":  147,
+                                      "responseRate":  13.3,
                                       "avgScore":  4.61
                                   },
                        "651322":  {
@@ -12210,8 +12240,8 @@ window.CSAT_DATA = {
                                  "assigneeId":  "668885",
                                  "name":  "남규민",
                                  "week":  "2026-W35",
-                                 "avgScore":  4.46,
-                                 "count":  52
+                                 "avgScore":  4.47,
+                                 "count":  53
                              },
                              {
                                  "assigneeId":  "656326",
@@ -12268,9 +12298,9 @@ window.CSAT_DATA = {
                                                  "avgScore":  4.07
                                              },
                                   "after":  {
-                                                "sent":  1491,
-                                                "responded":  134,
-                                                "responseRate":  8.99,
+                                                "sent":  1496,
+                                                "responded":  135,
+                                                "responseRate":  9.02,
                                                 "avgScore":  4.48
                                             },
                                   "manualMetrics":  {
@@ -12297,8 +12327,8 @@ window.CSAT_DATA = {
     "announcements":  [
                           {
                               "date":  "2026-08-25",
-                              "title":  "0점 코멘트 재응대 + 담당자별 인사이트 관리 시작",
-                              "description":  "8/19(수)부터 CSAT 0점 코멘트에 남겨진 추가 요청은 상담 재오픈 후 응대 시작.\u003cbr\u003e오늘부터는 담당자별 인사이트 탭으로 개인별 CSAT·가이드 준수·CPD 지표 관리 예정."
+                              "title":  "0점 코멘트 재응대 + 매니저별 인사이트 관리 시작",
+                              "description":  "8/19(수)부터 CSAT 0점 코멘트에 남겨진 추가 요청은 상담 재오픈 후 응대 시작.\u003cbr\u003e오늘부터는 매니저별 인사이트 탭으로 개인별 CSAT·가이드 준수·CPD 지표 관리 예정."
                           }
                       ],
     "tagCsat":  [
@@ -12645,7 +12675,7 @@ window.CSAT_DATA = {
                                              "ge4Pct":  51.7
                                          }
                                      ],
-                         "insight":  "담당자 배정 전 대기(담당자 없음 상태)가 5분 이하였던 상담은 평균 별점 4.06점(3점 이상 83.6%)인 반면, 60분을 넘긴 상담은 평균 3.15점(3점 이상 60%)으로 뚜렷하게 낮았습니다."
+                         "insight":  "매니저 배정 전 대기(매니저 없음 상태)가 5분 이하였던 상담은 평균 별점 4.06점(3점 이상 83.6%)인 반면, 60분을 넘긴 상담은 평균 3.15점(3점 이상 60%)으로 뚜렷하게 낮았습니다."
                      },
     "agentNotes":  {
                        "609327":  {
@@ -13890,7 +13920,72 @@ window.CSAT_DATA = {
                                        }
                                    ],
                           "insight":  "마지막 메시지 보내고 5분 이내 종료하면 회신율 9%(★4.26)인데, 그 이후로는 얼마나 늦게 닫든(5분이든 하루든) 회신율이 1.5~1.3%로 뚝 떨어져요. 완만한 흐름이 아니라 \"그 순간 고객이 채팅창을 보고 있었냐\"의 이진법이라, 마지막 멘트 보내고 곧바로 종료하는 습관이 지금까지 찾은 것 중 CSAT 참여율에 가장 강하게 작용해요."
-                      }
+                      },
+    "durationVsRating":  {
+                             "generatedAt":  "2026-09-03T05:19:56.606Z",
+                             "scannedFiles":  222,
+                             "scannedChats":  53706,
+                             "rows":  [
+                                          {
+                                              "label":  "30분 이내",
+                                              "total":  2110,
+                                              "responded":  284,
+                                              "responseRate":  13.5,
+                                              "avgScore":  4.65
+                                          },
+                                          {
+                                              "label":  "30분~2시간",
+                                              "total":  6527,
+                                              "responded":  206,
+                                              "responseRate":  3.2,
+                                              "avgScore":  4.3
+                                          },
+                                          {
+                                              "label":  "2시간~12시간",
+                                              "total":  35423,
+                                              "responded":  213,
+                                              "responseRate":  0.6,
+                                              "avgScore":  4.04
+                                          },
+                                          {
+                                              "label":  "12시간~24시간",
+                                              "total":  2024,
+                                              "responded":  46,
+                                              "responseRate":  2.3,
+                                              "avgScore":  3.37
+                                          },
+                                          {
+                                              "label":  "24시간 초과",
+                                              "total":  7622,
+                                              "responded":  212,
+                                              "responseRate":  2.8,
+                                              "avgScore":  3.62
+                                          }
+                                      ],
+                             "insight":  "상담이 30분 이내에 끝나면 평균 ★4.65(회신율 13.5%)인데, 24시간 초과까지 늘어지면 ★3.62(회신율 2.8%)로 떨어져요. 상담을 오래 끌수록 회신율도, 응답해준 사람의 만족도도 같이 낮아지는 패턴이에요."
+                         },
+    "closingSentVsRate":  {
+                              "generatedAt":  "2026-09-03T05:20:01.339Z",
+                              "scannedFiles":  222,
+                              "scannedChats":  51860,
+                              "rows":  [
+                                           {
+                                               "label":  "종료 멘트 발송 (5분 이내 종료)",
+                                               "total":  8201,
+                                               "responded":  774,
+                                               "responseRate":  9.4,
+                                               "avgScore":  4.32
+                                           },
+                                           {
+                                               "label":  "종료 멘트 미발송 (5분 초과 후 종료)",
+                                               "total":  43659,
+                                               "responded":  246,
+                                               "responseRate":  0.6,
+                                               "avgScore":  3.48
+                                           }
+                                       ],
+                              "insight":  "종료 멘트를 보내고 5분 안에 종료한 상담은 회신율 9.4%인데, 그렇지 않은 상담은 0.6%예요. 차이는 +8.8%p(약 15.7배) — 종료 멘트 발송이 CSAT 회신율에 직접 영향을 주는 걸 가장 단순한 형태로 보여줘요."
+                          }
 };
 
 (function () {
@@ -13939,6 +14034,39 @@ window.CSAT_DATA = {
         '<td>' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
     }).join('');
     document.getElementById('closing-timing-insight').textContent = CT.insight ? '💬 ' + CT.insight : '';
+  })();
+
+  /* ── 종료 멘트 발송 여부 vs 회신율 ── */
+  (function () {
+    var CS = D.closingSentVsRate;
+    if (!CS || !CS.rows || CS.rows.length === 0) return;
+    document.getElementById('closing-sent-section').style.display = '';
+    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626';
+    var maxRate = Math.max.apply(null, CS.rows.map(function (r) { return r.responseRate; }));
+    document.getElementById('closing-sent-tbody').innerHTML = CS.rows.map(function (r) {
+      var color = r.responseRate === maxRate ? good : bad;
+      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
+        '<td style="color:' + color + ';font-weight:700;">' + r.responseRate + '%</td>' +
+        '<td>' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
+    }).join('');
+    document.getElementById('closing-sent-insight').textContent = CS.insight ? '💬 ' + CS.insight : '';
+  })();
+
+  /* ── 총 상담 진행 시간 vs 별점 ── */
+  (function () {
+    var DR = D.durationVsRating;
+    if (!DR || !DR.rows || DR.rows.length === 0) return;
+    document.getElementById('duration-rating-section').style.display = '';
+    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626', star = getVar('--star') || '#F59E0B';
+    var scores = DR.rows.map(function (r) { return r.avgScore; }).filter(function (s) { return s != null; });
+    var maxScore = Math.max.apply(null, scores), minScore = Math.min.apply(null, scores);
+    document.getElementById('duration-rating-tbody').innerHTML = DR.rows.map(function (r) {
+      var color = r.avgScore == null ? 'var(--text-3)' : r.avgScore === maxScore ? good : r.avgScore === minScore ? bad : star;
+      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
+        '<td>' + r.responseRate + '%</td>' +
+        '<td style="color:' + color + ';font-weight:700;">' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
+    }).join('');
+    document.getElementById('duration-rating-insight').textContent = DR.insight ? '💬 ' + DR.insight : '';
   })();
 
   /* ── AI 상담 분석 (베타): 긍부정 요인 + 토픽 ── */
@@ -14576,7 +14704,7 @@ window.CSAT_DATA = {
         card.href = chatUrl; card.target = '_blank'; card.rel = 'noopener noreferrer';
         card.style.textDecoration = 'none'; card.style.color = 'inherit'; card.style.display = 'block';
       }
-      var agentLabel = r.assigneeName || '담당자 미상';
+      var agentLabel = r.assigneeName || '매니저 미상';
       card.innerHTML =
         '<div class="response-top">' +
           '<span style="font-size:12px;font-weight:600;color:var(--text-2);">' + agentLabel + '</span>' +
@@ -14748,7 +14876,7 @@ window.CSAT_DATA = {
     });
   })();
 
-  /* ── 담당자 인사이트 탭: 추이 · 가이드 준수 KPI · 별점 분포 · 대기시간 상관 ── */
+  /* ── 매니저 인사이트 탭: 추이 · 가이드 준수 KPI · 별점 분포 · 대기시간 상관 ── */
   (function () {
     var select = document.getElementById('insight-agent-select');
     var metaEl = document.getElementById('insight-agent-meta');
@@ -14893,7 +15021,8 @@ window.CSAT_DATA = {
         var valTxt = c.pct == null ? '해당없음' : c.pct + '%';
         var cls = c.pct == null ? '' : pctClass(c.pct);
         return '<div class="kpi-card"><div class="kpi-label">' + c.label + '</div><div class="kpi-value ' + cls + '">' + valTxt + '</div><div class="kpi-sub">' + (c.pct == null ? '해당 상담 없음' : c.count + '건 중') + '</div></div>';
-      }).join('') + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">종료 멘트 발송: 마지막 메시지 후 5분 이내 종료했는지(강성 상담 제외) · CSAT 참여 안내: ' + (GC ? GC.sinceDate : '') + ' 이후 · CSAT 추가의견 재응대: ' + (GC ? (GC.followupSinceDate || GC.sinceDate) : '') + ' 이후 · 채팅상담 ' + (GC ? GC.scannedChats.toLocaleString() : '0') + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' + '</p>';
+      }).join('') + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">종료 멘트 발송: 마지막 메시지 후 5분 이내 종료했는지(강성 상담 제외) · CSAT 참여 안내: ' + (GC ? GC.sinceDate : '') + ' 이후 · CSAT 추가의견 재응대: ' + (GC ? (GC.followupSinceDate || GC.sinceDate) : '') + ' 이후 · 채팅상담 ' + (GC ? GC.scannedChats.toLocaleString() : '0') + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' + '</p>' +
+        (D.closingSentVsRate && D.closingSentVsRate.insight ? '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:6px;">💬 팀 전체 기준: ' + D.closingSentVsRate.insight + '</p>' : '');
     }
 
     function renderDistFor(id) {
@@ -15009,7 +15138,9 @@ window.CSAT_DATA = {
         var ctx0 = cpdCanvas.getContext('2d'); ctx0.clearRect(0, 0, cpdCanvas.width, cpdCanvas.height);
         return;
       }
-      cpdMeta.innerHTML = '평균 CPD <strong style="color:var(--text-1);">' + a.cpdAvg + '건</strong> · 첫 응답까지 ' + (a.avgFirstReplyText || '—') + ' · 상담 요청~종료까지 ' + (a.avgResolutionText || '—');
+      var drInsight = D.durationVsRating && D.durationVsRating.insight
+        ? '<br><span style="font-size:11px;color:var(--text-3);">💬 팀 전체 기준: ' + D.durationVsRating.insight + '</span>' : '';
+      cpdMeta.innerHTML = '평균 CPD <strong style="color:var(--text-1);">' + a.cpdAvg + '건</strong> · 첫 응답까지 ' + (a.avgFirstReplyText || '—') + ' · 상담 요청~종료까지 ' + (a.avgResolutionText || '—') + drInsight;
       var recent = a.dailyClosed.slice(-21);
       var maxV = Math.max(1, Math.max.apply(null, recent.map(function (d) { return d.count; })) * 1.2);
       drawBarChart({
@@ -15024,7 +15155,7 @@ window.CSAT_DATA = {
 
     function renderFeedback() {
       if (agents.length === 0) {
-        feedbackList.innerHTML = '<div class="agent-feedback-item">표본이 충분한 담당자가 아직 없어요.</div>';
+        feedbackList.innerHTML = '<div class="agent-feedback-item">표본이 충분한 매니저가 아직 없어요.</div>';
         return;
       }
       var totalSent = agents.reduce(function (s, a) { return s + a.sent; }, 0);
@@ -15036,16 +15167,16 @@ window.CSAT_DATA = {
       var byScore = agents.slice().sort(function (a, b) { return b.avgScore - a.avgScore; });
 
       var lines = [];
-      lines.push('팀 평균 회신율은 ' + teamRate + '%, 평균 별점은 ★' + teamScore + '입니다 (표본 ' + MIN_SENT + '건 이상 담당자 ' + agents.length + '명 기준).');
+      lines.push('팀 평균 회신율은 ' + teamRate + '%, 평균 별점은 ★' + teamScore + '입니다 (표본 ' + MIN_SENT + '건 이상 매니저 ' + agents.length + '명 기준).');
       if (byRate.length > 1) {
-        lines.push('회신율이 가장 높은 담당자는 ' + byRate[0].name + '(' + byRate[0].responseRate + '%), 가장 낮은 담당자는 ' + byRate[byRate.length - 1].name + '(' + byRate[byRate.length - 1].responseRate + '%)입니다.');
+        lines.push('회신율이 가장 높은 매니저는 ' + byRate[0].name + '(' + byRate[0].responseRate + '%), 가장 낮은 매니저는 ' + byRate[byRate.length - 1].name + '(' + byRate[byRate.length - 1].responseRate + '%)입니다.');
       }
       if (byScore.length > 1) {
-        lines.push('평균 별점이 가장 높은 담당자는 ' + byScore[0].name + '(★' + byScore[0].avgScore + '), 가장 낮은 담당자는 ' + byScore[byScore.length - 1].name + '(★' + byScore[byScore.length - 1].avgScore + ')입니다.');
+        lines.push('평균 별점이 가장 높은 매니저는 ' + byScore[0].name + '(★' + byScore[0].avgScore + '), 가장 낮은 매니저는 ' + byScore[byScore.length - 1].name + '(★' + byScore[byScore.length - 1].avgScore + ')입니다.');
       }
       var lowScoreAgents = agents.filter(function (a) { return a.responded >= 20 && a.avgScore > 0 && a.avgScore < teamScore - 0.3; });
       if (lowScoreAgents.length > 0) {
-        lines.push('팀 평균보다 별점이 뚜렷하게 낮은 담당자: ' + lowScoreAgents.map(function (a) {
+        lines.push('팀 평균보다 별점이 뚜렷하게 낮은 매니저: ' + lowScoreAgents.map(function (a) {
           var respPct = a.sent > 0 ? Math.round(a.responded / a.sent * 1000) / 10 : 0;
           return a.name + '(★' + a.avgScore + ', 응답 ' + a.responded + '건/처리 ' + a.sent + '건 중 ' + respPct + '%)';
         }).join(', ') + ' — 응답 건수가 적을수록 표본 편차가 커질 수 있어, 처리량 대비 응답 비율도 함께 참고해주세요.');
