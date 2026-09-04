@@ -19932,23 +19932,29 @@ window.CSAT_DATA = {
         }
 
         function scoreSparkline(t) {
+          var softTD = getVar('--text-2') || '#6B7280';
           var vals = t.buckets.map(function (b) { return b.avgScore; });
-          var w = 110, h = 26, stepX = w / (vals.length - 1);
+          var margin = 15, w = 134, plotH = 24, labelY = 34, h = 38, stepX = (w - margin * 2) / (vals.length - 1);
           var validPts = [];
           vals.forEach(function (v, i) {
             if (v == null) return;
-            var y = h - ((v - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * (h - 4) - 2;
-            validPts.push({ x: i * stepX, y: y, v: v, label: t.buckets[i].label });
+            var y = plotH - ((v - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * (plotH - 4) - 2;
+            validPts.push({ x: margin + i * stepX, y: y, v: v, label: t.buckets[i].label });
           });
           var pts = validPts.map(function (p) { return p.x + ',' + p.y; }).join(' ');
-          var dots = validPts.map(function (p, idx) {
+          var marks = validPts.map(function (p, idx) {
             var isFirst = idx === 0, isLast = idx === validPts.length - 1;
-            var r = (isFirst || isLast) ? 2.4 : 1.4;
-            var fill = isFirst ? accentTD : (isLast ? badTD : accentTD);
-            return '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + fill + '"><title>' + p.label + ': ★' + p.v + '</title></circle>';
+            var r = (isFirst || isLast) ? 2.6 : 1.6;
+            var dotFill = isLast ? badTD : accentTD;
+            var textFill = isLast ? badTD : (isFirst ? accentTD : softTD);
+            var weight = (isFirst || isLast) ? '700' : '500';
+            var dot = '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + dotFill + '"><title>' + p.label + ': ★' + p.v + '</title></circle>';
+            var label = '<text x="' + p.x + '" y="' + labelY + '" text-anchor="middle" font-size="9" font-weight="' + weight + '" font-family="IBM Plex Mono, monospace" fill="' + textFill + '">' + p.v + '</text>';
+            return dot + label;
           }).join('');
+          // 값이 항상 보이도록 라벨을 점 아래 고정 행에 배치(hover 없이도 별점 추이 확인 가능)
           return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
-            '<polyline points="' + pts + '" fill="none" stroke="' + accentTD + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>' + dots + '</svg>';
+            '<polyline points="' + pts + '" fill="none" stroke="' + accentTD + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>' + marks + '</svg>';
         }
 
         document.getElementById('tag-peak-tbody').innerHTML = trendTags.map(function (t) {
