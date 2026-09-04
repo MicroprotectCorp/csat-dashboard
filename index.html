@@ -869,27 +869,15 @@
     </div>
 
     <div id="tag-peak-section" style="display:none;">
-      <p class="section-title">태그별 리드타임 최적 구간</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">이 태그가 붙은 상담이 <b>몇 분~몇 시간 안에 종료됐을 때</b> CSAT 회신율이 가장 좋았는지, 그때 평균 별점은 몇 점인지. 전체 태그 평균 건수 이상인 태그만.</p>
+      <p class="section-title">태그별 리드타임 변화 추이</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">태그(문의 유형)별로 <b>처리시간 5구간(30분 이내 → 24시간 초과)</b>에 따라 CSAT 회신율과 평균 별점이 어떻게 바뀌는지 전체 추이. 전체 태그 평균 건수 이상인 태그만.</p>
       <div class="card" style="overflow-x:auto;padding:0;">
         <table class="compare-table" id="tag-peak-table">
-          <thead><tr><th>태그</th><th>총 건수</th><th>최적 구간</th><th>그 구간 회신율</th><th>그 구간 평균 별점</th></tr></thead>
+          <thead><tr><th>태그</th><th>총 건수</th><th>회신율 추이(30분이내→24h+)</th><th>별점 추이(30분이내→24h+)</th></tr></thead>
           <tbody id="tag-peak-tbody"></tbody>
         </table>
       </div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;">📌 대부분의 태그가 "30분 이내 종료"에서 회신율이 가장 높아요 — 태그(문의 유형)와 무관하게, 얼마나 빨리 끝내느냐가 회신율을 가장 크게 좌우해요.</p>
-    </div>
-
-    <div id="tag-duration-score-section" style="display:none;">
-      <p class="section-title">리드타임이 만족도에 미치는 영향 — 태그 고정 비교</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">"빠를수록 점수가 높다"는 게 문의 유형(태그) 차이 때문인지 확인하려고, <b>같은 태그 안에서만</b> 처리시간 구간별 평균 별점을 비교했어요. (★1~★5, 왼쪽=30분 이내 → 오른쪽=24시간 초과)</p>
-      <div class="card" style="overflow-x:auto;padding:0;">
-        <table class="compare-table" id="tag-duration-score-table">
-          <thead><tr><th>태그</th><th>총 건수</th><th>별점 추이(30분이내→24h+)</th><th>낙폭</th></tr></thead>
-          <tbody id="tag-duration-score-tbody"></tbody>
-        </table>
-      </div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="tag-duration-score-insight"></p>
+      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;">📌 대부분 태그가 시간이 갈수록 회신율·별점 둘 다 함께 낮아져요 — 태그(문의 유형)와 무관하게 나타나는 공통 패턴이에요. 회신율 막대는 0~20% 기준, 별점은 ★1~★5 절대 기준이라 태그끼리 비교 가능해요.</p>
     </div>
 
     <div id="tag-refund-detail-section" style="display:none;">
@@ -19917,72 +19905,56 @@ window.CSAT_DATA = {
 
     var TD = D.tagDuration;
     var aboveAvgTags = (TD && TD.aboveAvgTags) || (TD && TD.topByPeakRate) || [];
+    // ── 태그별 리드타임 변화 추이: 회신율(막대) + 별점(스파크라인)을 구간별로 나란히 ──
     if (TD && aboveAvgTags.length > 0) {
-      detailHasContent = true;
-      document.getElementById('tag-peak-section').style.display = 'block';
-      var good = getVar('--good') || '#16A34A', star = getVar('--star') || '#F59E0B';
-      document.getElementById('tag-peak-tbody').innerHTML = aboveAvgTags.map(function (t) {
-        if (!t.peak) {
-          return '<tr><td>' + t.tag + '</td><td>' + t.totalCount.toLocaleString() + '건</td>' +
-            '<td colspan="3" style="color:var(--text-3);">표본 부족(응답 ' + (TD.minCellCount || 20) + '건 미만)</td></tr>';
-        }
-        var color = t.peak.responseRate >= 18 ? good : star;
-        return '<tr><td>' + t.tag + '</td><td>' + t.totalCount.toLocaleString() + '건</td><td>' + t.peak.label + '</td>' +
-          '<td style="color:' + color + ';font-weight:700;">' + t.peak.responseRate + '%</td>' +
-          '<td>' + (t.peak.avgScore != null ? '★' + t.peak.avgScore : '—') + '</td></tr>';
-      }).join('');
-    }
-
-    // ── 리드타임이 만족도에 미치는 영향 — 태그 고정 비교 (같은 태그 안에서 구간별 별점 추이) ──
-    if (TD && aboveAvgTags.length > 0) {
-      var scoreTags = aboveAvgTags.filter(function (t) {
+      var trendTags = aboveAvgTags.filter(function (t) {
         var valid = t.buckets.filter(function (b) { return b.avgScore != null; });
-        return valid.length >= 3; // 추이를 볼 수 있으려면 최소 3개 구간은 값이 있어야 함
+        return valid.length >= 2; // 추이를 그리려면 최소 2개 구간은 값이 있어야 함
       });
-      if (scoreTags.length > 0) {
+      if (trendTags.length > 0) {
         detailHasContent = true;
-        document.getElementById('tag-duration-score-section').style.display = 'block';
-        var accentTD = getVar('--accent') || '#3D6FE8', badTD = getVar('--bad') || '#DC2626';
-        var SCALE_MIN = 1, SCALE_MAX = 5; // 별점 절대 스케일(1~5)로 고정 — 태그 간 비교 가능하게
-        var dropSum = 0, dropCount = 0;
-        var rowsHtml = scoreTags.map(function (t) {
-          var vals = t.buckets.map(function (b) { return b.avgScore; }); // null 포함 5개
-          var w = 130, h = 26, stepX = w / (vals.length - 1);
+        document.getElementById('tag-peak-section').style.display = 'block';
+        var accentTD = getVar('--accent') || '#3D6FE8', badTD = getVar('--bad') || '#DC2626', goodTD = getVar('--good') || '#16A34A';
+        var RATE_MAX = 20; // 회신율 막대 스케일 상한(%) — 태그 간 비교 가능하게 고정
+        var SCORE_MIN = 1, SCORE_MAX = 5; // 별점 절대 스케일(1~5)로 고정
+
+        function rateBars(t) {
+          var w = 110, h = 26, n = t.buckets.length, gap = 3, bw = (w - gap * (n - 1)) / n;
+          var bars = t.buckets.map(function (b, i) {
+            var rate = b.responseRate || 0;
+            var bh = Math.max(1, Math.min(1, rate / RATE_MAX) * (h - 2));
+            var x = i * (bw + gap);
+            var y = h - bh;
+            var fill = b.responded < (TD.minCellCount || 20) ? 'color-mix(in srgb, ' + accentTD + ' 35%, transparent)' : accentTD;
+            return '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + bh + '" rx="1.2" fill="' + fill + '"><title>' + b.label + ': ' + rate + '%(' + b.responded + '/' + b.total + ')</title></rect>';
+          }).join('');
+          return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' + bars + '</svg>';
+        }
+
+        function scoreSparkline(t) {
+          var vals = t.buckets.map(function (b) { return b.avgScore; });
+          var w = 110, h = 26, stepX = w / (vals.length - 1);
           var validPts = [];
           vals.forEach(function (v, i) {
             if (v == null) return;
-            var y = h - ((v - SCALE_MIN) / (SCALE_MAX - SCALE_MIN)) * (h - 4) - 2;
-            validPts.push({ x: i * stepX, y: y });
+            var y = h - ((v - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * (h - 4) - 2;
+            validPts.push({ x: i * stepX, y: y, v: v, label: t.buckets[i].label });
           });
           var pts = validPts.map(function (p) { return p.x + ',' + p.y; }).join(' ');
           var dots = validPts.map(function (p, idx) {
             var isFirst = idx === 0, isLast = idx === validPts.length - 1;
-            var r = (isFirst || isLast) ? 2.6 : 1.6;
+            var r = (isFirst || isLast) ? 2.4 : 1.4;
             var fill = isFirst ? accentTD : (isLast ? badTD : accentTD);
-            return '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + fill + '" />';
+            return '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + fill + '"><title>' + p.label + ': ★' + p.v + '</title></circle>';
           }).join('');
-          var svg = '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
+          return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
             '<polyline points="' + pts + '" fill="none" stroke="' + accentTD + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>' + dots + '</svg>';
-          var first = validPts.length ? vals[vals.findIndex(function (v) { return v != null; })] : null;
-          var lastIdx = -1;
-          vals.forEach(function (v, i) { if (v != null) lastIdx = i; });
-          var last = lastIdx >= 0 ? vals[lastIdx] : null;
-          var drop = (first != null && last != null) ? Math.round((first - last) * 100) / 100 : null;
-          if (drop != null) { dropSum += drop; dropCount++; }
-          var dropColor = drop != null && drop > 0 ? badTD : (getVar('--good') || '#16A34A');
-          return '<tr><td>' + t.tag + '</td><td>' + t.totalCount.toLocaleString() + '건</td><td>' + svg + '</td>' +
-            '<td style="color:' + dropColor + ';font-weight:700;">' + (drop != null ? (drop > 0 ? '−' : '+') + Math.abs(drop) + '점' : '—') + '</td></tr>';
+        }
+
+        document.getElementById('tag-peak-tbody').innerHTML = trendTags.map(function (t) {
+          return '<tr><td>' + t.tag + '</td><td>' + t.totalCount.toLocaleString() + '건</td>' +
+            '<td>' + rateBars(t) + '</td><td>' + scoreSparkline(t) + '</td></tr>';
         }).join('');
-        document.getElementById('tag-duration-score-tbody').innerHTML = rowsHtml;
-        var avgDrop = dropCount > 0 ? Math.round(dropSum / dropCount * 100) / 100 : null;
-        var declineCount = scoreTags.filter(function (t) {
-          var vals = t.buckets.map(function (b) { return b.avgScore; });
-          var first = vals.find(function (v) { return v != null; });
-          var last = null; vals.forEach(function (v) { if (v != null) last = v; });
-          return first != null && last != null && first > last;
-        }).length;
-        document.getElementById('tag-duration-score-insight').textContent =
-          '💬 분석된 ' + scoreTags.length + '개 태그 중 ' + declineCount + '개에서 "빨리 끝날수록 점수가 높다" 패턴이 그대로 나타났어요(평균 낙폭 ' + (avgDrop != null ? avgDrop + '점' : '—') + '). 태그(문의 유형)를 고정해도 이 패턴이 남아있다는 건, 처리 속도 자체가 실제로 만족도에 영향을 준다는 뜻이에요 — 단순히 "쉬운 문의라 빠르고 만족도도 높았던" 착시가 아니에요.';
       }
     }
 
