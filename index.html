@@ -785,6 +785,27 @@
       <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="closing-sent-by-duration-insight"></p>
     </div>
 
+    <div id="fraud-mention-section" style="display:none;">
+      <p class="section-title">"사기" 언급 상담 — 운영 지표가 실제로 상쇄되는지</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">고객 메시지에 "사기"가 등장한 상담을 리드타임·종료멘트 발송 여부와 교차분석. 리드타임 단축·종료멘트 발송이 CSAT뿐 아니라 고객의 "사기당한 느낌"까지 실제로 줄이는지 확인.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <div class="card" style="overflow-x:auto;padding:0;flex:1;min-width:260px;">
+          <table class="compare-table" id="fraud-by-duration-table">
+            <thead><tr><th>구간</th><th>건수</th><th>"사기" 언급률</th></tr></thead>
+            <tbody id="fraud-by-duration-tbody"></tbody>
+          </table>
+        </div>
+        <div class="card" style="overflow-x:auto;padding:0;flex:1;min-width:220px;">
+          <table class="compare-table" id="fraud-by-closing-sent-table">
+            <thead><tr><th>구분</th><th>건수</th><th>"사기" 언급률</th></tr></thead>
+            <tbody id="fraud-by-closing-sent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="fraud-mention-insight"></p>
+      <p style="font-size:11px;color:var(--text-3);margin-top:6px;line-height:1.6;" id="fraud-top-tags"></p>
+    </div>
+
     <div id="reminder-proposal-section">
       <p class="section-title">무응답 고객 리마인드 도입 제안</p>
       <div class="proposal-card">
@@ -19855,6 +19876,102 @@ window.CSAT_DATA = {
       }
     ],
     "insight": "\"사기\" 언급 상담은 전체의 1.73%(935건/54052건)예요. 리드타임이 가장 빠른 구간(30분 이내)은 사기 언급률 1.06%인데, 가장 느린 구간(24시간 초과)은 4.46%로 약 4.21배예요 — 리드타임 단축이 CSAT뿐 아니라 \"사기\" 인식도 실제로 줄여요. 종료멘트 발송 여부로도 1.25% vs 1.8%로 방향은 같지만 폭은 더 작아요. 사기 언급 상담 중 CSAT까지 남긴 건 20건뿐이지만 평균 3.2★로 전체 평균 4.14★보다 뚜렷하게 낮아요."
+  },
+  "closingSentByDuration": {
+    "generatedAt": "2026-09-04T09:18:24.332Z",
+    "scannedFiles": 223,
+    "scannedChats": 38230,
+    "closingMentWindowMinutes": 5,
+    "bucketLabels": [
+      "30분 이내",
+      "30분~2시간",
+      "2시간~12시간",
+      "12시간~24시간",
+      "24시간 초과"
+    ],
+    "rows": [
+      {
+        "label": "30분 이내",
+        "sendRate": 82.2,
+        "sent": {
+          "total": 1453,
+          "responded": 303,
+          "responseRate": 20.9,
+          "avgScore": 4.69
+        },
+        "notSent": {
+          "total": 314,
+          "responded": 8,
+          "responseRate": 2.5,
+          "avgScore": 4
+        }
+      },
+      {
+        "label": "30분~2시간",
+        "sendRate": 39.1,
+        "sent": {
+          "total": 2008,
+          "responded": 171,
+          "responseRate": 8.5,
+          "avgScore": 4.47
+        },
+        "notSent": {
+          "total": 3124,
+          "responded": 39,
+          "responseRate": 1.2,
+          "avgScore": 3.56
+        }
+      },
+      {
+        "label": "2시간~12시간",
+        "sendRate": 9.4,
+        "sent": {
+          "total": 2481,
+          "responded": 148,
+          "responseRate": 6,
+          "avgScore": 4.15
+        },
+        "notSent": {
+          "total": 23794,
+          "responded": 68,
+          "responseRate": 0.3,
+          "avgScore": 3.82
+        }
+      },
+      {
+        "label": "12시간~24시간",
+        "sendRate": 17.6,
+        "sent": {
+          "total": 135,
+          "responded": 27,
+          "responseRate": 20,
+          "avgScore": 3.26
+        },
+        "notSent": {
+          "total": 631,
+          "responded": 17,
+          "responseRate": 2.7,
+          "avgScore": 3.12
+        }
+      },
+      {
+        "label": "24시간 초과",
+        "sendRate": 8.4,
+        "sent": {
+          "total": 362,
+          "responded": 52,
+          "responseRate": 14.4,
+          "avgScore": 3.5
+        },
+        "notSent": {
+          "total": 3928,
+          "responded": 64,
+          "responseRate": 1.6,
+          "avgScore": 3.14
+        }
+      }
+    ],
+    "insight": "상담이 길어질수록 종료 멘트 발송율 자체가 무너져요 — 30분 이내는 82.2%가 발송되지만, 24시간 초과 구간은 8.4%밖에 안 나가요. 종료 멘트를 실제로 보낸 경우만 놓고 보면(발송O), 회신율은 훨씬 덜 떨어져요(20.9% → 6%) — \"2시간 넘으면 회신율 1% 안팎\"이라는 통합 수치의 대부분은 리드타임 자체보다 종료 멘트 미발송 때문이에요. 다만 발송O로 통제해도 평균 별점은 여전히 하락해서(4.69★ → 4.15★), 만족도 저하 자체는 리드타임의 진짜 효과예요."
   }
 };
 
@@ -19957,6 +20074,31 @@ window.CSAT_DATA = {
         '<td>' + (r.notSent.avgScore != null ? '★' + r.notSent.avgScore : '—') + '</td></tr>';
     }).join('');
     document.getElementById('closing-sent-by-duration-insight').textContent = CSD.insight ? '💬 ' + CSD.insight : '';
+  })();
+
+  /* ── "사기" 언급 상담 — 운영 지표가 실제로 상쇄되는지 ── */
+  (function () {
+    var FM = D.fraudMention;
+    if (!FM || !FM.byDuration || FM.byDuration.length === 0) return;
+    document.getElementById('fraud-mention-section').style.display = '';
+    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626';
+    var durRates = FM.byDuration.map(function (r) { return r.fraudRate; });
+    var maxDurRate = Math.max.apply(null, durRates), minDurRate = Math.min.apply(null, durRates);
+    document.getElementById('fraud-by-duration-tbody').innerHTML = FM.byDuration.map(function (r) {
+      var color = r.fraudRate === maxDurRate ? bad : r.fraudRate === minDurRate ? good : 'var(--text-1)';
+      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
+        '<td style="color:' + color + ';font-weight:700;">' + r.fraudRate + '%</td></tr>';
+    }).join('');
+    document.getElementById('fraud-by-closing-sent-tbody').innerHTML = FM.byClosingSent.map(function (r) {
+      var color = r.label.indexOf('미발송') !== -1 ? bad : good;
+      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
+        '<td style="color:' + color + ';font-weight:700;">' + r.fraudRate + '%</td></tr>';
+    }).join('');
+    document.getElementById('fraud-mention-insight').textContent = FM.insight ? '💬 ' + FM.insight : '';
+    if (FM.topTags && FM.topTags.length > 0) {
+      var tagStr = FM.topTags.slice(0, 8).map(function (t) { return t.tag + '(' + t.count + ')'; }).join(' · ');
+      document.getElementById('fraud-top-tags').textContent = '🏷️ "사기" 언급 상담에 가장 많이 붙은 태그: ' + tagStr;
+    }
   })();
 
   /* ── 무응답 고객 리마인드 도입 제안 (정성적 시각화, 실측 아님) ── */
