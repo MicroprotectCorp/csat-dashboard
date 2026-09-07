@@ -21286,7 +21286,7 @@ window.CSAT_DATA = {
           grid += t.buckets.map(function (b) {
             var thin = b.responded < (TD.minCellCount || 20);
             var title = b.label + ': ' + (b.avgScore != null ? '★' + b.avgScore : '응답없음') + ' · 회신율 ' + b.responseRate + '% (' + b.responded + '/' + b.total + '건)' + (thin ? ' · 표본부족' : '');
-            return '<div title="' + title + '" style="background:' + scoreColor(b.avgScore) + ';' + (thin ? 'opacity:0.45;' : '') + 'border-radius:2px;min-height:26px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:\'IBM Plex Mono\',monospace;font-weight:700;font-size:10px;text-shadow:0 1px 1px rgba(0,0,0,.35);">' + (b.avgScore != null ? b.avgScore : '') + '</div>';
+            return '<div title="' + title + '" style="background:' + scoreColor(b.avgScore) + ';' + (thin ? 'opacity:0.45;' : '') + 'border-radius:2px;min-height:26px;display:flex;align-items:center;justify-content:center;color:#111;font-family:\'IBM Plex Mono\',monospace;font-weight:700;font-size:10px;">' + (b.avgScore != null ? b.avgScore : '') + '</div>';
           }).join('');
         });
         grid += '</div>';
