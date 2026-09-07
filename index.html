@@ -901,6 +901,16 @@
       </div>
     </div>
 
+    <div id="tag-inflow-donut-section" style="display:none;">
+      <p class="section-title">태그별 상담 인입 비율</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">전체 종료 상담 기준(별점 응답 여부 무관), 건수 많은 태그 상위 10개 + 나머지 전체.</p>
+      <div class="card" style="padding:16px;">
+        <div style="max-width:420px;margin:0 auto;">
+          <canvas id="tag-inflow-donut-canvas" height="320"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div id="tag-peak-section" style="display:none;">
       <p class="section-title">태그별 리드타임 변화 추이</p>
       <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">태그(문의 유형)별로 <b>처리시간 5구간(30분 이내 → 24시간 초과)</b>에 따라 CSAT 회신율과 평균 별점이 어떻게 바뀌는지 전체 추이. 전체 태그 평균 건수 이상인 태그만.</p>
@@ -992,6 +1002,7 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
 (function () {
   var PW = "CS0731MPINFO";
@@ -21364,6 +21375,41 @@ window.CSAT_DATA = {
     }
 
     var TD = D.tagDuration;
+
+    /* ── 태그별 상담 인입 비율(도넛) ── */
+    if (TD && TD.tags && TD.tags.length > 0 && window.Chart) {
+      document.getElementById('tag-inflow-donut-section').style.display = 'block';
+      var sortedByVolume = TD.tags.slice().sort(function (a, b) { return b.totalCount - a.totalCount; });
+      var topN = sortedByVolume.slice(0, 10);
+      var restTotal = sortedByVolume.slice(10).reduce(function (s, t) { return s + t.totalCount; }, 0);
+      var donutLabels = topN.map(function (t) { return t.tag; });
+      var donutValues = topN.map(function (t) { return t.totalCount; });
+      if (restTotal > 0) { donutLabels.push('기타(' + (sortedByVolume.length - 10) + '개 태그)'); donutValues.push(restTotal); }
+      var donutPalette = ['#3D6FE8', '#F59E0B', '#16A34A', '#DC2626', '#8B5CF6', '#06B6D4', '#EC4899', '#84CC16', '#F97316', '#64748B', '#9AA0B8'];
+      var donutTextColor = getVar('--text-2') || '#5C6480';
+      new Chart(document.getElementById('tag-inflow-donut-canvas'), {
+        type: 'doughnut',
+        data: {
+          labels: donutLabels,
+          datasets: [{ data: donutValues, backgroundColor: donutPalette.slice(0, donutLabels.length), borderColor: getVar('--card') || '#fff', borderWidth: 2 }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'right', labels: { color: donutTextColor, boxWidth: 12, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  var total = donutValues.reduce(function (a, b) { return a + b; }, 0);
+                  var pct = (ctx.parsed / total * 100).toFixed(1);
+                  return ctx.label + ': ' + ctx.parsed.toLocaleString() + '건 (' + pct + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
     var aboveAvgTags = (TD && TD.aboveAvgTags) || (TD && TD.topByPeakRate) || [];
     // ── 태그별 리드타임 변화 추이: 회신율(막대) + 별점(스파크라인)을 구간별로 나란히 ──
     if (TD && aboveAvgTags.length > 0) {
