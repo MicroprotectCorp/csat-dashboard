@@ -740,27 +740,6 @@
       </div>
     </div>
 
-    <div id="closing-timing-section" style="display:none;">
-      <p class="section-title">종료 타이밍 vs 회신율</p>
-      <div class="card" style="overflow-x:auto;padding:0;">
-        <table class="compare-table" id="closing-timing-table">
-          <thead><tr><th>마지막 메시지 → 종료 간격</th><th>건수</th><th>회신율</th><th>평균 별점</th></tr></thead>
-          <tbody id="closing-timing-tbody"></tbody>
-        </table>
-      </div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="closing-timing-insight"></p>
-    </div>
-
-    <div id="closing-sent-section" style="display:none;">
-      <p class="section-title">종료 멘트 발송 여부 vs 회신율</p>
-      <div class="card" style="overflow-x:auto;padding:0;">
-        <table class="compare-table" id="closing-sent-table">
-          <thead><tr><th>구분</th><th>건수</th><th>회신율</th><th>평균 별점</th></tr></thead>
-          <tbody id="closing-sent-tbody"></tbody>
-        </table>
-      </div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="closing-sent-insight"></p>
-    </div>
 
     <div id="duration-rating-section" style="display:none;">
       <p class="section-title">총 상담 진행 시간 vs 별점</p>
@@ -775,7 +754,7 @@
 
     <div id="closing-sent-by-duration-section" style="display:none;">
       <p class="section-title">종료 멘트 발송율 × 리드타임 — 회신율 붕괴의 진짜 원인</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">상담이 길어질수록 종료 멘트(설문 요청) 자체가 안 나가고 있어요. "발송O"만 통제해서 보면 회신율은 훨씬 덜 떨어져요 — 즉 리드타임이 길어질 때 회신율이 급락하는 건 대부분 종료 멘트 미발송 때문이고, 별점(만족도) 하락은 리드타임 자체의 진짜 효과예요.</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">회신율 급락의 주범은 리드타임이 아니라 종료멘트 미발송 — 발송만 되면 회신율은 덜 떨어져요.</p>
       <div class="card" style="overflow-x:auto;padding:0;">
         <table class="compare-table" id="closing-sent-by-duration-table">
           <thead><tr><th>구간</th><th>종료멘트 발송율</th><th>발송O 회신율</th><th>발송O 평균★</th><th>발송X 회신율</th><th>발송X 평균★</th></tr></thead>
@@ -787,7 +766,7 @@
 
     <div id="fraud-mention-section" style="display:none;">
       <p class="section-title">"사기" 언급 상담 — 운영 지표가 실제로 상쇄되는지</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">고객 메시지에 "사기"가 등장한 상담을 리드타임·종료멘트 발송 여부와 교차분석. 리드타임 단축·종료멘트 발송이 CSAT뿐 아니라 고객의 "사기당한 느낌"까지 실제로 줄이는지 확인.</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">리드타임·종료멘트 개선이 CSAT뿐 아니라 "사기당한 느낌"도 줄이는지 확인.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;">
         <div class="card" style="overflow-x:auto;padding:0;flex:1;min-width:260px;">
           <table class="compare-table" id="fraud-by-duration-table">
@@ -804,34 +783,6 @@
       </div>
       <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="fraud-mention-insight"></p>
       <p style="font-size:11px;color:var(--text-3);margin-top:6px;line-height:1.6;" id="fraud-top-tags"></p>
-    </div>
-
-    <div id="reminder-proposal-section">
-      <p class="section-title">무응답 고객 리마인드 도입 제안</p>
-      <div class="proposal-card">
-        <span class="proposal-badge">💡 제안 · 아직 도입 전, 정성적 예상 효과</span>
-        <div class="proposal-title">무응답 고객에게 팔로업 알림톡을 먼저 챙기면?</div>
-        <div class="proposal-sub">아래 수치는 실제로 이 정책을 시행한 결과가 아니라, 지금까지 확인된 상관관계(종료 타이밍·처리시간 vs 회신율)를 근거로 "같은 원리가 반복된다면" 기대할 수 있는 방향성이에요.</div>
-        <div class="proposal-flow">
-          <div class="proposal-step problem">
-            <span class="proposal-step-label">지금</span>
-            <div class="proposal-step-body" id="proposal-problem-body">상담의 상당수가 응답 없는 상태로 장시간 방치되다가 무응답 자동 종료돼요.</div>
-          </div>
-          <div class="proposal-arrow">→</div>
-          <div class="proposal-step action">
-            <span class="proposal-step-label">제안</span>
-            <div class="proposal-step-body"><strong>무응답 고객 우선 팔로업</strong> — 방치되기 전에 리마인드 알림톡을 먼저 보내 재접촉하고, 답이 오면 곧바로 처리해 리드타임을 줄여요.</div>
-          </div>
-          <div class="proposal-arrow">→</div>
-          <div class="proposal-step effect">
-            <span class="proposal-step-label">기대 효과</span>
-            <div class="proposal-step-body">
-              <div class="proposal-effects" id="proposal-effects-body"></div>
-            </div>
-          </div>
-        </div>
-        <p class="proposal-basis" id="proposal-basis"></p>
-      </div>
     </div>
 
     <div id="ai-analysis-section" style="display:none;">
@@ -879,16 +830,6 @@
       <div id="compare-cards"></div>
     </div>
 
-    <div id="refund-csat-section" style="display:none;">
-      <p class="section-title">환불 처리 여부별 CSAT</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">별점 남긴 상담 중, 실제 환불(전체/부분)로 이어진 건과 아닌 건 비교. 주 1회 정도 갱신돼요.</p>
-      <div class="card" style="overflow-x:auto;">
-        <table class="compare-table">
-          <thead><tr><th></th><th>건수</th><th>평균 별점</th></tr></thead>
-          <tbody id="refund-csat-tbody"></tbody>
-        </table>
-      </div>
-    </div>
 
     <div id="tag-csat-section" style="display:none;">
       <p class="section-title">태그별 CSAT</p>
@@ -911,27 +852,18 @@
       </div>
     </div>
 
-    <div id="tag-peak-section" style="display:none;">
-      <p class="section-title">태그별 리드타임 변화 추이</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">태그(문의 유형)별로 <b>처리시간 5구간(30분 이내 → 24시간 초과)</b>에 따라 CSAT 회신율과 평균 별점이 어떻게 바뀌는지 전체 추이. 전체 태그 평균 건수 이상인 태그만.</p>
-      <div class="card" style="overflow-x:auto;padding:0;">
-        <table class="compare-table" id="tag-peak-table">
-          <thead><tr><th>태그</th><th>총 건수</th><th>회신율 추이(30분이내→24h+)</th><th>별점 추이(30분이내→24h+)</th></tr></thead>
-          <tbody id="tag-peak-tbody"></tbody>
-        </table>
+    <div id="tag-heatmap-section" style="display:none;">
+      <p class="section-title">태그 × 리드타임 히트맵</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">색이 진할수록 별점이 낮은 구간. 칸에 마우스를 올리면 회신율·건수가 떠요.</p>
+      <div class="card" style="overflow-x:auto;padding:14px;">
+        <div id="tag-heatmap-grid"></div>
       </div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;">📌 대부분 태그가 시간이 갈수록 회신율·별점 둘 다 함께 낮아져요 — 태그(문의 유형)와 무관하게 나타나는 공통 패턴이에요. 회신율 막대는 0~20% 기준, 별점은 ★1~★5 절대 기준이라 태그끼리 비교 가능해요.</p>
-    </div>
-
-    <div id="tag-refund-detail-section" style="display:none;">
-      <p class="section-title">환불 태그 × 처리시간 상세</p>
-      <div id="tag-refund-detail-cards"></div>
-      <p style="font-size:11.5px;color:var(--text-2);margin-top:10px;line-height:1.6;" id="dup-customer-insight"></p>
+      <p style="font-size:11.5px;color:var(--text-2);margin-top:8px;line-height:1.6;" id="dup-customer-insight"></p>
     </div>
 
     <div id="q6-refund-outcome-section" style="display:none;">
       <p class="section-title">문의/Q6_환불요청 — 시간 때문일까, 미해결 때문일까</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">가장 건수가 많은 태그를 실제 <b>환불완료(RP/RT 태그) 여부</b>로 나눠 리드타임별 별점을 비교. "오래 걸린 것" 자체와 "오래 걸리고 결국 미해결"인 것 중 무엇이 더 나쁜지 분리.</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">"오래 걸린 것"과 "결국 미해결"인 것 중 뭐가 더 나쁜지, 환불완료 여부로 분리.</p>
       <div style="display:flex;gap:14px;flex-wrap:wrap;">
         <div class="card" style="overflow-x:auto;padding:0;flex:1;min-width:260px;">
           <table class="compare-table" id="q6-refund-done-table">
@@ -951,7 +883,7 @@
 
     <div id="repeat-contact-section" style="display:none;">
       <p class="section-title">재문의율 — 자동종료가 총 건수에 미치는 영향 추적</p>
-      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">2026-09-07 자동종료 도입 후 리드타임이 급격히 짧아졌는데, 이게 "빨리 해결돼서 재문의가 주는" 좋은 신호인지 "덜 끝난 채로 끊겨서 재문의가 느는" 나쁜 신호인지를, 상담 종료 후 같은 고객이 며칠 안에 다시 상담을 여는 비율로 추적.</p>
+      <p style="font-size:12px;color:var(--text-3);margin:0 0 10px;">자동종료가 "빨리 해결"인지 "덜 끝난 채로 끊김"인지, 재문의율로 추적.</p>
       <div class="card" style="overflow-x:auto;padding:0;">
         <table class="compare-table" id="repeat-contact-table">
           <thead><tr><th>기간</th><th>1일 재문의율</th><th>3일 재문의율</th><th>7일 재문의율</th></tr></thead>
@@ -21058,38 +20990,6 @@ window.CSAT_DATA = {
     }
   })();
 
-  /* ── 종료 타이밍 vs 회신율 ── */
-  (function () {
-    var CT = D.closingTiming;
-    if (!CT || !CT.rows || CT.rows.length === 0) return;
-    document.getElementById('closing-timing-section').style.display = '';
-    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626', star = getVar('--star') || '#F59E0B';
-    var maxRate = Math.max.apply(null, CT.rows.map(function (r) { return r.responseRate; }));
-    document.getElementById('closing-timing-tbody').innerHTML = CT.rows.map(function (r) {
-      var color = r.responseRate === maxRate ? good : r.responseRate >= maxRate / 3 ? star : bad;
-      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
-        '<td style="color:' + color + ';font-weight:700;">' + r.responseRate + '%</td>' +
-        '<td>' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
-    }).join('');
-    document.getElementById('closing-timing-insight').textContent = CT.insight ? '💬 ' + CT.insight : '';
-  })();
-
-  /* ── 종료 멘트 발송 여부 vs 회신율 ── */
-  (function () {
-    var CS = D.closingSentVsRate;
-    if (!CS || !CS.rows || CS.rows.length === 0) return;
-    document.getElementById('closing-sent-section').style.display = '';
-    var good = getVar('--good') || '#16A34A', bad = getVar('--bad') || '#DC2626';
-    var maxRate = Math.max.apply(null, CS.rows.map(function (r) { return r.responseRate; }));
-    document.getElementById('closing-sent-tbody').innerHTML = CS.rows.map(function (r) {
-      var color = r.responseRate === maxRate ? good : bad;
-      return '<tr><td>' + r.label + '</td><td>' + r.total.toLocaleString() + '건</td>' +
-        '<td style="color:' + color + ';font-weight:700;">' + r.responseRate + '%</td>' +
-        '<td>' + (r.avgScore != null ? '★' + r.avgScore : '—') + '</td></tr>';
-    }).join('');
-    document.getElementById('closing-sent-insight').textContent = CS.insight ? '💬 ' + CS.insight : '';
-  })();
-
   /* ── 총 상담 진행 시간 vs 별점 ── */
   (function () {
     var DR = D.durationVsRating;
@@ -21150,43 +21050,6 @@ window.CSAT_DATA = {
       var tagStr = FM.topTags.slice(0, 8).map(function (t) { return t.tag + '(' + t.count + ')'; }).join(' · ');
       document.getElementById('fraud-top-tags').textContent = '🏷️ "사기" 언급 상담에 가장 많이 붙은 태그: ' + tagStr;
     }
-  })();
-
-  /* ── 무응답 고객 리마인드 도입 제안 (정성적 시각화, 실측 아님) ── */
-  (function () {
-    var CT = D.closingTiming, DR = D.durationVsRating;
-    if (!CT || !CT.rows) return;
-    var midBuckets = CT.rows.filter(function (r) { return r.label !== '5분 이내'; });
-    var midTotal = midBuckets.reduce(function (s, r) { return s + r.total; }, 0);
-    var allTotal = CT.rows.reduce(function (s, r) { return s + r.total; }, 0);
-    var midPct = allTotal > 0 ? Math.round(midTotal / allTotal * 1000) / 10 : null;
-    var oneToDay = CT.rows.find(function (r) { return r.label === '1시간~24시간'; });
-
-    if (midPct != null && oneToDay) {
-      document.getElementById('proposal-problem-body').innerHTML =
-        '전체 상담의 <strong>' + midPct + '%</strong>가 5분 안에 종료되지 못하고 방치돼요. 그중 "1시간~24시간" 구간(' + oneToDay.total.toLocaleString() + '건)은 회신율이 ' + oneToDay.responseRate + '%까지 떨어져요 — 사실상 응답을 못 받고 흘려보내는 구간이에요.';
-    }
-
-    var effects = [];
-    var fastRow = CT.rows.find(function (r) { return r.label === '5분 이내'; });
-    if (fastRow && oneToDay && oneToDay.responseRate > 0) {
-      var mult = Math.round(fastRow.responseRate / oneToDay.responseRate * 10) / 10;
-      effects.push('<span class="arrow-up">▲</span> CSAT 회신율 — 빠르게 재접촉된 상담은 방치된 상담보다 회신율이 최대 ' + mult + '배 높았던 패턴과 같은 방향');
-    }
-    if (DR && DR.rows && DR.rows.length >= 2) {
-      var fastest = DR.rows[0], slowest = DR.rows[DR.rows.length - 1];
-      if (fastest.avgScore != null && slowest.avgScore != null) {
-        effects.push('<span class="arrow-up">▲</span> 평균 별점 — 처리 시간이 짧을수록 점수가 높았던 상관관계(★' + fastest.avgScore + ' vs ★' + slowest.avgScore + ')와 같은 방향');
-      }
-    }
-    effects.push('<span class="arrow-up">▲</span> 처리 리드타임 단축 — 고객이 답을 미루기 전에 먼저 챙기면 건당 대기 시간 자체가 줄어들어요');
-    effects.push('<span class="arrow-up">▲</span> 무응답 종결 비율 감소 — 1점 상담의 27.3%가 무응답 종결이었던 것과 반대 방향으로 작용할 것으로 기대');
-    document.getElementById('proposal-effects-body').innerHTML = effects.map(function (e) {
-      return '<div class="proposal-effect-row">' + e + '</div>';
-    }).join('');
-
-    document.getElementById('proposal-basis').textContent =
-      '📌 근거: "종료 타이밍 vs 회신율", "총 상담 진행 시간 vs 별점" 실측 분석(이 페이지 상단) — 인과관계가 아니라 상관관계이며, 실제 도입 후에는 이 페이지에서 별도 전/후 비교로 검증할 예정이에요.';
   })();
 
   /* ── AI 상담 분석 (베타): 긍부정 요인 + 토픽 ── */
@@ -21345,23 +21208,8 @@ window.CSAT_DATA = {
     });
   })();
 
-  /* ── 환불 처리 여부별 CSAT / 태그별 CSAT ── */
+  /* ── 태그별 CSAT ── */
   (function () {
-    var RC = D.refundCsat;
-    if (RC && (RC.refunded.count > 0 || RC.notRefunded.count > 0)) {
-      detailHasContent = true;
-      document.getElementById('refund-csat-section').style.display = 'block';
-      var refundTbody = document.getElementById('refund-csat-tbody');
-      [
-        { label: '환불(전체/부분)로 이어짐', d: RC.refunded },
-        { label: '환불 아님', d: RC.notRefunded }
-      ].forEach(function (r) {
-        var tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + r.label + '</td><td>' + r.d.count + '건</td><td>' + r.d.avgScore.toFixed(2) + '</td>';
-        refundTbody.appendChild(tr);
-      });
-    }
-
     var tagCsatList = D.tagCsat || [];
     if (tagCsatList.length > 0) {
       detailHasContent = true;
@@ -21411,82 +21259,38 @@ window.CSAT_DATA = {
     }
 
     var aboveAvgTags = (TD && TD.aboveAvgTags) || (TD && TD.topByPeakRate) || [];
-    // ── 태그별 리드타임 변화 추이: 회신율(막대) + 별점(스파크라인)을 구간별로 나란히 ──
+    // ── 태그 × 리드타임 히트맵: 별점(색) + 회신율/건수(hover)를 한 그리드로 ──
     if (TD && aboveAvgTags.length > 0) {
-      var trendTags = aboveAvgTags.filter(function (t) {
+      var heatTags = aboveAvgTags.filter(function (t) {
         var valid = t.buckets.filter(function (b) { return b.avgScore != null; });
-        return valid.length >= 2; // 추이를 그리려면 최소 2개 구간은 값이 있어야 함
+        return valid.length >= 2;
       });
-      if (trendTags.length > 0) {
+      if (heatTags.length > 0) {
         detailHasContent = true;
-        document.getElementById('tag-peak-section').style.display = 'block';
-        var accentTD = getVar('--accent') || '#3D6FE8', badTD = getVar('--bad') || '#DC2626', goodTD = getVar('--good') || '#16A34A';
-        var RATE_MAX = 20; // 회신율 막대 스케일 상한(%) — 태그 간 비교 가능하게 고정
-        var SCORE_MIN = 1, SCORE_MAX = 5; // 별점 절대 스케일(1~5)로 고정
-
-        function rateBars(t) {
-          var w = 110, h = 26, n = t.buckets.length, gap = 3, bw = (w - gap * (n - 1)) / n;
-          var bars = t.buckets.map(function (b, i) {
-            var rate = b.responseRate || 0;
-            var bh = Math.max(1, Math.min(1, rate / RATE_MAX) * (h - 2));
-            var x = i * (bw + gap);
-            var y = h - bh;
-            var fill = b.responded < (TD.minCellCount || 20) ? 'color-mix(in srgb, ' + accentTD + ' 35%, transparent)' : accentTD;
-            return '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + bh + '" rx="1.2" fill="' + fill + '"><title>' + b.label + ': ' + rate + '%(' + b.responded + '/' + b.total + ')</title></rect>';
-          }).join('');
-          return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' + bars + '</svg>';
+        document.getElementById('tag-heatmap-section').style.display = 'block';
+        var badRgb = [220, 38, 38], goodRgb = [22, 163, 74]; // --bad / --good 계열(라이트 기준, 다크에서도 무난)
+        var SCORE_MIN = 1, SCORE_MAX = 5;
+        function scoreColor(v) {
+          if (v == null) return 'transparent';
+          var t = Math.max(0, Math.min(1, (v - SCORE_MIN) / (SCORE_MAX - SCORE_MIN))); // 0=최저 1=최고
+          var r = Math.round(badRgb[0] + (goodRgb[0] - badRgb[0]) * t);
+          var g = Math.round(badRgb[1] + (goodRgb[1] - badRgb[1]) * t);
+          var b = Math.round(badRgb[2] + (goodRgb[2] - badRgb[2]) * t);
+          return 'rgba(' + r + ',' + g + ',' + b + ',0.75)';
         }
-
-        function scoreSparkline(t) {
-          var softTD = getVar('--text-2') || '#6B7280';
-          var vals = t.buckets.map(function (b) { return b.avgScore; });
-          var margin = 15, w = 134, plotH = 24, labelY = 34, h = 38, stepX = (w - margin * 2) / (vals.length - 1);
-          var validPts = [];
-          vals.forEach(function (v, i) {
-            if (v == null) return;
-            var y = plotH - ((v - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * (plotH - 4) - 2;
-            validPts.push({ x: margin + i * stepX, y: y, v: v, label: t.buckets[i].label });
-          });
-          var pts = validPts.map(function (p) { return p.x + ',' + p.y; }).join(' ');
-          var marks = validPts.map(function (p, idx) {
-            var isFirst = idx === 0, isLast = idx === validPts.length - 1;
-            var r = (isFirst || isLast) ? 2.6 : 1.6;
-            var dotFill = isLast ? badTD : accentTD;
-            var textFill = isLast ? badTD : (isFirst ? accentTD : softTD);
-            var weight = (isFirst || isLast) ? '700' : '500';
-            var dot = '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + r + '" fill="' + dotFill + '"><title>' + p.label + ': ★' + p.v + '</title></circle>';
-            var label = '<text x="' + p.x + '" y="' + labelY + '" text-anchor="middle" font-size="9" font-weight="' + weight + '" font-family="IBM Plex Mono, monospace" fill="' + textFill + '">' + p.v + '</text>';
-            return dot + label;
+        var bucketLabels = TD.bucketLabels || ['30분 이내', '30분~2시간', '2시간~12시간', '12시간~24시간', '24시간 초과'];
+        var grid = '<div style="display:grid;grid-template-columns:150px repeat(' + bucketLabels.length + ', 1fr);gap:3px;font-size:10.5px;">';
+        grid += '<div></div>' + bucketLabels.map(function (l) { return '<div style="text-align:center;color:var(--text-3);font-size:9.5px;padding-bottom:4px;">' + l + '</div>'; }).join('');
+        heatTags.forEach(function (t) {
+          grid += '<div style="display:flex;align-items:center;color:var(--text-1);font-weight:600;padding-right:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + t.tag + '">' + t.tag + '</div>';
+          grid += t.buckets.map(function (b) {
+            var thin = b.responded < (TD.minCellCount || 20);
+            var title = b.label + ': ' + (b.avgScore != null ? '★' + b.avgScore : '응답없음') + ' · 회신율 ' + b.responseRate + '% (' + b.responded + '/' + b.total + '건)' + (thin ? ' · 표본부족' : '');
+            return '<div title="' + title + '" style="background:' + scoreColor(b.avgScore) + ';' + (thin ? 'opacity:0.45;' : '') + 'border-radius:2px;min-height:26px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:\'IBM Plex Mono\',monospace;font-weight:700;font-size:10px;text-shadow:0 1px 1px rgba(0,0,0,.35);">' + (b.avgScore != null ? b.avgScore : '') + '</div>';
           }).join('');
-          // 값이 항상 보이도록 라벨을 점 아래 고정 행에 배치(hover 없이도 별점 추이 확인 가능)
-          return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
-            '<polyline points="' + pts + '" fill="none" stroke="' + accentTD + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>' + marks + '</svg>';
-        }
-
-        document.getElementById('tag-peak-tbody').innerHTML = trendTags.map(function (t) {
-          return '<tr><td>' + t.tag + '</td><td>' + t.totalCount.toLocaleString() + '건</td>' +
-            '<td>' + rateBars(t) + '</td><td>' + scoreSparkline(t) + '</td></tr>';
-        }).join('');
-      }
-    }
-
-    if (TD && TD.tags && TD.tags.length > 0) {
-      var refundTags = TD.tags.filter(function (t) { return t.isRefund; });
-      if (refundTags.length > 0) {
-        detailHasContent = true;
-        document.getElementById('tag-refund-detail-section').style.display = 'block';
-        var good2 = getVar('--good') || '#16A34A', bad2 = getVar('--bad') || '#DC2626', star2 = getVar('--star') || '#F59E0B';
-        document.getElementById('tag-refund-detail-cards').innerHTML = refundTags.map(function (rt) {
-          var scores = rt.buckets.map(function (b) { return b.avgScore; }).filter(function (s) { return s != null; });
-          var maxS = Math.max.apply(null, scores), minS = Math.min.apply(null, scores);
-          var rows = rt.buckets.map(function (b) {
-            var color = b.avgScore == null ? 'var(--text-3)' : b.avgScore === maxS ? good2 : b.avgScore === minS ? bad2 : star2;
-            return '<tr><td>' + b.label + '</td><td>' + b.total.toLocaleString() + '건</td><td>' + b.responseRate + '%</td>' +
-              '<td style="color:' + color + ';font-weight:700;">' + (b.avgScore != null ? '★' + b.avgScore : '—') + '</td></tr>';
-          }).join('');
-          return '<p style="font-size:12.5px;font-weight:700;color:var(--text-1);margin:14px 0 6px;">' + rt.tag + ' <span style="font-weight:500;color:var(--text-3);">(총 ' + rt.totalCount.toLocaleString() + '건)</span></p>' +
-            '<div class="card" style="overflow-x:auto;padding:0;margin-bottom:4px;"><table class="compare-table"><thead><tr><th>상담요청 → 종료까지</th><th>건수</th><th>회신율</th><th>평균 별점</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
-        }).join('');
+        });
+        grid += '</div>';
+        document.getElementById('tag-heatmap-grid').innerHTML = grid;
       }
     }
 
