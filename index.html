@@ -706,18 +706,6 @@
   <p class="section-title">별점 분포</p>
   <div class="card" id="dist-card"></div>
 
-  <div id="comment-only-section" style="display:none;margin-bottom:24px;">
-    <div class="comment-only-card">
-      <div class="comment-only-head">
-        <p class="comment-only-title">📝 별점 없이 남긴 의견</p>
-        <span class="comment-only-pending-pill" id="comment-only-pending-pill" style="display:none;"></span>
-      </div>
-      <p style="font-size:12px;color:var(--text-2);margin:0 0 10px;">별점은 안 눌렀지만 글은 남긴 경우예요. 회신율 계산에는 포함 안 되지만(별점 미응답), 놓치면 안 되는 피드백이라 따로 모아뒀어요.<br>카드 클릭하면 해당 상담으로 바로 이동해요.</p>
-      <div id="comment-only-list" class="response-list" style="max-height:280px;"></div>
-      <p id="comment-only-insight" style="font-size:12px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px solid color-mix(in srgb, var(--star) 25%, var(--border));line-height:1.6;display:none;"></p>
-    </div>
-  </div>
-
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
     <p class="section-title" style="margin-bottom:0;">응답 목록</p>
   </div>
@@ -12851,7 +12839,7 @@ window.CSAT_DATA = {
       "comment": "",
       "time": "2026-09-09 12:08",
       "assigneeId": "668885",
-      "assigneeName": "남규민"
+      "assigneeName": "남���민"
     },
     {
       "chatId": "6a9fb48b16947c5b57e9",
@@ -22502,55 +22490,6 @@ window.CSAT_DATA = {
     currentTrendDays = computeTrendDays(key);
     drawTrend();
   }
-
-  /* ── 별점 없이 코멘트만 남긴 응답 ── */
-  (function renderCommentOnly() {
-    var items = D.commentOnlyResponses || [];
-    if (items.length === 0) return;
-    var section = document.getElementById('comment-only-section');
-    var listEl = document.getElementById('comment-only-list');
-    var statusMap = (D.commentOnlyStatus && D.commentOnlyStatus.status) || {};
-    section.style.display = 'block';
-
-    var pendingCount = Object.keys(statusMap).filter(function (k) { return statusMap[k] === 'pending'; }).length;
-    var pill = document.getElementById('comment-only-pending-pill');
-    if (pendingCount > 0) {
-      pill.textContent = '☐ 미응대 ' + pendingCount + '건';
-      pill.style.display = 'inline-block';
-    }
-
-    if (D.commentOnlyStatus && D.commentOnlyStatus.insight) {
-      var insightEl = document.getElementById('comment-only-insight');
-      insightEl.textContent = '💬 ' + D.commentOnlyStatus.insight;
-      insightEl.style.display = 'block';
-    }
-
-    function statusBadge(chatId) {
-      var s = statusMap[chatId];
-      if (s === 'handled') return '<span class="comment-status-badge good">☑ 재응대 완료</span>';
-      if (s === 'pending') return '<span class="comment-status-badge bad">☐ 미응대</span>';
-      return ''; // 'na'(규칙 이전) · 'unknown' · 미판정은 배지 생략
-    }
-
-    items.forEach(function (r) {
-      var chatUrl = r.chatId ? 'https://channel.works/j6kzv/user-chats/' + r.chatId : null;
-      var card = document.createElement(chatUrl ? 'a' : 'div');
-      card.className = 'response-card';
-      if (chatUrl) {
-        card.href = chatUrl; card.target = '_blank'; card.rel = 'noopener noreferrer';
-        card.style.textDecoration = 'none'; card.style.color = 'inherit'; card.style.display = 'block';
-      }
-      var agentLabel = r.assigneeName || '매니저 미상';
-      card.innerHTML =
-        '<div class="response-top">' +
-          '<span style="font-size:12px;font-weight:600;color:var(--text-2);">' + agentLabel + '</span>' +
-          '<span class="response-time">' + (r.time || '') + '</span>' +
-        '</div>' +
-        '<div class="response-comment">' + (r.comment || '').replace(/</g, '&lt;') + '</div>' +
-        statusBadge(r.chatId);
-      listEl.appendChild(card);
-    });
-  })();
 
   /* ── Initial render ── */
   renderAll('all');
