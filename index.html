@@ -25738,6 +25738,7 @@ window.CSAT_DATA = {
           return a.name + '(★' + a.avgScore + ', 응답 ' + a.responded + '건/처리 ' + a.sent + '건 중 ' + respPct + '%)';
         }).join(', ') + ' — 응답 건수가 적을수록 표본 편차가 커질 수 있어, 처리량 대비 응답 비율도 함께 참고해주세요.');
       }
+      lines.push('📌 QA 배점 근거: 쿠션멘트("기다려 주셔서 감사합니다" 등 대기·양해 표현) 사용 상담은 속도를 동일하게 통제해도 미사용 대비 회신율이 10%p 높고 평균 별점도 소폭 높아요(누적 데이터 기준 사용 27.2%·★4.73 vs 미사용 17.2%·★4.69). 응답 신속성은 60분을 넘기는 순간부터 만족도가 눈에 띄게 떨어지고요 — 그래서 QA 스코어카드도 이 두 항목에 배점을 두고 있어요.');
 
       feedbackList.innerHTML = lines.map(function (t) {
         return '<div class="agent-feedback-item"><span class="dot">▪</span><span>' + t + '</span></div>';
