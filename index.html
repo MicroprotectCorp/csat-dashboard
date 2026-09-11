@@ -25376,8 +25376,69 @@ window.CSAT_DATA = {
     var rtById = {};
     if (RT && RT.byAgent) RT.byAgent.forEach(function (a) { rtById[a.id] = a; });
 
+    /* QA 스코어카드(랜덤 샘플 상담 품질 평가) — 매주 수동 갱신되는 이력. 이름(한글) 기준 매칭. */
+    var QA_HISTORY = [
+ {
+  "week": "2026-08-31 ~ 2026-09-04",
+  "weekLabel": "1주차",
+  "generatedAt": "2026-09-11",
+  "managers": [
+   {
+    "manager": "김태훈",
+    "total": 93,
+    "spelling": 10,
+    "grasp": 28,
+    "acc": 20,
+    "speed": 9,
+    "tag": 10,
+    "macro": 16
+   },
+   {
+    "manager": "조윤조",
+    "total": 96.4,
+    "spelling": 10,
+    "grasp": 28,
+    "acc": 20,
+    "speed": 8.4,
+    "tag": 10,
+    "macro": 20
+   },
+   {
+    "manager": "김동아",
+    "total": 95.5,
+    "spelling": 9.9,
+    "grasp": 28,
+    "acc": 20,
+    "speed": 9.6,
+    "tag": 10,
+    "macro": 18
+   },
+   {
+    "manager": "김로빈",
+    "total": 96.6,
+    "spelling": 10,
+    "grasp": 28,
+    "acc": 20,
+    "speed": 9.8,
+    "tag": 9.8,
+    "macro": 19
+   },
+   {
+    "manager": "남규민",
+    "total": 93.9,
+    "spelling": 10,
+    "grasp": 28,
+    "acc": 19.5,
+    "speed": 9.4,
+    "tag": 10,
+    "macro": 17
+   }
+  ]
+ }
+];
+
     var MIN_SENT = 20; // 표본 너무 적은 계정(테스트 등)은 제외
-    var REAL_NAME = { lily: '한지연', jacob: '김동아', randy: '김태훈', summer: '조윤조', jiu: '김미노', allie: '조예진', david: '구본민', olive: '이승희', aileen: '강수진', heizle: '이수연' };
+    var REAL_NAME = { lily: '한지연', jacob: '김동아', randy: '김태훈', summer: '조윤조', jiu: '김미노', allie: '조예진', david: '구본민', olive: '이승희', aileen: '강수진', heizle: '이수연', chloe: '남규민', robing: '김로빈' };
     var EXCLUDE_LEFT = { lily: true, jiu: true, allie: true, david: true, olive: true }; // aileen(강수진)은 계약 8/31까지 연장돼 재직중 // 퇴사자 - 현재 CSAT 비교에서 제외
     var agents = Object.keys(D.agentStats || {})
       .map(function (id) { return Object.assign({ id: id }, D.agentStats[id]); })
@@ -25493,11 +25554,31 @@ window.CSAT_DATA = {
         { label: '종료 멘트 발송', pct: gc.closingPct, count: gc.closingCount },
         { label: 'CSAT 참여 안내', pct: gc.csatPct, count: gc.csatCount }
       ];
+
+      var qaCardHtml = '', qaFootHtml = '';
+      if (QA_HISTORY.length) {
+        var lastWeek = QA_HISTORY[QA_HISTORY.length - 1];
+        var prevWeek = QA_HISTORY.length > 1 ? QA_HISTORY[QA_HISTORY.length - 2] : null;
+        var qaEntry = lastWeek.managers.filter(function (m) { return m.manager === gc.name; })[0];
+        if (qaEntry) {
+          var prevEntry = prevWeek ? prevWeek.managers.filter(function (m) { return m.manager === gc.name; })[0] : null;
+          var trendTxt = '최초 측정';
+          if (prevEntry) {
+            var delta = Math.round((qaEntry.total - prevEntry.total) * 10) / 10;
+            var arrow = delta > 0 ? '▲' : (delta < 0 ? '▼' : '–');
+            trendTxt = '전주 대비 ' + arrow + ' ' + (delta === 0 ? '변동없음' : Math.abs(delta));
+          }
+          qaCardHtml = '<div class="kpi-card"><div class="kpi-label">QA 총점</div><div class="kpi-value ' + pctClass(qaEntry.total) + '">' + qaEntry.total.toFixed(1) + '</div><div class="kpi-sub">' + trendTxt + '</div></div>';
+          qaFootHtml = '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:6px;">📋 QA 총점: 매니저당 랜덤 10건 상담 품질 평가(' + lastWeek.weekLabel + ', ' + lastWeek.week + ') — <a href="https://claude.ai/code/artifact/b6fad84e-a47b-48c2-9ef1-084e558ddd74" target="_blank" rel="noopener">스코어카드 상세 열기 →</a></p>';
+        }
+      }
+
       kpiGrid.innerHTML = cards.map(function (c) {
         var valTxt = c.pct == null ? '해당없음' : c.pct + '%';
         var cls = c.pct == null ? '' : pctClass(c.pct);
         return '<div class="kpi-card"><div class="kpi-label">' + c.label + '</div><div class="kpi-value ' + cls + '">' + valTxt + '</div><div class="kpi-sub">' + (c.pct == null ? '해당 상담 없음' : c.count + '건 중') + '</div></div>';
-      }).join('') + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">종료 멘트 발송: 마지막 메시지 후 5분 이내 종료했는지(강성 상담 제외) · CSAT 참여 안내: ' + (GC ? GC.sinceDate : '') + ' 이후 · 채팅상담 ' + (GC ? GC.scannedChats.toLocaleString() : '0') + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' + '</p>' +
+      }).join('') + qaCardHtml + '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:2px;">종료 멘트 발송: 마지막 메시지 후 5분 이내 종료했는지(강성 상담 제외) · CSAT 참여 안내: ' + (GC ? GC.sinceDate : '') + ' 이후 · 채팅상담 ' + (GC ? GC.scannedChats.toLocaleString() : '0') + '건 기준 · 패턴 매칭 집계라 약간의 오차가 있을 수 있어요.' + '</p>' +
+        qaFootHtml +
         (D.closingSentVsRate && D.closingSentVsRate.insight ? '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:6px;">💬 팀 전체 기준: ' + D.closingSentVsRate.insight + '</p>' : '');
     }
 
