@@ -16628,6 +16628,8 @@ window.CSAT_DATA = {
                                       "avgScore":  4.44
                                   }
                    },
+    "agentStatsWeek": {"565238":{"name":"김태훈","sent":426,"responded":70,"responseRate":16.4,"avgScore":3.21},"609327":{"name":"조윤조","sent":405,"responded":94,"responseRate":23.2,"avgScore":3.29},"636057":{"name":"김동아","sent":479,"responded":110,"responseRate":23,"avgScore":2.79},"667753":{"name":"김로빈","sent":483,"responded":113,"responseRate":23.4,"avgScore":4},"668885":{"name":"남규민","sent":348,"responded":91,"responseRate":26.1,"avgScore":3.82}},
+    "agentStatsWeekLabel": "2026-09-07 ~ 2026-09-11",
     "agentWeeklyTrend":  [
                              {
                                  "assigneeId":  "631507",
@@ -25567,27 +25569,33 @@ window.CSAT_DATA = {
     }
 
     function renderFeedback() {
-      if (agents.length === 0) {
-        feedbackList.innerHTML = '<div class="agent-feedback-item">표본이 충분한 매니저가 아직 없어요.</div>';
+      var weekAgents = Object.keys(D.agentStatsWeek || {})
+        .map(function (id) { return Object.assign({ id: id }, D.agentStatsWeek[id]); })
+        .filter(function (a) { return a.name !== 'unknown' && a.sent >= MIN_SENT && !EXCLUDE_LEFT[(a.name || '').toLowerCase()]; })
+        .map(function (a) { a.name = REAL_NAME[(a.name || '').toLowerCase()] || a.name; return a; });
+      var weekLabel = D.agentStatsWeekLabel || '';
+
+      if (weekAgents.length === 0) {
+        feedbackList.innerHTML = '<div class="agent-feedback-item">이번 주 표본이 충분한 매니저가 아직 없어요.</div>';
         return;
       }
-      var totalSent = agents.reduce(function (s, a) { return s + a.sent; }, 0);
-      var totalResp = agents.reduce(function (s, a) { return s + a.responded; }, 0);
+      var totalSent = weekAgents.reduce(function (s, a) { return s + a.sent; }, 0);
+      var totalResp = weekAgents.reduce(function (s, a) { return s + a.responded; }, 0);
       var teamRate = totalSent > 0 ? Math.round(totalResp / totalSent * 1000) / 10 : 0;
-      var teamScore = Math.round(agents.reduce(function (s, a) { return s + a.avgScore * a.responded; }, 0) / Math.max(1, totalResp) * 100) / 100;
+      var teamScore = Math.round(weekAgents.reduce(function (s, a) { return s + a.avgScore * a.responded; }, 0) / Math.max(1, totalResp) * 100) / 100;
 
-      var byRate = agents.slice().sort(function (a, b) { return b.responseRate - a.responseRate; });
-      var byScore = agents.slice().sort(function (a, b) { return b.avgScore - a.avgScore; });
+      var byRate = weekAgents.slice().sort(function (a, b) { return b.responseRate - a.responseRate; });
+      var byScore = weekAgents.slice().sort(function (a, b) { return b.avgScore - a.avgScore; });
 
       var lines = [];
-      lines.push('팀 평균 회신율은 ' + teamRate + '%, 평균 별점은 ★' + teamScore + '입니다 (표본 ' + MIN_SENT + '건 이상 매니저 ' + agents.length + '명 기준).');
+      lines.push('📅 이번 주(' + weekLabel + ') 기준 — 팀 평균 회신율은 ' + teamRate + '%, 평균 별점은 ★' + teamScore + '입니다 (표본 ' + MIN_SENT + '건 이상 매니저 ' + weekAgents.length + '명 기준).');
       if (byRate.length > 1) {
         lines.push('회신율이 가장 높은 매니저는 ' + byRate[0].name + '(' + byRate[0].responseRate + '%), 가장 낮은 매니저는 ' + byRate[byRate.length - 1].name + '(' + byRate[byRate.length - 1].responseRate + '%)입니다.');
       }
       if (byScore.length > 1) {
         lines.push('평균 별점이 가장 높은 매니저는 ' + byScore[0].name + '(★' + byScore[0].avgScore + '), 가장 낮은 매니저는 ' + byScore[byScore.length - 1].name + '(★' + byScore[byScore.length - 1].avgScore + ')입니다.');
       }
-      var lowScoreAgents = agents.filter(function (a) { return a.responded >= 20 && a.avgScore > 0 && a.avgScore < teamScore - 0.3; });
+      var lowScoreAgents = weekAgents.filter(function (a) { return a.responded >= 20 && a.avgScore > 0 && a.avgScore < teamScore - 0.3; });
       if (lowScoreAgents.length > 0) {
         lines.push('팀 평균보다 별점이 뚜렷하게 낮은 매니저: ' + lowScoreAgents.map(function (a) {
           var respPct = a.sent > 0 ? Math.round(a.responded / a.sent * 1000) / 10 : 0;
