@@ -25467,7 +25467,7 @@ window.CSAT_DATA = {
             trendTxt = '전주 대비 ' + arrow + ' ' + (delta === 0 ? '변동없음' : Math.abs(delta));
           }
           qaCardHtml = '<div class="kpi-card"><div class="kpi-label">QA 총점</div><div class="kpi-value ' + pctClass(qaEntry.total) + '">' + qaEntry.total.toFixed(1) + '</div><div class="kpi-sub">' + trendTxt + '</div></div>';
-          qaFootHtml = '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:6px;">📋 QA 총점: 매니저당 랜덤 10건 상담 품질 평가(' + lastWeek.weekLabel + ', ' + lastWeek.week + ') — <a href="https://claude.ai/code/artifact/b6fad84e-a47b-48c2-9ef1-084e558ddd74" target="_blank" rel="noopener">스코어카드 상세 열기 →</a></p>';
+          qaFootHtml = '<p style="grid-column:1/-1;font-size:11px;color:var(--text-3);margin-top:6px;">📋 QA 총점: 매니저당 랜덤 10건 상담 품질 평가(' + lastWeek.weekLabel + ', ' + lastWeek.week + ') 기준이에요.</p>';
         }
       }
 
