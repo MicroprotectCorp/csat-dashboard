@@ -25088,7 +25088,7 @@ window.CSAT_DATA = {
 
     var MIN_SENT = 20; // 표본 너무 적은 계정(테스트 등)은 제외
     var REAL_NAME = { lily: '한지연', jacob: '김동아', randy: '김태훈', summer: '조윤조', jiu: '김미노', allie: '조예진', david: '구본민', olive: '이승희', aileen: '강수진', heizle: '이수연' };
-    var EXCLUDE_LEFT = { lily: true, jiu: true, allie: true, david: true, olive: true }; // aileen(강수진)은 계약 8/31까지 연장돼 재직중 // 퇴사자 - 현재 CSAT 비교에서 제외
+    var EXCLUDE_LEFT = { lily: true, jiu: true, allie: true, david: true, olive: true, aileen: true }; // 퇴사자 - 현재 CSAT 비교에서 제외 (aileen/강수진: 2026-09-02 퇴사 처리)
     var agents = Object.keys(D.agentStats || {})
       .map(function (id) { return Object.assign({ id: id }, D.agentStats[id]); })
       .filter(function (a) { return a.name !== 'unknown' && a.sent >= MIN_SENT && !EXCLUDE_LEFT[(a.name || '').toLowerCase()]; })
